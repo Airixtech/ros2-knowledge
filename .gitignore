@@ -1,0 +1,12 @@
+# build outputs
+dist/
+*.zip
+# python
+__pycache__/
+*.pyc
+.venv/
+# obsidian (vault config lives in ~/vault, not here)
+.obsidian/
+.trash/
+# raw wiki exports are never published (kept outside this repo)
+source/
