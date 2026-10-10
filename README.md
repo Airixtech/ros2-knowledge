@@ -37,7 +37,7 @@ Cada nota sigue el mismo formato: un TL;DR de 1–2 líneas, luego el código o 
 
 1. Clona el repo, dentro de tu bóveda o como una bóveda propia:
    ```bash
-   git clone https://github.com/ORGANIZACION/ros2-knowledge.git
+   git clone https://github.com/Airixtech/ros2-knowledge.git
    ```
 2. En Obsidian, abre la carpeta como bóveda, o simplemente ábrela si ya está dentro de la tuya.
 3. Por dónde empezar:
