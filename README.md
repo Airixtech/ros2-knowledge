@@ -17,9 +17,9 @@ Base de conocimiento de **ROS 2** en notas atómicas de Markdown, con dos skills
 | `skills/ros2-core/notes/` | Notas técnicas por área: `build-run`, `core-api`, `recipes`, `tools`, `architecture` |
 | `skills/ros2-core/learn/` | Material del curso: conceptos y ejercicios de las Units 2–8 ([empieza aquí](skills/ros2-core/learn/core-learn-start-here.md)) |
 | `skills/ros2-core/migration/` | Cambios Humble → Jazzy → Lyrical y una checklist para migrar proyectos |
-| `skills/ros2-nav2/` | Skill de Nav2: 54 notas ([índice](skills/ros2-nav2/SKILL.md)). Necesita `ros2-core` |
-| `skills/ros2-nav2/notes/` | Notas técnicas por área: `bringup`, `mapping`, `localization`, `planning-control`, `costmaps`, `multi-robot` |
-| `skills/ros2-nav2/learn/` | Material del curso de navegación con TurtleBot3: Units 1–6 y proyecto ([empieza aquí](skills/ros2-nav2/learn/nav2-learn-start-here.md)) |
+| `skills/ros2-nav2/` | Skill de Nav2: 96 notas ([índice](skills/ros2-nav2/SKILL.md)). Necesita `ros2-core` |
+| `skills/ros2-nav2/notes/` | Notas técnicas por área: `bringup`, `mapping`, `localization`, `planning-control`, `behavior-trees`, `costmaps` (con filtros), `commander` (Simple Commander, waypoints), `plugins` (plugins propios de costmap, planner y controller), `multi-robot` |
+| `skills/ros2-nav2/learn/` | Material de dos cursos: navegación con TurtleBot3, Units 1–6 y proyecto ([empieza aquí](skills/ros2-nav2/learn/nav2-learn-start-here.md)), y navegación avanzada en un almacén con el MP-400, Units 1–4 ([empieza aquí](skills/ros2-nav2/learn/nav2-learn-adv-start-here.md)) |
 | `skills/ros2-nav2/migration/` | Cambios de Nav2 Humble → Jazzy → Lyrical y una checklist para migrar configuraciones |
 | `tools/` | Scripts para generar índices, validar, ver enlaces y empaquetar los skills |
 | `reports/` | Auditorías de versiones con fuentes (las notas citan sus IDs: `Vxx` en core, `NAV2-Vxx` en Nav2) y reporte de enlaces |
@@ -41,7 +41,7 @@ Cada nota sigue el mismo formato: un TL;DR de 1–2 líneas, luego el código o 
    ```
 2. En Obsidian, abre la carpeta como bóveda, o simplemente ábrela si ya está dentro de la tuya.
 3. Por dónde empezar:
-   - **Estudiantes:** `skills/ros2-core/learn/core-learn-start-here.md` (ROS 2 base) y `skills/ros2-nav2/learn/nav2-learn-start-here.md` (navegación).
+   - **Estudiantes:** `skills/ros2-core/learn/core-learn-start-here.md` (ROS 2 base) y `skills/ros2-nav2/learn/nav2-learn-start-here.md` (navegación) y `skills/ros2-nav2/learn/nav2-learn-adv-start-here.md` (navegación avanzada).
    - **Consulta técnica:** el índice de áreas en `skills/ros2-core/SKILL.md` y en `skills/ros2-nav2/SKILL.md`.
 4. Para actualizar: `git pull`.
 

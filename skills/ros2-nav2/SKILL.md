@@ -1,10 +1,10 @@
 ---
 name: ros2-nav2
-description: "ROS 2 Humble Nav2: map_server, Cartographer SLAM, AMCL, planner/controller/behavior servers, bt_navigator, costmaps, lifecycle manager, multi-robot. Jazzy/Lyrical notes."
+description: "ROS 2 Humble Nav2: maps, AMCL, planner/controller/behavior servers, behavior trees, costmaps and filters, Simple Commander, custom plugins, multi-robot. Jazzy/Lyrical notes."
 ---
 # ros2-nav2 — Nav2 navigation stack for ROS 2 Humble
 
-Atomic notes for configuring, launching and debugging Nav2. **Humble is canonical** (Nav2 1.1.x): configs target Humble, and Jazzy/Lyrical differences are marked, never substituted. Paths are relative to this skill's folder. `[[note-id]]` means the file `<note-id>.md`; find it via the area index or a glob `**/<note-id>.md`. Notes `[[core-…]]` belong to the skill **ros2-core** (required: nodes, topics, QoS, TF, launch, lifecycle, actions).
+Atomic notes for configuring, launching, debugging and extending Nav2 (Simple Commander scripts, costmap filters, custom behavior trees and plugins). **Humble is canonical** (Nav2 1.1.x): configs target Humble, and Jazzy/Lyrical differences are marked, never substituted. Paths are relative to this skill's folder. `[[note-id]]` means the file `<note-id>.md`; find it via the area index or a glob `**/<note-id>.md`. Notes `[[core-…]]` belong to the skill **ros2-core** (required: nodes, topics, QoS, TF, launch, lifecycle, actions).
 
 ## Golden rules (always apply)
 1. Every Nav2 server is a lifecycle node: a `lifecycle_manager` with `autostart: True` must list each one (full name, namespace included) in `node_names`, or nothing starts ([[nav2-lifecycle-manager]]).
@@ -12,19 +12,19 @@ Atomic notes for configuring, launching and debugging Nav2. **Humble is canonica
 3. Localization means AMCL publishes `map → odom`; it publishes nothing until it gets an initial pose (RViz, `set_initial_pose`, or `/initialpose` in frame `map`) ([[nav2-amcl-concepts]]).
 4. `/map` is latched (RELIABLE + TRANSIENT_LOCAL); save maps with `map_saver_cli` before stopping SLAM ([[nav2-map-saver]]).
 5. Costmaps: global block in the planner YAML, local block in the controller YAML, both at column 0; sensor layers before `inflation_layer` ([[nav2-costmap-layers]]).
-6. Robot shape in **both** costmaps: `robot_radius` or `footprint`, never both; DWB critic `BaseObstacle` vs `ObstacleFootprint` ([[nav2-robot-footprint]]).
-7. `planner_id` / `controller_id` in the BT XML must match `planner_plugins` / `controller_plugins`; in Humble every BT node needs its library in `plugin_lib_names` ([[nav2-behavior-tree-xml]]).
-8. Humble plugin names mix `/` and `::` (`nav2_navfn_planner/NavfnPlanner`); Jazzy+ uses `::` and BT XML `BTCPP_format="4"` ([[nav2-humble-to-jazzy]]).
+6. Robot shape in **both** costmaps: `robot_radius` or `footprint`, never both ([[nav2-robot-footprint]]). DWB needs `BaseObstacle` or `ObstacleFootprint` in `critics`: they are its only collision check ([[nav2-dwb-generators-critics]]).
+7. Behavior trees: `planner_id` / `controller_id` must match the labels in `planner_plugins` / `controller_plugins` (any name); in Humble every BT node needs its library in `plugin_lib_names`; pass a custom tree as `default_nav_to_pose_bt_xml` (`default_bt_xml_filename` is the Foxy name, silently ignored) ([[nav2-bt-navigator]]).
+8. Plugins: the YAML `plugin:` is the `name` (or `type`) of the plugin description XML; Humble mixes `/` and `::`, Jazzy+ uses `::`. Custom plugins derive from the Humble base class and are found through `pluginlib_export_plugin_description_file()` in CMake ([[nav2-plugins-overview]]).
 9. Multi-robot: a launch namespace renames nodes and topics, not the frames in YAML; prefix frames by hand, force `map_topic: /map`, never repeat the namespace in relative topics ([[nav2-multirobot-amcl-config]]).
-10. Goals: `NavigateToPose` on `navigate_to_pose`, frame `map`, heading as an orientation quaternion (never in `position.z`) ([[nav2-send-goal-action-client]]).
+10. Goals: `NavigateToPose` on `navigate_to_pose`, frame `map`, heading as an orientation quaternion (never in `position.z`). With the Simple Commander, `isTaskComplete()` is also True after a failure or cancel: check `getResult()` ([[nav2-simple-commander]]).
 
 ## Retrieval protocol
 1. Pick the area from the **Areas** table below (column "Covers").
 2. Open that area's `_index.md` and choose notes by their summary.
 3. Open 1–3 notes. Use their YAML and launch code as the template: keep the structure, adapt names and frames.
-4. No clear match → `grep -ril "<keyword>" notes/` (parameter and node names work best: `inflation_radius`, `set_initial_pose`, `bt_navigator`) and open the top hits.
+4. No clear match → `grep -ril "<keyword>" notes/` (parameter, node and class names work best: `inflation_radius`, `set_initial_pose`, `KeepoutFilter`, `nav2_core::Controller`) and open the top hits.
 5. Follow a note's `see:` links **one hop** at most. Generic ROS 2 questions (QoS, TF, launch, actions) → the ros2-core skill.
-6. Do not open `learn/` unless the question is about the course (TurtleBot3, Units 1–6, course project).
+6. Do not open `learn/` unless the question is about a course: intro (TurtleBot3, Units 1–6, course project) or advanced (warehouse, MP-400, Units 1–4).
 7. Jazzy, Lyrical or porting a configuration → open `migration/` and apply the version marks.
 If the notes do not cover the question, answer from standard Humble knowledge and say so. Never invent parameters, plugins or defaults.
 
