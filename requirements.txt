@@ -1,0 +1,5 @@
+# Python packages for tools/ (validate.py, build_index.py). Install: python -m pip install -r requirements.txt
+# Without them validate.py still runs, but says how many YAML blocks and Python programs it could not check.
+# Tested with PyYAML 6.0.3 and pyflakes 4.0.3 (Python 3.10).
+PyYAML>=5.4     # frontmatter, YAML blocks of the notes, params YAML vs launched node names
+pyflakes>=2.4   # complete Python programs of the notes

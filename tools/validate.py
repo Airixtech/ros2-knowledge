@@ -145,6 +145,7 @@ def main(argv):
     notes = load_notes()
     errors, warnings = [], []
     unlinted = 0                                   # complete Python programs not checked (no pyflakes)
+    unparsed_yaml = 0                              # YAML blocks not checked (no PyYAML)
     by_id = {}
     for n in notes:
         nid = n['fm'].get('id')
@@ -213,6 +214,8 @@ def main(argv):
                     warnings.append(f'{where}: pyflakes: {msg}')
         for block in YAML_BLOCK_RE.findall(n['body']):
             err = yaml_error(textwrap.dedent(block))
+            if err is None:
+                unparsed_yaml += 1
             if err:
                 errors.append(f'{where}: YAML block does not parse ({err})')
         for block in XML_BLOCK_RE.findall(n['body']):
@@ -296,7 +299,10 @@ def main(argv):
 
     print(f'skills: {len(skills)} ({", ".join(skills)}) | notes: {len(notes)} | '
           f'errors: {len(errors)} | warnings: {len(warnings)}'
-          + (f' | {unlinted} Python programs not linted (pip install pyflakes)' if unlinted else ''))
+          + (f' | NOT CHECKED: {unparsed_yaml} YAML blocks and the params-YAML/node-name check'
+             ' (python -m pip install -r requirements.txt)' if unparsed_yaml else '')
+          + (f' | NOT CHECKED: {unlinted} Python programs (python -m pip install -r requirements.txt)'
+             if unlinted else ''))
     for e in errors:
         print(f'ERROR   {e}')
     if brief and warnings:                         # rare kinds in full, frequent kinds as one count
