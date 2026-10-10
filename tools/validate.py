@@ -19,7 +19,15 @@ Warnings: > MAX_TOKENS (≈ chars/4), summary > 20 words, audience not dev|stude
   generated indexes out of date, pyflakes findings in complete Python programs (only if
   pyflakes is installed; a block is "complete" when it has an import and def main / __main__).
 
-Usage: python tools/validate.py [--strict]   (--strict: warnings also fail)
+Optional checks:
+  --forbidden FILE  one term per line ('#' = comment): any note containing a term (case-insensitive) is an
+                    ERROR. Keep the file outside the repo when the terms themselves must not be published.
+  Launch/YAML names (WARNING): a params YAML whose node key matches an executable launched in the same skill
+  under a different name is never applied (ROS 2 matches params by node name).
+
+Usage: python tools/validate.py [--strict] [--brief] [--forbidden FILE]
+  --strict  warnings also fail
+  --brief   print the summary, the errors and the warnings grouped by kind (one line)
 """
 import ast
 import re
@@ -73,8 +81,66 @@ def yaml_error(code):
         return str(e).splitlines()[0]
 
 
+def launched_nodes(body):
+    """(names, executables) of launch_ros Node(...) calls with literal arguments in Python blocks.
+    names holds 'name' and 'namespace/name'; a non-literal namespace adds the bare name only."""
+    names, exes = set(), set()
+    for block in PY_BLOCK_RE.findall(body):
+        try:
+            tree = ast.parse(textwrap.dedent(block))
+        except SyntaxError:
+            continue
+        for call in ast.walk(tree):
+            if not isinstance(call, ast.Call):
+                continue
+            func = call.func.attr if isinstance(call.func, ast.Attribute) else getattr(call.func, 'id', '')
+            if func not in ('Node', 'LifecycleNode'):
+                continue
+            kw = {k.arg: k.value.value for k in call.keywords
+                  if isinstance(k.value, ast.Constant) and isinstance(k.value.value, str)}
+            if 'executable' in kw:
+                exes.add(kw['executable'])
+            if 'name' in kw:
+                names.add(kw['name'])
+                if 'namespace' in kw:
+                    names.add(f"{kw['namespace'].strip('/')}/{kw['name']}")
+    return names, exes
+
+
+def yaml_node_keys(body):
+    """Node keys of params YAML blocks: 'node' or 'ns/node' (nested form), the ones holding ros__parameters."""
+    try:
+        import yaml
+    except ImportError:
+        return set()
+    keys = set()
+    for block in YAML_BLOCK_RE.findall(body):
+        try:
+            docs = list(yaml.safe_load_all(textwrap.dedent(block)))
+        except yaml.YAMLError:
+            continue
+        for doc in docs:
+            if not isinstance(doc, dict):
+                continue
+            for k, v in doc.items():
+                if not isinstance(v, dict) or str(k).startswith('/**'):
+                    continue
+                if 'ros__parameters' in v:
+                    keys.add(str(k).strip('/'))
+                for k2, v2 in v.items():
+                    if isinstance(v2, dict) and 'ros__parameters' in v2:
+                        keys.add(f'{str(k).strip("/")}/{k2}')
+    return keys
+
+
 def main(argv):
     strict = '--strict' in argv
+    brief = '--brief' in argv
+    forbidden = []
+    if '--forbidden' in argv:
+        path = Path(argv[argv.index('--forbidden') + 1])
+        forbidden = sorted({t.strip().lower() for t in path.read_text(encoding='utf-8').splitlines()
+                            if t.strip() and not t.startswith('#')})
     skills = discover_skills()
     notes = load_notes()
     errors, warnings = [], []
@@ -155,6 +221,11 @@ def main(argv):
                 except ElementTree.ParseError:
                     errors.append(f'{where}: XML block is not well-formed ({e})')
 
+        low = n['text'].lower()
+        hits = [term for term in forbidden if term in low]
+        if hits:
+            errors.append(f'{where}: contains forbidden terms ({", ".join(hits)})')
+
         tok = tokens_estimate(n['text'])
         if tok > MAX_TOKENS:
             warnings.append(f'{where}: ~{tok} tokens (> {MAX_TOKENS})')
@@ -166,6 +237,20 @@ def main(argv):
             warnings.append(f"{where}: audience '{aud}' not in dev|students")
         if n['path'].parent.name == 'learn' and aud != 'students':
             warnings.append(f'{where}: learn/ note should have audience: students')
+
+    for skill in skills:                              # params YAML key vs launched node name
+        in_skill = [n for n in notes if n['skill'] == skill and not n['fm_error']]
+        names, exes = set(), set()
+        for n in in_skill:
+            a, b = launched_nodes(n['body'])
+            names |= a
+            exes |= b
+        for n in in_skill:
+            for key in sorted(yaml_node_keys(n['body'])):
+                base = key.rsplit('/', 1)[-1]
+                if key not in names and base not in names and base in exes:
+                    warnings.append(f"{n['repo_rel']}: params key '{key}' matches executable '{base}', but no node "
+                                    f"is launched with that name in this skill (the YAML would be ignored)")
 
     for skill, spath in skills.items():
         skill_md = spath / 'SKILL.md'
@@ -209,8 +294,21 @@ def main(argv):
           f'errors: {len(errors)} | warnings: {len(warnings)}')
     for e in errors:
         print(f'ERROR   {e}')
-    for w in warnings:
-        print(f'WARNING {w}')
+    if brief and warnings:                         # rare kinds in full, frequent kinds as one count
+        kinds = {}
+        for w in warnings:
+            kind = re.sub(r'^[^:]+: ', '', w)
+            kind = re.sub(r"'[^']*'", 'X', re.sub(r'~?\d[\d,.]*', 'N', kind))[:70]
+            kinds.setdefault(kind, []).append(w)
+        for kind, ws in sorted(kinds.items(), key=lambda x: len(x[1])):
+            if len(ws) <= 3:
+                for w in ws:
+                    print(f'WARNING {w}')
+            else:
+                print(f'WARNING {len(ws)} x {kind}')
+    else:
+        for w in warnings:
+            print(f'WARNING {w}')
     return 1 if errors or (strict and warnings) else 0
 
 
