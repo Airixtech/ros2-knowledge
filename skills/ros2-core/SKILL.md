@@ -46,4 +46,4 @@ If the notes do not cover the question, answer from standard Humble knowledge an
 <!-- INDEX:END -->
 
 ## Related skills
-None yet. Future domain skills (e.g. `ros2-nav2`, `ros2-moveit`) declare `requires: [ros2-core]`; this skill never links to them.
+ros2-nav2: Nav2 in detail (map server, Cartographer, AMCL, planners, controllers, costmaps, behavior trees, multi-robot). Domain skills declare `requires: [ros2-core]`; this skill never links to them.

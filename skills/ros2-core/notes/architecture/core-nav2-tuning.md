@@ -17,6 +17,8 @@ version_notes:
 
 **TL;DR** The global costmap is in `map` (static, ~1 Hz) and the local one in `odom` (rolling, ~5 Hz). The inflation radius must be larger than the robot radius. Start with SmacPlanner2D + RPP for diff-drive, and use MPPI for dynamic obstacles.
 
+Parameter-by-parameter detail and complete course configs: skill ros2-nav2.
+
 ## Costmaps
 Global (`global_frame: map`, `rolling_window: false`, 1 Hz, static+obstacle+inflation) vs local (`odom`, rolling 3×3 m, 5 Hz, obstacle/voxel+inflation).
 ```yaml

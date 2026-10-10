@@ -16,7 +16,7 @@ version_notes:
 ---
 # Nav2 architecture, cmd_vel chain & rates
 
-**TL;DR** `bt_navigator` drives the planner, controller, behavior and smoother servers, all of them lifecycle nodes under `lifecycle_manager`. In Humble's default bringup, `cmd_vel` only passes through the velocity smoother. Seed note for a future `ros2-nav2` skill.
+**TL;DR** `bt_navigator` drives the planner, controller, behavior and smoother servers, all of them lifecycle nodes under `lifecycle_manager`. In Humble's default bringup, `cmd_vel` only passes through the velocity smoother. Per-server configuration, costmaps, behavior trees and multi-robot setups: skill ros2-nav2.
 
 ## Architecture
 - `bt_navigator` (NavigateToPose / NavigateThroughPoses BT, ~10 Hz) → `planner_server`, `controller_server`, `behavior_server`, `smoother_server`, `waypoint_follower`; global + local `nav2_costmap_2d`. All are lifecycle nodes under `lifecycle_manager` ([[core-lifecycle-concepts]]).
