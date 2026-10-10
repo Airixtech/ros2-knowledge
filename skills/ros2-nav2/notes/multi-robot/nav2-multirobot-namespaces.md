@@ -6,7 +6,7 @@ area: multi-robot
 distro: humble
 tested: false
 audience: dev
-summary: "Before multi-robot Nav2: every robot needs its own namespace for nodes, topics and frames (tb3_0, tb3_1); how to check nodes, topics and the TF tree."
+summary: "Multi-robot prerequisite: a namespace per robot (tb3_0, tb3_1) for nodes, topics and frames; how to check them."
 tags: [multi-robot, namespace, tb3_0, tb3_1, frames, ros2 node list, view_frames, TF tree]
 see: ["[[core-multi-robot-namespacing]]", "[[nav2-multirobot-mapping]]", "[[nav2-multirobot-localization]]", "[[core-tf-basics]]"]
 requires: [ros2-core]

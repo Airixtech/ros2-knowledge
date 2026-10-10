@@ -18,11 +18,7 @@ version_notes:
 **TL;DR** Path planning needs a map and a localized robot first (`map_server` + `amcl`, [[nav2-amcl-launch]]). Then launch four servers and one lifecycle manager with a **different name** from the localization one.
 
 ## Nodes
-1. `planner_server` – computes the path ([[nav2-planner-server]]).
-2. `controller_server` – generates the velocity commands to follow it ([[nav2-controller-server]]).
-3. `behavior_server` (named `recoveries_server`) – recovery actions when navigation fails ([[nav2-behavior-server]]).
-4. `bt_navigator` – high-level navigation logic with behavior trees ([[nav2-bt-navigator]]).
-5. `nav2_lifecycle_manager` – configures and activates the four servers.
+`planner_server` (path, [[nav2-planner-server]]), `controller_server` (velocity commands, [[nav2-controller-server]]), `behavior_server` named `recoveries_server` (manages recovery actions in case of navigation failures, [[nav2-behavior-server]]), `bt_navigator` (high-level logic with behavior trees, [[nav2-bt-navigator]]) and a `nav2_lifecycle_manager` for the four.
 
 ## launch/pathplanner.launch.py (package `path_planner_server`)
 ```python
@@ -57,9 +53,8 @@ def generate_launch_description():
 The four YAML files go in `config/` and are installed from `setup.py`. Run order: localization launch → RViz → initial pose → `ros2 launch path_planner_server pathplanner.launch.py`.
 
 ## Check it in RViz
-Add a `Path` display on `/plan` (Line Style **Billboards**, Line Width **0.05**), then click **Nav2 Goal** and a point on the map: a green line shows the planned path and the robot moves towards the goal ([[nav2-rviz-displays]]).
+Add a `Path` display on `/plan` (Line Style **Billboards**, Line Width **0.05**), then click **Nav2 Goal** and a point on the map: a green line shows the path and the robot moves ([[nav2-rviz-displays]]).
 
 ## Pitfalls
 - Two lifecycle managers with the same name → their services collide; give each a unique name ([[nav2-lifecycle-manager]]).
 - `recovery.yaml` keyed `behavior_server:` while the node is `recoveries_server` → its parameters are ignored ([[nav2-behavior-server]]).
-- Path planning launched before the robot is localized → the planner has no `map → base_link` transform and goals fail.

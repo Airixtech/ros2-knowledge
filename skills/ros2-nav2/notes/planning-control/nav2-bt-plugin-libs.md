@@ -6,7 +6,7 @@ area: planning-control
 distro: humble
 tested: false
 audience: dev
-summary: "Complete bt_navigator.yaml of the course with the Humble plugin_lib_names list of Nav2 BT node libraries; when to list them; Jazzy change."
+summary: "Course bt_navigator.yaml with the Humble plugin_lib_names list of Nav2 BT libraries; when to list them; Jazzy change."
 tags: [bt_navigator.yaml, plugin_lib_names, BT nodes, nav2_behavior_tree, behavior tree plugins]
 see: ["[[nav2-bt-navigator]]", "[[nav2-behavior-tree-xml]]"]
 requires: [ros2-core]
@@ -81,4 +81,3 @@ bt_navigator:
 ## Pitfalls
 - An XML node whose library is missing from the list → "node not registered" when bt_navigator configures.
 - Copying this list into a Jazzy (or later) config → remove it: the Nav2 libraries load automatically there.
-- Several robots: the course also added `enable_groot_monitoring: false`, which has no effect in Humble (NAV2-V10, [[nav2-multirobot-bt-behavior-config]]).

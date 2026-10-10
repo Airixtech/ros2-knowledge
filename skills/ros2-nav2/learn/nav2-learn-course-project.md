@@ -6,7 +6,7 @@ area: learn
 distro: humble
 tested: false
 audience: students
-summary: "Course project on a real robot, done remotely in a separate development environment: Section I after Unit 2 through Section IV after Unit 5, then a live presentation."
+summary: "Course project on a real robot: Sections I-IV after Units 2-5, then a live presentation of the project."
 tags: [course, students, course project, real robot, sections, presentation]
 see: ["[[nav2-learn-start-here]]", "[[nav2-learn-unit2-mapping]]", "[[nav2-learn-unit5-costmaps]]"]
 requires: [ros2-core]

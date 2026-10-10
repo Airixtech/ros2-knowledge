@@ -35,7 +35,7 @@ version_notes:
           obstacle_max_range: 2.5
           obstacle_min_range: 0.0
 ```
-Layer parameters (Humble defaults): `enabled` true · `observation_sources` "" (space-separated source names) · `footprint_clearing_enabled` true (clear cells under the footprint) · `max_obstacle_height` 2.0 / `min_obstacle_height` 0.0 (heights added to the grid) · `combination_method` 1 (how data enters the master costmap: 1 = maximum, 0 = overwrite).
+Layer parameters (Humble defaults): `enabled` true · `observation_sources` "" (space-separated source names) · `footprint_clearing_enabled` true (clear cells under the footprint) · `max_obstacle_height` 2.0 / `min_obstacle_height` 0.0 (heights added to the grid) · `combination_method` 1 (1 = maximum, 0 = overwrite).
 
 Per observation source:
 | Parameter | Default | Meaning |
@@ -76,8 +76,7 @@ Per observation source:
           marking: True
           data_type: "PointCloud2"
 ```
-Voxel-specific (Humble defaults): `z_voxels` 10, `z_resolution` 0.2 m (height covered = z_voxels × z_resolution), `origin_z` 0.0, `unknown_threshold` 15, `mark_threshold` 0, `publish_voxel_map` false.
+Voxel-specific (Humble defaults): `z_voxels` 10, `z_resolution` 0.2 m `origin_z` 0.0, `unknown_threshold` 15, `mark_threshold` 0, `publish_voxel_map` false.
 
 ## Pitfalls
 - `clearing` left at its default (false) → obstacles that moved away are never erased.
-- `obstacle_max_range` > `raytrace_max_range` → marks that can never be cleared.

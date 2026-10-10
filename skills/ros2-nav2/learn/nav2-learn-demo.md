@@ -6,7 +6,7 @@ area: learn
 distro: humble
 tested: false
 audience: students
-summary: "Unit 1: clone the course files, build, ros2 launch nav2_course nav2_demo.launch.py, set the initial pose and send Nav2 goals in RViz."
+summary: "Unit 1: clone the course files, build, launch nav2_demo.launch.py, set the initial pose, send Nav2 goals in RViz."
 tags: [course, students, unit 1, demo, nav2_course, nav2_demo.launch.py, 2D Pose Estimate, Nav2 Goal, RViz]
 see: ["[[nav2-learn-start-here]]", "[[nav2-architecture]]", "[[nav2-rviz-displays]]"]
 requires: [ros2-core]

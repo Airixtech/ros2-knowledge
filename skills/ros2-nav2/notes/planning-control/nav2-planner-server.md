@@ -19,12 +19,8 @@ version_notes:
 
 **TL;DR** The planner (ROS 1 "global planner") computes a path from the robot to the goal that avoids the **known** obstacles of the global costmap. Package `nav2_planner`, executable `planner_server`; the algorithm is a plugin (NavFn here).
 
-## Launch and config
-```python
-        Node(package='nav2_planner', executable='planner_server', name='planner_server',
-             output='screen', parameters=[planner_yaml]),
-```
-`config/planner_server.yaml` (a typical base config; the global costmap block goes in the same file, [[nav2-global-costmap]]):
+## Config
+Launched as package `nav2_planner`, executable `planner_server`, `parameters=[planner_yaml]` ([[nav2-path-planning-launch]]). `config/planner_server.yaml` (a typical base config; the global costmap block goes in the same file, [[nav2-global-costmap]]):
 ```yaml
 planner_server:
   ros__parameters:

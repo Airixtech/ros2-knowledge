@@ -56,9 +56,8 @@ version_notes:
 - `RateController hz="1.0"`: computes a new path once per second.
 - `ComputePathToPose` / `FollowPath`: call the planner and the controller; `planner_id` and `controller_id` must match the names in `planner_plugins` and `controller_plugins` ([[nav2-planner-server]], [[nav2-controller-server]]).
 - Recovery actions when navigation keeps failing: clear both costmaps, spin 1.57 rad, wait 5 s (served by the behavior server, [[nav2-behavior-server]]).
-- `{goal}` and `{path}` are blackboard entries shared between nodes.
 
-Install the file (`config/` in `setup.py`) and point `default_nav_to_pose_bt_xml` to it ([[nav2-bt-navigator]]). Detailed BT customization: [Nav2 behavior trees](https://github.com/ros-navigation/docs.nav2.org/blob/rolling/docs/getting_started/nav2_behavior_trees/index.md).
+Install it and point `default_nav_to_pose_bt_xml` to it ([[nav2-bt-navigator]]). Detailed BT customization: [Nav2 behavior trees](https://github.com/ros-navigation/docs.nav2.org/blob/rolling/docs/getting_started/nav2_behavior_trees/index.md).
 
 ## Pitfalls
 - Every node in the XML needs its library in `plugin_lib_names` (Humble) ([[nav2-bt-plugin-libs]]).

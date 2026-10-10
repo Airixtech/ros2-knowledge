@@ -6,7 +6,7 @@ area: multi-robot
 distro: humble
 tested: false
 audience: dev
-summary: "multi_pathplanner.launch.py: planner, controller, behaviors and bt_navigator per namespace, one lifecycle manager with full node names; run order and goals per robot."
+summary: "multi_pathplanner.launch.py: planner, controller, behaviors, bt_navigator per namespace; one lifecycle manager with full node names."
 tags: [multi-robot, multi_pathplanner.launch.py, namespace, lifecycle_manager, node_names, bond_timeout, goal_pose, Nav2 multi-robot]
 see: ["[[nav2-path-planning-launch]]", "[[nav2-multirobot-planner-controller-config]]", "[[nav2-multirobot-bt-behavior-config]]", "[[nav2-multirobot-rviz]]"]
 requires: [ros2-core]
@@ -55,9 +55,7 @@ def generate_launch_description():
                                   {'node_names': managed}]))
     return LaunchDescription(nodes)
 ```
-- A launched node gets the namespace in front of its name, topics and services: `tb3_0/planner_server`.
-- The namespace does **not** change the frames in the config files: edit them per robot ([[nav2-multirobot-planner-controller-config]], [[nav2-multirobot-bt-behavior-config]]).
-- `{'bond_timeout': 0.0}` is the course's workaround for launch errors; it disables crash detection.
+Nodes become `tb3_0/planner_server`…; frames are edited per robot ([[nav2-multirobot-planner-controller-config]], [[nav2-multirobot-bt-behavior-config]]). `bond_timeout: 0.0` (course workaround) disables crash detection.
 
 ## Run
 ```bash
@@ -72,8 +70,7 @@ Final message telling you that everything launched correctly:
 ```
 [lifecycle_manager-9] [INFO] [1701423537.147284432] [lifecycle_manager]: Managed nodes are active
 ```
- Then RViz ([[nav2-multirobot-rviz]]): set the **2D Goal Pose** tool topic to `/tb3_0/goal_pose`, send a goal, then `/tb3_1/goal_pose` for the other robot. Each robot avoids static obstacles and dynamic ones, like the other robot (it replans around it).
+ Then RViz ([[nav2-multirobot-rviz]]): set the **2D Goal Pose** tool topic to `/tb3_0/goal_pose`, send a goal, then `/tb3_1/goal_pose` for the other robot. Each robot avoids static and dynamic obstacles, including the other robot.
 
 ## Pitfalls
 - A short name in `node_names` (`planner_server` instead of `tb3_0/planner_server`) → that node never activates.
-- Alternative used by Nav2 itself: one complete stack and lifecycle manager per namespace (keeps the bonds).

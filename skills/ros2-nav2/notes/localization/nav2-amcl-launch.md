@@ -83,7 +83,7 @@ amcl:
     z_rand: 0.5
     z_short: 0.05
 ```
-Meaning of every key: [[nav2-amcl-params-filter]], [[nav2-amcl-params-models]]. Install `config/` and `launch/` in `setup.py`, then `colcon build --packages-select localization_server`, source, and `ros2 launch localization_server localization.launch.py`.
+Keys: [[nav2-amcl-params-filter]], [[nav2-amcl-params-models]]. Install `config/` and `launch/` in `setup.py`, then `colcon build --packages-select localization_server`, source, and `ros2 launch localization_server localization.launch.py`.
 
 ## Expected output
 ```

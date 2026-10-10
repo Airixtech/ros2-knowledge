@@ -6,7 +6,7 @@ area: bringup
 distro: humble
 tested: false
 audience: dev
-summary: "RViz2 displays and QoS for mapping, localization and planning: Map, LaserScan, TF, RobotModel, ParticleCloud, 2D Pose Estimate, Nav2 Goal, Path, costmaps."
+summary: "RViz2 displays and QoS for Nav2: Map, LaserScan, TF, RobotModel, ParticleCloud, 2D Pose Estimate, Nav2 Goal, Path, costmaps."
 tags: [RViz2, Map display, LaserScan, QoS, ParticleCloud, PoseWithCovariance, 2D Pose Estimate, Nav2 Goal, Path, costmap display]
 see: ["[[core-qos-usage]]", "[[core-debug-tools]]", "[[nav2-amcl-launch]]", "[[nav2-path-planning-launch]]", "[[nav2-multirobot-rviz]]"]
 requires: [ros2-core]

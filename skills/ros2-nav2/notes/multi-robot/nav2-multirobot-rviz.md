@@ -6,7 +6,7 @@ area: multi-robot
 distro: humble
 tested: false
 audience: dev
-summary: "RViz2 config tb3_1_and_2.rviz: LaserScan and RobotModel per robot (TF prefix), Tool Properties topics for 2D Pose Estimate and 2D Goal Pose, paths and costmaps."
+summary: "RViz2 for two robots: per-robot LaserScan, RobotModel TF prefix, Tool Properties topics, paths and costmaps."
 tags: [multi-robot, RViz2, Tool Properties, 2D Pose Estimate, 2D Goal Pose, initialpose, RobotModel, TF prefix, Path, costmap]
 see: ["[[nav2-rviz-displays]]", "[[nav2-multirobot-localization]]", "[[nav2-multirobot-planning-launch]]"]
 requires: [ros2-core]

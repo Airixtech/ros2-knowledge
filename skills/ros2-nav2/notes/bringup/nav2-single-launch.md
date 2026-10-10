@@ -54,10 +54,8 @@ def generate_launch_description():
                                          'recoveries_server', 'bt_navigator']}])
     ])
 ```
-- Include every navigation node: `map_server`, localization (`amcl`), planner, controller, `bt_navigator` and the behavior server.
-- One manager with a generic name (`lifecycle_manager`) manages them all, each with its config file.
+One manager with the generic name `lifecycle_manager` manages every node, each with its config file.
 - `recovery.yaml` must start with `recoveries_server:` to match the node name ([[nav2-behavior-server]]).
 
 ## Pitfalls
 - Order in `node_names` matters: map and localization first, so the planner finds `map → odom` when it activates.
-- Leaving the old per-unit launch files running as well → duplicate nodes with the same names.

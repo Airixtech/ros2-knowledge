@@ -54,7 +54,6 @@ def generate_launch_description():
     ])
 ```
 - `os.path.join` concatenates paths (module `os`); `get_package_share_directory` finds the installed share path of a package (module `ament_index_python.packages`).
-- Several `Node(...)` go one after another, separated by commas.
 - Install `launch/` and `config/` from `setup.py` (`data_files` with `glob`, plus `import os` and `from glob import glob`) ([[core-pkg-ament-python]]):
 ```python
         (os.path.join('share', package_name, 'launch'), glob('launch/*.launch.py')),
@@ -76,4 +75,3 @@ Watch the map in RViz ([[nav2-rviz-displays]]).
 
 ## Pitfalls
 - Lua changes only take effect after `colcon build` (the file is read from `install/…/share`).
-- Stopping the nodes before saving loses the map ([[nav2-map-saver]]).

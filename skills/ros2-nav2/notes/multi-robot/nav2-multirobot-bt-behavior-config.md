@@ -65,4 +65,3 @@ With the course key `tb3_0/behavior_server:` the node `tb3_0/recoveries_server` 
 
 ## Pitfalls
 - Relative topics inside a namespaced node must not repeat the namespace (`odom`, not `tb3_0/odom`).
-- Copy-pasting the `tb3_0` files for `tb3_1` and forgetting one frame → one robot uses the other robot's base frame.

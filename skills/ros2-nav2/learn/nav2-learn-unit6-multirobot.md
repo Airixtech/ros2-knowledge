@@ -28,7 +28,7 @@ version_notes: []
 2. Create **`tb3_0_amcl_config.yaml`** and **`tb3_1_amcl_config.yaml`**: full node name on the first line, namespaced frames (except `global_frame_id`), `map_topic` forced to `/map`.
 3. Add `topic_name` and `frame_id` to the map server.
 4. Compile, source, launch: both AMCL nodes wait for their initial pose.
-5. Configure RViz for two robots and save it as **`tb3_1_and_2.rviz`**; set each robot's pose with 2D Pose Estimate (relaunch the sim first: robots drift); check the TF with `view_frames` ([[nav2-multirobot-localization]], [[nav2-multirobot-rviz]]).
+5. Configure RViz for two robots and save it as **`tb3_1_and_2.rviz`**; set each robot's pose with 2D Pose Estimate (relaunch the sim first: robots drift); check the TF with `view_frames` ([[nav2-multirobot-amcl-config]], [[nav2-multirobot-localization]], [[nav2-multirobot-rviz]]).
 
 ## Path planning for both robots
 - Create **`multi_pathplanner.launch.py`** in `path_planner_server`: two `planner_server`, `controller_server`, `recoveries_server` and `bt_navigator`, each with its namespace, and one lifecycle manager with all full names and `bond_timeout: 0.0` ([[nav2-multirobot-planning-launch]]).

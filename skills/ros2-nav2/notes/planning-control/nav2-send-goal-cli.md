@@ -6,7 +6,7 @@ area: planning-control
 distro: humble
 tested: false
 audience: dev
-summary: "Send a Nav2 goal from the terminal: ros2 action send_goal /navigate_to_pose (feedback, result) or ros2 topic pub /goal_pose PoseStamped (fire and forget)."
+summary: "Nav2 goal from the terminal: ros2 action send_goal /navigate_to_pose (feedback, result) or ros2 topic pub /goal_pose."
 tags: [navigate_to_pose, NavigateToPose, goal_pose, PoseStamped, ros2 action send_goal, ros2 topic pub, quaternion, Publish Point]
 see: ["[[nav2-send-goal-action-client]]", "[[core-nav2-python-client]]", "[[core-action-cli-status]]", "[[nav2-bt-navigator]]"]
 requires: [ros2-core]

@@ -84,13 +84,11 @@ def main(args=None):
 if __name__ == '__main__':
     main()
 ```
-Wiring: script in the package's module folder, `setup.py` entry point, a launch file, `colcon build` ([[core-pkg-ament-python]]). Then click **Publish Point** in RViz.
+Wiring: entry point in `setup.py`, a launch file, `colcon build` ([[core-pkg-ament-python]]); then **Publish Point** in RViz.
 
 ## Notes
 - The node shuts down after the first result: remove `rclpy.shutdown()` to keep accepting clicks.
-- `wait_for_server()` blocks the callback until bt_navigator is active.
 - `async`/`await` version with initial pose and status check, and `nav2_simple_commander`: [[core-nav2-python-client]].
 
 ## Pitfalls
 - Heading in `position.z` (as in the course) is ignored: the robot always ends at yaw 0.
-- The goal must be in the `map` frame; RViz's fixed frame must be `map` for the clicked point to match.

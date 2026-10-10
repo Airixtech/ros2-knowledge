@@ -17,13 +17,9 @@ version_notes:
 ---
 # behavior_server: spin, backup, wait and their parameters
 
-**TL;DR** When the robot cannot find a valid path or gets stuck, the behavior tree calls **recovery behaviors**: simple, pre-defined movements that usually clear the situation. The `behavior_server` (package `nav2_behaviors`, called `recoveries_server`/`nav2_recoveries` before Humble) executes them.
+**TL;DR** When the robot cannot find a valid path or gets stuck, the behavior tree calls **recovery behaviors**: simple, pre-defined movements that usually clear the situation. The `behavior_server` (`nav2_behaviors`; `recoveries_server`/`nav2_recoveries` before Humble) is the node responsible for executing them, e.g. when `bt_navigator` believes the robot is stuck.
 
-## Launch (node named as in the course)
-```python
-        Node(package='nav2_behaviors', executable='behavior_server', name='recoveries_server',
-             parameters=[recovery_yaml], output='screen'),
-```
+The course launches it with `name='recoveries_server'` ([[nav2-path-planning-launch]]).
 
 ## config/recovery.yaml (Humble-correct)
 ```yaml
@@ -48,7 +44,7 @@ recoveries_server:          # must equal the launched node name (the course file
     min_rotational_vel: 0.4
     rotational_acc_lim: 3.2
 ```
-Load only the behaviors your BT calls; each one is ready for `bt_navigator` as an action server with the same name (`spin`, `backup`, `wait`).
+In the config file, indicate which behaviors to load: each is then ready to be called by `bt_navigator` as an action server with the same name.
 
 ## Behaviors and parameters (Humble)
 | Behavior | Does |
@@ -68,8 +64,6 @@ Load only the behaviors your BT calls; each one is ready for `bt_navigator` as a
 | `global_frame` | `odom` | frame the behaviors work in |
 | `robot_base_frame` | `base_link` | robot base frame |
 | `transform_tolerance` | 0.1 s | TF tolerance |
-`simulate_ahead_time` is the collision-check lookahead (s); `max_rotational_vel`, `min_rotational_vel`, `rotational_acc_lim` limit the spin.
 
 ## Pitfalls
 - YAML key ≠ node name → the whole file is ignored and defaults are used. With one robot it still works; with namespaced robots the default frames are wrong and recoveries fail ([[nav2-multirobot-bt-behavior-config]], [[core-param-yaml-cli]]).
-- Lifecycle manager `node_names` must use the same node name (`recoveries_server`).

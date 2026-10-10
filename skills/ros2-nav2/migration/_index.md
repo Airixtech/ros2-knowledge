@@ -5,6 +5,6 @@ Humble → Jazzy → Lyrical Nav2 changes and a migration checklist; open for ot
 
 | id | summary | path |
 |---|---|---|
-| [[nav2-humble-to-jazzy]] | What changes in a Nav2 configuration from Humble to Jazzy (includes Iron): plugin names, BT.CPP 4.5, BT plugin list, behavior server frames, Gazebo. | migration/nav2-humble-to-jazzy.md |
+| [[nav2-humble-to-jazzy]] | Nav2 changes from Humble to Jazzy (incl. Iron): :: plugin names, BT.CPP 4.5, BT plugin list, behavior server frames, Gazebo. | migration/nav2-humble-to-jazzy.md |
 | [[nav2-jazzy-to-lyrical]] | Nav2 changes from Jazzy to Lyrical (Kilted included): TwistStamped cmd_vel default, namespace-ready params, map_topic in static_layer, Groot 2, nav2_ros_common. | migration/nav2-jazzy-to-lyrical.md |
-| [[nav2-migration-checklist]] | Step-by-step checklist to port this course's Nav2 packages (YAML, BT XML, launch, simulation) from Humble to Jazzy or Lyrical, plus Humble fixes. | migration/nav2-migration-checklist.md |
+| [[nav2-migration-checklist]] | Checklist to port the course's Nav2 packages (YAML, BT XML, launch, simulation) to Jazzy or Lyrical, plus Humble fixes. | migration/nav2-migration-checklist.md |

@@ -5,8 +5,8 @@ Nav2 architecture and servers, nav2_lifecycle_manager (node_names, autostart, bo
 
 | id | summary | path |
 |---|---|---|
-| [[nav2-architecture]] | How a robot navigates (map, localize, plan, control) and which Nav2 server does each task; data flow diagram; where each topic is detailed. | notes/bringup/nav2-architecture.md |
+| [[nav2-architecture]] | How a robot navigates (map, localize, plan, control), which Nav2 server does each task, data flow diagram. | notes/bringup/nav2-architecture.md |
 | [[nav2-lifecycle-manage-nodes]] | <manager>/manage_nodes (nav2_msgs/srv/ManageLifecycleNodes): STARTUP, PAUSE, RESUME, RESET, SHUTDOWN; find it, inspect it, call it from the CLI. | notes/bringup/nav2-lifecycle-manage-nodes.md |
 | [[nav2-lifecycle-manager]] | Nav2 servers are lifecycle nodes; lifecycle_manager configures and activates node_names in order, autostart, bonds detect crashes, bond_timeout. | notes/bringup/nav2-lifecycle-manager.md |
-| [[nav2-rviz-displays]] | RViz2 displays and QoS for mapping, localization and planning: Map, LaserScan, TF, RobotModel, ParticleCloud, 2D Pose Estimate, Nav2 Goal, Path, costmaps. | notes/bringup/nav2-rviz-displays.md |
+| [[nav2-rviz-displays]] | RViz2 displays and QoS for Nav2: Map, LaserScan, TF, RobotModel, ParticleCloud, 2D Pose Estimate, Nav2 Goal, Path, costmaps. | notes/bringup/nav2-rviz-displays.md |
 | [[nav2-single-launch]] | navigation.launch.py: map_server, amcl, planner, controller, behaviors and bt_navigator managed by ONE lifecycle_manager, for a full navigation system. | notes/bringup/nav2-single-launch.md |

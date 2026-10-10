@@ -6,7 +6,7 @@ area: migration
 distro: humble
 tested: false
 audience: dev
-summary: "Step-by-step checklist to port this course's Nav2 packages (YAML, BT XML, launch, simulation) from Humble to Jazzy or Lyrical, plus Humble fixes."
+summary: "Checklist to port the course's Nav2 packages (YAML, BT XML, launch, simulation) to Jazzy or Lyrical, plus Humble fixes."
 tags: [migration, checklist, Nav2, Humble, Jazzy, Lyrical, YAML, BT XML, launch]
 see: ["[[nav2-humble-to-jazzy]]", "[[nav2-jazzy-to-lyrical]]", "[[core-migration-checklist]]"]
 requires: [ros2-core]

@@ -54,4 +54,3 @@ Node(package='nav2_lifecycle_manager', executable='lifecycle_manager', name='lif
 ## Pitfalls
 - A node missing from `node_names`, or with a different name (namespace included), stays `unconfigured`.
 - One node failing to configure aborts the startup of all of them: read the first error in the log.
-- `bond_timeout: 0.0` (used in the course's multi-robot setup) also disables crash detection ([[nav2-multirobot-localization]]).

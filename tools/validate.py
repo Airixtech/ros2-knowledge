@@ -10,7 +10,8 @@ Errors (exit 1):
   - relative markdown link that leaves the repo or points to a missing file
   - `see`/`uses`/`implements`/`depends_on` items that are not wikilinks
   - unbalanced ``` fences (a split code block)
-  - Python block that fails ast.parse (after dedent); YAML block that fails to parse (needs PyYAML)
+  - Python block that fails ast.parse (after dedent); YAML block that fails to parse (needs PyYAML);
+    XML block (launch files, behavior trees) that is not well-formed
   - SKILL.md: name != folder, missing/oversized (>1024) description, missing INDEX markers,
     broken or cross-skill wikilinks
 Warnings: > MAX_TOKENS (≈ chars/4), summary > 20 words, audience not dev|students,
@@ -25,6 +26,7 @@ import re
 import sys
 import textwrap
 from pathlib import Path
+from xml.etree import ElementTree
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from notes_lib import (ROOT, RELATION_FIELDS, as_list, discover_skills,  # noqa: E402
@@ -40,6 +42,7 @@ MD_LINK_RE = re.compile(r'(?<!!)\[[^\]\n]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)')
 FENCE_RE = re.compile(r'^\s*```', re.M)
 PY_BLOCK_RE = re.compile(r'^\s*```(?:python|py)\s*\n(.*?)^\s*```', re.S | re.M)
 YAML_BLOCK_RE = re.compile(r'^\s*```ya?ml\s*\n(.*?)^\s*```', re.S | re.M)
+XML_BLOCK_RE = re.compile(r'^\s*```xml\s*\n(.*?)^\s*```', re.S | re.M)
 LINK_ITEM_RE = re.compile(r'^\[\[[^\]]+\]\]$')
 COMPLETE_PY_RE = re.compile(r'^(?:import|from)\s', re.M)
 
@@ -142,6 +145,15 @@ def main(argv):
             err = yaml_error(textwrap.dedent(block))
             if err:
                 errors.append(f'{where}: YAML block does not parse ({err})')
+        for block in XML_BLOCK_RE.findall(n['body']):
+            code = textwrap.dedent(block).strip()
+            try:
+                ElementTree.fromstring(code)
+            except ElementTree.ParseError as e:
+                try:                                  # fragment of sibling elements (e.g. package.xml lines)
+                    ElementTree.fromstring(f'<fragment>{code}</fragment>')
+                except ElementTree.ParseError:
+                    errors.append(f'{where}: XML block is not well-formed ({e})')
 
         tok = tokens_estimate(n['text'])
         if tok > MAX_TOKENS:

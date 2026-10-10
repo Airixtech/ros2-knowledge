@@ -49,7 +49,7 @@ version_notes:
 | `imu_sampling_ratio` | fixed ratio sampling for IMU messages |
 | `landmarks_sampling_ratio` | fixed ratio sampling for landmark messages |
 
-Topic names (`scan`, `odom`, `imu`, `fix`, `echoes`, `points2`) are fixed by Cartographer: remap them in the launch file ([[nav2-cartographer-launch]]).
+Topic names are fixed by Cartographer: remap them in the launch file ([[nav2-cartographer-launch]]).
 
 ## Pitfalls
 - `published_frame = "odom"` while also `provide_odom_frame = true` → two publishers of `odom` and a broken TF tree.

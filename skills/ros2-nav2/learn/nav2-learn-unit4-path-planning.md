@@ -6,7 +6,7 @@ area: learn
 distro: humble
 tested: false
 audience: students
-summary: "Unit 4 (pkg path_planner_server): pathplanner.launch.py with its YAML files, RViz path display, parameter experiments, goals by topic and by action client."
+summary: "Unit 4 (pkg path_planner_server): pathplanner.launch.py, YAML files, RViz path, parameter experiments, goals by topic and action client."
 tags: [course, students, unit 4, path_planner_server, pathplanner.launch.py, planner_server.yaml, controller.yaml, goal_pose, nav_to_pose_action_client.py]
 see: ["[[nav2-path-planning-launch]]", "[[nav2-planner-server]]", "[[nav2-dwb-controller]]", "[[nav2-send-goal-cli]]", "[[nav2-send-goal-action-client]]"]
 requires: [ros2-core]

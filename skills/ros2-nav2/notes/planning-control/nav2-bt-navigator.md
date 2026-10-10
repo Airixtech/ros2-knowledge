@@ -22,11 +22,7 @@ version_notes:
 Official definition: *the BT Navigator implements the NavigateToPose task interface. It is a Behavior Tree-based implementation of navigation that is intended to allow for flexibility in the navigation task and provide a way to easily specify complex robot behaviors, including recovery.*
 
 ## Launch
-```python
-        Node(package='nav2_bt_navigator', executable='bt_navigator', name='bt_navigator',
-             output='screen', parameters=[bt_navigator_yaml]),
-```
-The complete `bt_navigator.yaml` of the course (with the Humble `plugin_lib_names` list): [[nav2-bt-plugin-libs]].
+Package `nav2_bt_navigator`, executable `bt_navigator`, `parameters=[bt_navigator_yaml]` ([[nav2-path-planning-launch]]). The complete `bt_navigator.yaml` of the course (with the Humble `plugin_lib_names` list): [[nav2-bt-plugin-libs]].
 
 ## Parameters
 | Parameter | Default | Meaning |
@@ -52,4 +48,3 @@ Node(package='nav2_bt_navigator', executable='bt_navigator', name='bt_navigator'
 ## Pitfalls
 - XML path that does not exist → bt_navigator fails to configure and the lifecycle manager aborts the startup.
 - A BT node used in the XML but missing from `plugin_lib_names` → "node not registered" error ([[nav2-bt-plugin-libs]]).
-- Customizing behavior trees in depth: [Nav2 behavior trees](https://github.com/ros-navigation/docs.nav2.org/blob/rolling/docs/getting_started/nav2_behavior_trees/index.md).

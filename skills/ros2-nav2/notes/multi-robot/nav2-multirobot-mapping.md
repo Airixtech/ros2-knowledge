@@ -6,7 +6,7 @@ area: multi-robot
 distro: humble
 tested: false
 audience: dev
-summary: "Map with one namespaced robot (cartographer_multi.lua frames, topic remappings), save the map, erase the other robot from it; one map_server for all."
+summary: "Map with one namespaced robot (cartographer_multi.lua, topic remaps), save, erase the other robot; one shared map_server."
 tags: [multi-robot, cartographer_multi.lua, multi_cartographer.launch.py, remappings, map_saver_cli, GIMP, pgm, shared map_server]
 see: ["[[nav2-cartographer-lua]]", "[[nav2-cartographer-launch]]", "[[nav2-map-saver]]", "[[nav2-multirobot-localization]]"]
 requires: [ros2-core]

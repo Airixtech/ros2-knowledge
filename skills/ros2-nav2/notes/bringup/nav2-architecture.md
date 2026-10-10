@@ -6,7 +6,7 @@ area: bringup
 distro: humble
 tested: false
 audience: dev
-summary: "How a robot navigates (map, localize, plan, control) and which Nav2 server does each task; data flow diagram; where each topic is detailed."
+summary: "How a robot navigates (map, localize, plan, control), which Nav2 server does each task, data flow diagram."
 tags: [Nav2, navigation2, architecture, map_server, amcl, planner_server, controller_server, bt_navigator, behavior_server, lifecycle_manager]
 see: ["[[core-nav2-overview]]", "[[nav2-lifecycle-manager]]", "[[nav2-single-launch]]", "[[nav2-map-concepts]]", "[[nav2-amcl-concepts]]", "[[nav2-costmap-concepts]]"]
 requires: [ros2-core]
@@ -24,7 +24,6 @@ To move from one point to another, a robot must:
 - Determine its location (**Localization**) within that map ([[nav2-amcl-concepts]]).
 - Plan a route (**Path Planning**): the best way between two points ([[nav2-planner-server]]).
 - Execute the movement while avoiding obstacles (**Robot Control** & **Obstacle Avoidance**): send commands to the wheels (or other actuators) to follow the path while detecting and avoiding obstacles in real time ([[nav2-controller-server]], [[nav2-costmap-concepts]]).
-Building all this from scratch is complex; ROS provides pre-built navigation packages that you configure.
 
 ## What Nav2 provides
 | Task | Nav2 component | Package / executable |
@@ -57,4 +56,4 @@ The lifecycle manager starts every server above, not only `bt_navigator` ([[nav2
 
 ## Pitfalls
 - Launching the servers without a lifecycle manager → they stay unconfigured and nothing happens.
-- Nav2 needs `map → odom → base_link` TF and `/scan`; check them before tuning anything ([[core-tf-basics]]).
+- Check `map → odom → base_link` and `/scan` before tuning anything ([[core-tf-basics]]).

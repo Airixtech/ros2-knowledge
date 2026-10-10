@@ -6,7 +6,7 @@ area: migration
 distro: jazzy
 tested: false
 audience: dev
-summary: "What changes in a Nav2 configuration from Humble to Jazzy (includes Iron): plugin names, BT.CPP 4.5, BT plugin list, behavior server frames, Gazebo."
+summary: "Nav2 changes from Humble to Jazzy (incl. Iron): :: plugin names, BT.CPP 4.5, BT plugin list, behavior server frames, Gazebo."
 tags: [migration, jazzy, iron, Nav2, BT.CPP 4, plugin names, progress_checker_plugins, behavior_server]
 see: ["[[nav2-jazzy-to-lyrical]]", "[[nav2-migration-checklist]]", "[[core-humble-to-jazzy]]"]
 requires: [ros2-core]

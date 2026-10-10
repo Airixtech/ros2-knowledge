@@ -16,13 +16,10 @@ version_notes:
 ---
 # Per-robot planner_server and controller_server YAML (costmaps, frames, map_topic)
 
-**TL;DR** Copy each config once per robot (`tb3_0_planner_server.yaml`, `tb3_0_controller.yaml`…) and change: the full node name in the first key, the same for the costmap keys, the robot frames, and force `/map`.
+**TL;DR** Copy each config once per robot (`tb3_0_planner_server.yaml`, `tb3_0_controller.yaml`…) and apply the rules below.
 
 ## Rules for every per-robot file
-1. The first line holds the **full new node name**, e.g. `tb3_0/planner_server`.
-2. All frames get the namespace, except the global frame (`map`), which is shared.
-3. Topics are renamed by the launch namespace; frames are not.
-4. Force `map_topic` to `/map`: the `/` means "do not apply the namespace", because the map is unique and shared.
+First key = **full new node name** (`tb3_0/planner_server`), also for the costmap keys (`tb3_0/global_costmap`); all frames get the namespace except the shared global frame (`map`); topics are renamed by the launch namespace, frames are not; force `map_topic` to `/map` (the `/` means: do not apply the namespace) ([[nav2-multirobot-amcl-config]]).
 
 ## tb3_0_planner_server.yaml (complete)
 ```yaml
@@ -89,8 +86,7 @@ tb3_0/local_costmap:              # was local_costmap
         scan:
           topic: /tb3_0/scan
 ```
-The course also adds `cmd_vel_topic: "cmd_vel"` to `controller_server`: Humble has no such parameter. The controller publishes the relative topic `cmd_vel`, which the namespace already turns into `/tb3_0/cmd_vel`.
+The course also adds `cmd_vel_topic: "cmd_vel"`: not a Humble parameter; the relative `cmd_vel` already becomes `/tb3_0/cmd_vel`.
 
 ## Pitfalls
 - Costmap key not namespaced (`global_costmap:` under a `tb3_0` planner) → the costmap runs with default parameters.
-- `robot_base_frame: base_link` left unprefixed → TF lookup errors: that frame does not exist.

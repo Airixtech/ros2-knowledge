@@ -76,7 +76,7 @@ Critics are plugins that score each candidate trajectory against one constraint;
 | `RotateToGoal` | rotate in place to the goal heading once in xy tolerance |
 | `Oscillation` | do not oscillate back and forth |
 
-Full list: [DWB critics](https://github.com/ros-navigation/navigation2/blob/main/nav2_dwb_controller/README.md#critic-plugins), [DWB docs](https://github.com/ros-navigation/docs.nav2.org/blob/rolling/docs/configuration_and_development/configuration_guide/controller_plugins/dwb_controller/index.md).
+Full list: [DWB docs](https://github.com/ros-navigation/docs.nav2.org/blob/rolling/docs/configuration_and_development/configuration_guide/controller_plugins/dwb_controller/index.md).
 
 ## Pitfalls
 - DWB needs tuning for each robot and is not meant for Ackermann robots ([[core-nav2-tuning]]).
