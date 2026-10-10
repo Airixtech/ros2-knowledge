@@ -22,6 +22,7 @@ version_notes:
     FollowPath:
       plugin: "dwb_core::DWBLocalPlanner"
       debug_trajectory_details: True
+      trajectory_generator_name: "dwb_plugins::StandardTrajectoryGenerator"   # default; set in the advanced course (ASCII quotes, NAV2-V54)
       min_vel_x: 0.0
       min_vel_y: 0.0
       max_vel_x: 0.26
@@ -76,7 +77,7 @@ Critics are plugins that score each candidate trajectory against one constraint;
 | `RotateToGoal` | rotate in place to the goal heading once in xy tolerance |
 | `Oscillation` | do not oscillate back and forth |
 
-Full list: [DWB docs](https://github.com/ros-navigation/docs.nav2.org/blob/rolling/docs/configuration_and_development/configuration_guide/controller_plugins/dwb_controller/index.md).
+Trajectory generators and the full list of critics: [[nav2-dwb-generators-critics]]; [DWB docs](https://github.com/ros-navigation/docs.nav2.org/blob/rolling/docs/configuration_and_development/configuration_guide/controller_plugins/dwb_controller/index.md).
 
 ## Pitfalls
 - DWB needs tuning for each robot and is not meant for Ackermann robots ([[core-nav2-tuning]]).

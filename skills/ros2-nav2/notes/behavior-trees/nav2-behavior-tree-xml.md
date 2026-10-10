@@ -2,7 +2,7 @@
 id: nav2-behavior-tree-xml
 title: "Navigation behavior tree XML: replanning and recoveries"
 domain: nav2
-area: planning-control
+area: behavior-trees
 distro: humble
 tested: false
 audience: dev

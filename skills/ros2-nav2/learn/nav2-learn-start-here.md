@@ -8,7 +8,7 @@ tested: false
 audience: students
 summary: "Start here for the Nav2 course: unit path (demo, mapping, localization, path planning, costmaps, multi-robot), prerequisites, TurtleBot3 Burger, credits."
 tags: [course, students, start here, Nav2, TurtleBot3, learning path, requirements]
-see: ["[[nav2-learn-demo]]", "[[nav2-architecture]]", "[[core-learn-start-here]]", "[[nav2-learn-course-project]]"]
+see: ["[[nav2-learn-demo]]", "[[nav2-architecture]]", "[[core-learn-start-here]]", "[[nav2-learn-course-project]]", "[[nav2-learn-adv-start-here]]"]
 requires: [ros2-core]
 order: 1
 version_notes: []
@@ -27,6 +27,8 @@ version_notes: []
 | 5 | Obstacle avoidance (costmaps) | 5.1–5.5 | [[nav2-learn-unit5-costmaps]] |
 | 6 | Multi-robot navigation | 6.1–6.2 + planning + single launch | [[nav2-learn-unit6-multirobot]] |
 | – | Course project (Sections I–IV) | after Units 2–5 | [[nav2-learn-course-project]] |
+
+Next: the advanced course (warehouse, Simple Commander, behavior trees, plugins, controller server): [[nav2-learn-adv-start-here]].
 
 ## Requirements
 - Basic knowledge of **Python**.

@@ -32,7 +32,13 @@ version_notes:
 | Multi-robot bringup | `unique_/cloned_multi_tb3_simulation_launch.py` | renamed `unique_tb3_simulation_launch.py`, `cloned_tb3_simulation_launch.py` | NAV2-V25 |
 | Map server launch | `yaml_filename` param | Nav2 launch files take a `map` argument that overrides it | NAV2-V36 |
 | use_sim_time | set in every YAML | Nav2 launch files can set it for all nodes | NAV2-V30 |
+| Simple Commander | `isTaskComplete()`, `getResult()` → `TaskResult`, clear*Costmap methods | + `driveOnHeading()`, docking, `followGpsWaypoints()`, `clearCostmapAroundRobot()` | NAV2-V57 |
+| Action results | `NavigateToPose` result empty; `FollowWaypoints` `int32[] missed_waypoints` | `error_code` + `error_msg`; `FollowWaypoints` goal `number_of_loops`, `goal_index`, result `MissedWaypoint[]` | NAV2-V58, NAV2-V59 |
+| waypoint_follower | `loop_rate`, `stop_on_failure`, task executor plugins | + `action_server_result_timeout`, `global_frame_id` | NAV2-V60 |
+| Costmap filters | Keepout, Speed and Binary filters, `toggle_filter` | + `override_lethal_cost`, `lethal_override_cost` (KeepoutFilter) | NAV2-V61 |
+| Plugin API | `GlobalPlanner::createPlan(start, goal)`; `Controller` without cancel | `createPlan(start, goal, cancel_checker)`; `Controller::cancel()`, `reset()` | NAV2-V63 |
+| Regulated Pure Pursuit | `use_interpolation`, `max_allowed_time_to_collision_up_to_carrot` | + `use_fixed_curvature_lookahead`, `curvature_lookahead_dist`, `stateful`, cancel deceleration; − `use_interpolation` | NAV2-V65 |
 
-Unchanged and safe to keep: AMCL parameters and topics, costmap layer parameters, NavFn parameters, map_saver_cli, cartographer_ros, NavigateToPose action and `goal_pose` topic.
+Unchanged and safe to keep: AMCL parameters and topics, costmap layer parameters, NavFn parameters, DWB critics, map_saver_cli, cartographer_ros, the NavigateToPose goal and the `goal_pose` topic (its result gains error codes, NAV2-V58).
 
 Generic ROS 2 changes (Ubuntu 24.04, rclpy, launch, tf2…): [[core-humble-to-jazzy]]. Step-by-step: [[nav2-migration-checklist]].

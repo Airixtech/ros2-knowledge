@@ -39,10 +39,13 @@ If the notes do not cover the question, answer from standard Humble knowledge an
 | bringup | 5 | `notes/bringup/_index.md` | Nav2 architecture and servers, nav2_lifecycle_manager (node_names, autostart, bonds, manage_nodes), single launch file, RViz2 displays |
 | mapping | 6 | `notes/mapping/_index.md` | occupancy grid maps, SLAM, cartographer_ros launch and Lua options, map_saver_cli, map_server |
 | localization | 7 | `notes/localization/_index.md` | AMCL concepts, launch and parameters, initial pose (RViz, config file, node), global localization |
-| planning-control | 10 | `notes/planning-control/_index.md` | planner_server (NavFn), controller_server (DWB, checkers), bt_navigator and BT XML, behavior_server, goals from CLI and Python |
-| costmaps | 6 | `notes/costmaps/_index.md` | global vs local costmap, static/inflation/obstacle/voxel layers, robot_radius vs footprint |
+| planning-control | 11 | `notes/planning-control/_index.md` | planner_server (NavFn), controller_server (DWB, RPP, progress and goal checkers, critics), behavior_server, goals from CLI and Python |
+| behavior-trees | 7 | `notes/behavior-trees/_index.md` | bt_navigator, behavior tree XML, Nav2 BT control/action nodes, plugin_lib_names, custom trees (low battery), how recoveries are triggered |
+| costmaps | 10 | `notes/costmaps/_index.md` | global vs local costmap, static/inflation/obstacle/voxel layers, robot_radius vs footprint, costmap filters (keepout zones, speed limits) |
+| commander | 5 | `notes/commander/_index.md` | nav2_simple_commander BasicNavigator (goToPose, followWaypoints), NavigateToPose action, waypoint_follower, warehouse demos |
+| plugins | 20 | `notes/plugins/_index.md` | writing Nav2 plugins: costmap layer, global planner, controller (base classes, plugin XML, CMake, package.xml, configuration) |
 | multi-robot | 9 | `notes/multi-robot/_index.md` | Nav2 for several robots with namespaces: mapping, AMCL, per-robot YAML, launch files, RViz |
-| learn | 8 | `learn/_index.md` | course track for students (TurtleBot3): demo, Units 2–6 exercises, course project; open only for course questions |
+| learn | 13 | `learn/_index.md` | course tracks for students: intro course (TurtleBot3, Units 1–6, project) and advanced course (warehouse, Units 1–4); open only for course questions |
 | migration | 3 | `migration/_index.md` | Humble → Jazzy → Lyrical Nav2 changes and a migration checklist; open for other distros or porting |
 <!-- INDEX:END -->
 

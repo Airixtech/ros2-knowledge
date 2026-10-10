@@ -27,7 +27,14 @@ version_notes:
 | Bonds | `bond_heartbeat_period` 0.1 s | default 0.25 s, also set it in the lifecycle manager (Lyrical) | NAV2-V23 |
 | New servers | docking | route server; following server and a collision monitor toggle (Lyrical) | NAV2-V27 |
 | Inflation layer | — | refactored (OpenMP), custom inscribed radius, asymmetric inflation (Lyrical) | NAV2-V09 |
+| Simple Commander | untyped methods | typed API, `getTaskError()`, `isTaskComplete(task)`; (Lyrical) `followWaypoints(poses, number_of_loops, goal_index)`, `followObjectByTopic`/`ByFrame`, `toggleCollisionMonitor` | NAV2-V57 |
+| Action results | `error_code`, `error_msg` | named codes 9000–9003; (Lyrical) `GOAL_REJECTED`, `SEND_GOAL_FAILURE`, feedback tracking errors, `FollowWaypoints` `WaypointStatus[]` | NAV2-V58, NAV2-V59 |
+| Costmap filters | keepout, speed, binary | keepout and speed zones in the default bringup, vector object server; (Lyrical) zone parameter filter | NAV2-V61 |
+| Plugin API | `rclcpp_lifecycle` node, `setPlan()` | (Lyrical) `nav2::LifecycleNode`, `nav2::TransformBuffer`, `createPlan(…, viapoints, cancel_checker)`, `Controller::newPathReceived()` and `computeVelocityCommands(…, transformed_global_plan, global_goal)` | NAV2-V63 |
+| Controller server | progress/goal checkers | (Lyrical) path handler plugin (`FeasiblePathHandler`), `AdaptiveToleranceGoalChecker`, `AxisGoalChecker` | NAV2-V67 |
+| Regulated Pure Pursuit | — | (Lyrical) dynamic window (`use_dynamic_window`, velocity/acceleration limits), `min_distance_to_obstacle`; − `transform_tolerance`, `max_robot_pose_search_dist`, `stateful` | NAV2-V65 |
+| CMake | `ament_target_dependencies()` | deprecated; removed in Lyrical: `target_link_libraries()` | NAV2-V68 |
 
-Unchanged: AMCL parameters, the `navigate_to_pose` action and `goal_pose`, map_saver_cli, cartographer_ros and SLAM Toolbox (both released for Lyrical).
+Unchanged: AMCL parameters, the `navigate_to_pose` goal and `goal_pose`, map_saver_cli, cartographer_ros and SLAM Toolbox (both released for Lyrical).
 
 Generic ROS 2 changes: [[core-jazzy-to-lyrical]]. Step-by-step: [[nav2-migration-checklist]].

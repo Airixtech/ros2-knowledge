@@ -2,7 +2,7 @@
 id: nav2-bt-navigator
 title: "bt_navigator: role, launch and parameters"
 domain: nav2
-area: planning-control
+area: behavior-trees
 distro: humble
 tested: false
 audience: dev

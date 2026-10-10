@@ -2,7 +2,7 @@
 id: nav2-bt-plugin-libs
 title: "plugin_lib_names: BT node libraries in Humble"
 domain: nav2
-area: planning-control
+area: behavior-trees
 distro: humble
 tested: false
 audience: dev
