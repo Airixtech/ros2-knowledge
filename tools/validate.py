@@ -144,6 +144,7 @@ def main(argv):
     skills = discover_skills()
     notes = load_notes()
     errors, warnings = [], []
+    unlinted = 0                                   # complete Python programs not checked (no pyflakes)
     by_id = {}
     for n in notes:
         nid = n['fm'].get('id')
@@ -205,7 +206,10 @@ def main(argv):
                 errors.append(f'{where}: Python block does not parse (line {e.lineno}: {e.msg})')
                 continue
             if COMPLETE_PY_RE.search(code) and ('def main' in code or "__name__ == '__main__'" in code):
-                for msg in pyflakes_messages(code) or []:
+                msgs = pyflakes_messages(code)
+                if msgs is None:
+                    unlinted += 1
+                for msg in msgs or []:
                     warnings.append(f'{where}: pyflakes: {msg}')
         for block in YAML_BLOCK_RE.findall(n['body']):
             err = yaml_error(textwrap.dedent(block))
@@ -291,7 +295,8 @@ def main(argv):
         warnings.append(f'index check skipped: {e}')
 
     print(f'skills: {len(skills)} ({", ".join(skills)}) | notes: {len(notes)} | '
-          f'errors: {len(errors)} | warnings: {len(warnings)}')
+          f'errors: {len(errors)} | warnings: {len(warnings)}'
+          + (f' | {unlinted} Python programs not linted (pip install pyflakes)' if unlinted else ''))
     for e in errors:
         print(f'ERROR   {e}')
     if brief and warnings:                         # rare kinds in full, frequent kinds as one count

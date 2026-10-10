@@ -47,7 +47,7 @@ Cada nota sigue el mismo formato: un TL;DR de 1–2 líneas, luego el código o 
 
 ## Usarlo como Skill de Claude
 
-Requisitos: Python 3.10+ y bash (en Windows, Git Bash). PyYAML es opcional.
+Requisitos: Python 3.10+ y bash (en Windows, Git Bash). PyYAML y pyflakes son opcionales (`pip install pyyaml pyflakes`): sin pyflakes, `validate.py` avisa cuántos programas Python no revisó.
 
 Instala siempre `ros2-core`; `ros2-nav2` lo necesita, porque sus notas enlazan a las de core.
 
