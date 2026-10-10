@@ -1,0 +1,38 @@
+---
+id: nav2-humble-to-jazzy
+title: "Humble → Jazzy changes (Nav2)"
+domain: nav2
+area: migration
+distro: jazzy
+tested: false
+audience: dev
+summary: "What changes in a Nav2 configuration from Humble to Jazzy (includes Iron): plugin names, BT.CPP 4.5, BT plugin list, behavior server frames, Gazebo."
+tags: [migration, jazzy, iron, Nav2, BT.CPP 4, plugin names, progress_checker_plugins, behavior_server]
+see: ["[[nav2-jazzy-to-lyrical]]", "[[nav2-migration-checklist]]", "[[core-humble-to-jazzy]]"]
+requires: [ros2-core]
+version_notes:
+  - "sources: https://github.com/ros-navigation/docs.nav2.org/blob/rolling/docs/configuration_and_development/migration_guides/Humble.md · https://github.com/ros-navigation/docs.nav2.org/blob/rolling/docs/configuration_and_development/migration_guides/iron/Iron.md"
+---
+# Humble → Jazzy changes (Nav2)
+
+**TL;DR** Jazzy's Nav2 (1.3.x) includes Iron's changes. The edits most course-style configs need are the `::` plugin names, BT XML for BehaviorTree.CPP 4.5, removing the BT plugin list, `progress_checker_plugins`, the behavior server's `local_frame`, and Gazebo Harmonic instead of Gazebo Classic. `NAV2-Vxx` = row in the repo's `reports/version_audit_nav2.md`.
+
+| Area | Humble | Jazzy | Ref |
+|---|---|---|---|
+| Plugin names | mixed: `nav2_navfn_planner/NavfnPlanner`, `nav2_behaviors/Spin` | all `::`: `nav2_navfn_planner::NavfnPlanner`, `nav2_behaviors::Spin`; DWB stays `dwb_core::DWBLocalPlanner` | NAV2-V17 |
+| Behavior trees | BT.CPP 3.8, `<root main_tree_to_execute=…>` | BT.CPP 4.5: `<root BTCPP_format="4" …>`, new SubTree syntax; custom control/decorator nodes handle `SKIPPED`; `SequenceStar` still accepted | NAV2-V20 |
+| bt_navigator | `plugin_lib_names` lists every Nav2 BT library | Nav2 BT nodes load automatically, list only custom ones; `navigators` param; `$(find-pkg-share)` in param files | NAV2-V19, NAV2-V21 |
+| controller_server | `progress_checker_plugin: "progress_checker"` | `progress_checker_plugins: ["progress_checker"]` | NAV2-V18 |
+| Default controller | DWB in `nav2_params.yaml` | MPPI in `nav2_params.yaml` | NAV2-V32 |
+| behavior_server | `global_frame` (default `odom`), `costmap_topic`, `footprint_topic` | `local_frame: odom` + `global_frame: map`; `local_/global_costmap_topic`, `local_/global_footprint_topic` | NAV2-V02 |
+| Lifecycle | `bond_timeout` in the manager | + `bond_heartbeat_period` per node (0.1 s; ≤ 0 disables bonds) | NAV2-V23 |
+| ManageLifecycleNodes | commands 0–4 | + `CONFIGURE = 5`, `CLEANUP = 6` | NAV2-V22 |
+| cmd_vel | Twist | Twist, opt-in `enable_stamped_cmd_vel`; collision_monitor in the default chain | NAV2-V26, NAV2-V27 |
+| Simulation | Gazebo Classic: `ros2 run gazebo_ros spawn_entity.py -entity … -database …` | Gazebo Harmonic: `ros2 run ros_gz_sim create …`; `gazebo_ros` not released | NAV2-V28 |
+| Multi-robot bringup | `unique_/cloned_multi_tb3_simulation_launch.py` | renamed `unique_tb3_simulation_launch.py`, `cloned_tb3_simulation_launch.py` | NAV2-V25 |
+| Map server launch | `yaml_filename` param | Nav2 launch files take a `map` argument that overrides it | NAV2-V36 |
+| use_sim_time | set in every YAML | Nav2 launch files can set it for all nodes | NAV2-V30 |
+
+Unchanged and safe to keep: AMCL parameters and topics, costmap layer parameters, NavFn parameters, map_saver_cli, cartographer_ros, NavigateToPose action and `goal_pose` topic.
+
+Generic ROS 2 changes (Ubuntu 24.04, rclpy, launch, tf2…): [[core-humble-to-jazzy]]. Step-by-step: [[nav2-migration-checklist]].

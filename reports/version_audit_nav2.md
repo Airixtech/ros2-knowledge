@@ -42,7 +42,7 @@
 | NAV2-V03 | P37.S04, P40.S01 | "three recovery behaviors: spin, backup, wait"; default list `{"spin","back_up","wait"}` | Humble default `behavior_plugins`: `spin`, `backup`, `drive_on_heading`, `wait`; `assisted_teleop` is also available (enabled in `nav2_params.yaml`). |
 | NAV2-V04 | P37.S01 | "Currently (Galactic), only one planner algorithm: NavFn" | Humble planners: NavFn, Smac (2D, Hybrid-A*, Lattice), Theta* (all released as Humble binaries). |
 | NAV2-V05 | P37.S02 | "only two local planners: DWB and TEB" | Humble controllers: DWB, Regulated Pure Pursuit, MPPI, Rotation Shim, Graceful (Humble binaries; MPPI and Graceful are backports). TEB is not released for any ROS 2 distro in rosdistro. |
-| NAV2-V06 | P38 | `expected_planner_frequency` default 20 | Code default is **1.0** Hz; `nav2_params.yaml` sets 20.0. |
+| NAV2-V06 | P38 | `expected_planner_frequency` default 20; "the frequency at which to compute the path" | Code default is **1.0** Hz (`nav2_params.yaml` sets 20.0). It does not set how often paths are computed (the BT decides that, e.g. `RateController hz="1.0"`): it only sets the duration (1/frequency) above which a planning-overrun warning is printed. |
 | NAV2-V07 | P39 | defaults `min_x_velocity_threshold` 0.01, `min_y_…` 0.0, `min_theta_…` 0.1; `failure_tolerance` "0.5 m" | All three thresholds default to **0.0001**. `failure_tolerance` is in **seconds**, default **0.0** (−1 = infinite). |
 | NAV2-V08 | P29 | `robot_model_type` default `"differential"`; `always_reset_initial_pose` is a double; `save_pose_rate` stores the pose "to the parameter server" for later runs | Default is `nav2_amcl::DifferentialMotionModel` (motion models became plugins in Galactic→Humble; `nav2_amcl::OmniMotionModel` for omni). `always_reset_initial_pose` is a bool (default false). `save_pose_rate` is declared but has **no effect** in Humble: the pose is not saved or reused. |
 | NAV2-V09 | P52 | defaults `always_send_full_costmap` true, static `subscribe_to_updates` true, static `transform_tolerance` 0.1 m, inflation `cost_scaling_factor` 1.0, source `clearing` true; params `obstacle_range`, `raytrace_range` | Code defaults: `always_send_full_costmap` **false**, `subscribe_to_updates` **false**, static `transform_tolerance` **0.0** s, `cost_scaling_factor` **10.0**, `clearing` **false** (`marking` true). Range params are `obstacle_max_range`/`obstacle_min_range` and `raytrace_max_range`/`raytrace_min_range`. `obstacle_range`/`raytrace_range` are ROS 1 names. |
@@ -53,6 +53,7 @@
 | NAV2-V14 | P43 | action client puts `theta` in `pose.position.z`; `'Result: {0}' + str(result)` | The orientation is never set (it stays `w = 1`, yaw 0) and `z` is ignored by 2D planning. Set the orientation quaternion from yaw. The log line prints a literal `{0}`. |
 | NAV2-V15 | P60, P62 | `view_frames` "will generate a `frames.pdf` file" | Humble writes `frames_<YYYY-MM-DD_HH.MM.SS>.pdf` (the log says `frames.pdf`). Use `-o frames` for a fixed name. |
 | NAV2-V16 | P22 | lifecycle manager moves nodes "to `initialized`" in list order | It **configures and activates** the nodes in `node_names` order, and deactivates/cleans them up in reverse order. |
+| NAV2-V41 | P63 | "Add the `cmd_vel_topic: \"cmd_vel\"` parameter to the controller_server" | Humble's `controller_server` has no `cmd_vel_topic` parameter (the value is ignored). It publishes on the relative topic `cmd_vel`, so the node namespace already makes it `/tb3_0/cmd_vel`. |
 
 ## Full table
 | # | Section | Statement | Humble | Jazzy | Lyrical | Action | Source | Confidence |
@@ -62,7 +63,7 @@
 | NAV2-V03 | P37.S04 | 3 recoveries | ✗ spin, backup, drive_on_heading, wait (+ assisted_teleop) | ✓ same set | ✓ | **fix** | [behavior_server (humble)][bs-h], [nav2_params (humble)][np-h] | High |
 | NAV2-V04 | P37.S01 | only NavFn | ✗ NavFn, Smac, Theta* | ✓ | ✓ | **fix** | [apt index (jammy)][apt-jammy] | High |
 | NAV2-V05 | P37.S02 | only DWB + TEB | ✗ DWB, RPP, MPPI, Rotation Shim, Graceful; no TEB | default MPPI | ✓ | **fix** | [apt index (jammy)][apt-jammy], [rosdistro][rd], [nav2_params (jazzy)][np-j] | High |
-| NAV2-V06 | P38 | `expected_planner_frequency` default 20 | ✗ 1.0 | ✓ same | ✓ | **fix** | [planner_server (humble)][ps-h] | High |
+| NAV2-V06 | P38 | `expected_planner_frequency` default 20 and meaning | ✗ 1.0; only an overrun-warning threshold | ✓ same | ✓ | **fix** | [planner_server (humble)][ps-h] | High |
 | NAV2-V07 | P39 | controller thresholds and `failure_tolerance` defaults | ✗ 0.0001; 0.0 s | ✓ same | ✓ | **fix** | [controller_server (humble)][cs-h] | High |
 | NAV2-V08 | P29 | AMCL `robot_model_type`, `always_reset_initial_pose`, `save_pose_rate` | ✗ see fix table | ✓ same | ✓ | **fix** | [amcl_node (humble)][amcl-h], [Galactic→Humble][mig-g2h] | High |
 | NAV2-V09 | P52 | costmap/layer defaults and range param names | ✗ see fix table | ✓ same | inflation layer refactor (Kilted) | **fix** | [costmap_2d_ros (humble)][c2d-h], [layers (humble)][layers-h] | High |
@@ -97,6 +98,7 @@
 | NAV2-V38 | P38, P39 | NavFn params (0.5 / false / true), progress and goal checker values, DWB class `dwb_core::DWBLocalPlanner` | ✓ | ✓ | ✓ | keep | [navfn (humble)][navfn-h], [nav2_params (humble)][np-h] | High |
 | NAV2-V39 | P62, P63 | flat YAML keys `tb3_0/amcl:`; `/reinitialize_global_localization`; `goal_pose` topic | ✓ (rcl prepends `/` to the key) | ✓ | ✓ | keep | [rcl YAML parser][rcl-parse], [amcl_node (humble)][amcl-h] | High |
 | NAV2-V40 | P22 | lifecycle diagram: unconfigured, inactive, active, finalized; `on_configure` … `on_error` | ✓ (generic, see `core-lifecycle-concepts`) | ✓ | Nav2 lifecycle node moves to `nav2_ros_common` (`nav2::LifecycleNode`) (Kilted) | annotate | [Kilted→Lyrical][mig-k2l] | High |
+| NAV2-V41 | P63 | `cmd_vel_topic` parameter | ✗ not a parameter; relative `cmd_vel` | ✗ same | ✗ same | **fix** | [controller_server (humble)][cs-h] | High |
 
 ## Open `[verify]` (Phase 5 or a real robot)
 - NAV2-V10: whether the Jazzy **release** (not only the jazzy branch) has `enable_groot_monitoring`.

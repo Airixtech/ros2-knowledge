@@ -1,0 +1,9 @@
+# Area descriptions for tools/build_index.py (display order = file order). Not packaged.
+bringup: "Nav2 architecture and servers, nav2_lifecycle_manager (node_names, autostart, bonds, manage_nodes), single launch file, RViz2 displays"
+mapping: "occupancy grid maps, SLAM, cartographer_ros launch and Lua options, map_saver_cli, map_server"
+localization: "AMCL concepts, launch and parameters, initial pose (RViz, config file, node), global localization"
+planning-control: "planner_server (NavFn), controller_server (DWB, checkers), bt_navigator and BT XML, behavior_server, goals from CLI and Python"
+costmaps: "global vs local costmap, static/inflation/obstacle/voxel layers, robot_radius vs footprint"
+multi-robot: "Nav2 for several robots with namespaces: mapping, AMCL, per-robot YAML, launch files, RViz"
+learn: "course track for students (TurtleBot3): demo, Units 2–6 exercises, course project; open only for course questions"
+migration: "Humble → Jazzy → Lyrical Nav2 changes and a migration checklist; open for other distros or porting"
