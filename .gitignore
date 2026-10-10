@@ -10,3 +10,6 @@ __pycache__/
 .trash/
 # raw wiki exports are never published (kept outside this repo)
 source/
+.obsidian/workspace*.json
+.obsidian/cache
+.trash/
