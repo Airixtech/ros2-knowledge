@@ -12,7 +12,7 @@ see: ["[[core-lifecycle-concepts]]", "[[nav2-lifecycle-manage-nodes]]", "[[nav2-
 requires: [ros2-core]
 version_notes:
   - "humble: nodes are configured and activated in node_names order and deactivated in reverse; bond_timeout default 4.0 s, <= 0 disables bonds — https://github.com/ros-navigation/navigation2/blob/humble/nav2_lifecycle_manager/src/lifecycle_manager.cpp (NAV2-V16, NAV2-V23)"
-  - "jazzy: bond_heartbeat_period per lifecycle node (0.1 s); lyrical: default 0.25 s and nav2::LifecycleNode in nav2_ros_common (Kilted) — https://github.com/ros-navigation/docs.nav2.org/blob/rolling/docs/configuration_and_development/migration_guides/kilted/Kilted.md (NAV2-V23, NAV2-V40)"
+  - "jazzy: bond_heartbeat_period per lifecycle node (0.1 s); lyrical: default 0.25 s and nav2::LifecycleNode in nav2_ros_common (both new in Lyrical; Kilted keeps 0.1 s and nav2_util) — https://github.com/ros-navigation/docs.nav2.org/blob/rolling/docs/configuration_and_development/migration_guides/kilted/Kilted.md (NAV2-V23, NAV2-V40)"
 ---
 # nav2_lifecycle_manager: node_names, autostart, bonds
 

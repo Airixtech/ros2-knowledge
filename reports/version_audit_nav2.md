@@ -1,8 +1,11 @@
 # Version audit — ros2-nav2 (Phase 1)
 
-> Date: 2026-10-09 · Scope: every version-dependent statement in the original "Introduction to ROS 2 Navigation"
-> course wiki (not published): Nav2 servers and parameters, behavior trees, lifecycle manager, map server,
-> AMCL, costmaps, Cartographer, multi-robot setup, simulator commands and the course code.
+> Date: 2026-10-09 (intro course, NAV2-V01–V41) · 2026-10-10 (advanced course, NAV2-V42–V68).
+> Scope: every version-dependent statement in two course wikis (not published): "Introduction to ROS 2 Navigation"
+> (Nav2 servers and parameters, behavior trees, lifecycle manager, map server, AMCL, costmaps, Cartographer,
+> multi-robot setup, simulator commands, course code) and "Advanced ROS 2 Navigation" (Simple Commander API,
+> waypoint follower, costmap filters, Nav2 behavior tree nodes, custom costmap/planner/controller plugins,
+> controller server plugins). Section IDs: `Pnn` = intro course page, `A-Pnn` = advanced course page.
 > Baseline: **Humble is canonical**. Jazzy and Lyrical differences are annotated, not substituted.
 > The "Lyrical" column includes changes that first appeared in **Kilted**, marked "(Kilted)".
 > Generic ROS 2 rows are in [version_audit.md](version_audit.md) (IDs `Vnn`); this report cites them instead of repeating them.
@@ -15,6 +18,11 @@
   `kilted/Kilted.md` = Kilted→Lyrical), `ros2/rcl` (YAML parameter parser), `ros2/geometry2` (`view_frames`),
   `ros2/cartographer_ros` (`ros2` branch), `ROBOTIS-GIT/turtlebot3` (`humble`), `BehaviorTree/BehaviorTree.CPP`,
   the rosdistro `distribution.yaml` of each distro, and the packages.ros.org apt index for Jammy.
+- Advanced course, in addition: `nav2_simple_commander`, `nav2_waypoint_follower`, the costmap filters and
+  `costmap_filter_info_server`, the `nav2_core` plugin interfaces and `nav2_costmap_2d::Layer` on each branch,
+  `ros/pluginlib` and `ros/class_loader` (`humble`), the Nav2 tutorials in `ros-navigation/docs.nav2.org`, and the
+  `navigation2` release tags 1.0.x (Galactic) and 1.1.x (Humble) to find which upstream version the course's
+  controller plugin code was copied from (token similarity of the whole file).
 - Defaults are taken from the code, not from the configuration docs: the course copied several defaults from
   older documentation pages, and the code disagrees.
 - Actions: **keep** = correct for Humble · **annotate** = correct for Humble, add a version mark · **fix** = wrong
@@ -35,6 +43,7 @@
 | Sources | [nav2 humble][n2-h], [rosdistro][rd] | [nav2 jazzy][n2-j], [Iron→Jazzy][mig-i2j] | [Jazzy→Kilted][mig-j2k] | [nav2 lyrical][n2-l], [Kilted→Lyrical][mig-k2l] |
 
 ## Real Humble errors (fix)
+### Intro course
 | ID | Section | Error in the course | Correct Humble statement |
 |---|---|---|---|
 | NAV2-V01 | P37.S04, P40.S01, P55, P63 | The node is launched with `name='recoveries_server'`, but its YAML starts with `behavior_server:` (multi-robot: `tb3_0/behavior_server:`) | Parameter files are matched by node name, so this YAML is **never applied** and the node runs with defaults. Single robot it works by accident. Multi-robot it breaks: the defaults `global_frame: odom` / `robot_base_frame: base_link` have no namespace, so behaviors fail their TF lookups. The YAML key must equal the launched name (`recoveries_server:` / `tb3_0/recoveries_server:`), or launch the node as `behavior_server`. |
@@ -55,14 +64,32 @@
 | NAV2-V16 | P22 | lifecycle manager moves nodes "to `initialized`" in list order | It **configures and activates** the nodes in `node_names` order, and deactivates/cleans them up in reverse order. |
 | NAV2-V41 | P63 | "Add the `cmd_vel_topic: \"cmd_vel\"` parameter to the controller_server" | Humble's `controller_server` has no `cmd_vel_topic` parameter (the value is ignored). It publishes on the relative topic `cmd_vel`, so the node namespace already makes it `/tb3_0/cmd_vel`. |
 
+### Advanced course
+| ID | Section | Error in the course | Correct Humble statement |
+|---|---|---|---|
+| NAV2-V42 | A-P06 | "`isNavComplete()` returns True only after the robot has reached the goal" (the code calls `isTaskComplete()`) | The Humble method is `isTaskComplete()` (`isNavComplete()` is the Galactic name). It returns True when the task ends with **any** result (succeeded, canceled or failed); `getResult()` tells which. |
+| NAV2-V43 | A-P10, A-P32 | To stop `ObstacleFootprint/Trajectory Hits Obstacle` near a keepout zone, "remove the critic `ObstacleFootprint`"; the custom costmap config runs DWB without `BaseObstacle` too | In DWB only `BaseObstacle` and `ObstacleFootprint` reject trajectories through lethal cells (the grid critics never mark obstacle cells). Without both, DWB has **no collision check** for any obstacle. Keep one of them: the error means the footprint already touches a lethal cell (robot inside or at the edge of the zone). Jazzy+ `KeepoutFilter` adds `override_lethal_cost` to drive out of a zone. |
+| NAV2-V44 | A-P11 | `filters.yaml` loads `…/maps/map_speeds.yaml`; the mask created is `map_speed.yaml` | The mask server cannot load the file. Use the same name in both places. |
+| NAV2-V45 | A-P15 | "You MUST create a behavior for the `bt_navigator`" | Optional: if `default_nav_to_pose_bt_xml` is not set, Humble loads `navigate_to_pose_w_replanning_and_recovery.xml` from `nav2_bt_navigator`. |
+| NAV2-V46 | A-P17 | `Spin` "rotates the number of degrees in `spin_dist`"; `Spin` and `Wait` are served by "the `nav2_recoveries` node" | `spin_dist` is in **radians** (default 1.57 = 90°), `wait_duration` in seconds. Both actions are served by `behavior_server` (`nav2_behaviors`, NAV2-V31). |
+| NAV2-V47 | A-P19 | Exercise solution: `<Inverter><IsBatteryLow …/></Inverter>` as first child of the `PipelineSequence` "aborts the current goal" | Inside `RecoveryNode number_of_retries="6"` a low battery fails the pipeline, so the recovery branch runs (clear costmaps, spin, wait 5 s) and the pipeline is retried: the goal aborts only after 6 recovery rounds. An immediate abort needs the battery check outside the RecoveryNode `[verify]`. |
+| NAV2-V48 | A-P20 | `recovery.yaml`: `recovery_plugins: ["spin", "backup", "wait"]`, `transform_timeout`; `ros2 action list` shows `/backup`, `/spin`, `/wait` and `/move_robot_as` | Humble reads `behavior_plugins` (default `spin`, `backup`, `drive_on_heading`, `wait`) and `transform_tolerance` (NAV2-V02, V03). `recovery_plugins` is ignored, the defaults load, and the list also shows `/drive_on_heading`. `/move_robot_as` is not a Nav2 action. |
+| NAV2-V49 | A-P25, A-P39 | "You CAN NOT change the name of the plugin tag: it has to be `GridBased`" (`planner GridBased is not a valid planner…`) | Any name works. The BT asks for `planner_id="GridBased"` in `ComputePathToPose` and the planner server looks that id up in `planner_plugins`: rename both, or leave `planner_id` empty when only one planner is loaded. |
+| NAV2-V50 | A-P29 | Cost "0–255: 0 no danger, 255 very high risk"; required layer methods `updateBounds`, `updateCosts`, `reset` | 0 `FREE_SPACE`, 1–252 rising cost, 253 `INSCRIBED_INFLATED_OBSTACLE`, 254 `LETHAL_OBSTACLE`, 255 `NO_INFORMATION` (unknown). Pure virtual (required): `reset()`, `isClearable()`, `updateBounds()`, `updateCosts()`. |
+| NAV2-V51 | A-P32, A-P33, A-P39, A-P40, A-P40.S01, A-P46 | Launch files pass the tree with `parameters=[bt_navigator_yaml, {'default_bt_xml_filename': default_bt_xml_path}]` | `default_bt_xml_filename` is the Foxy name. Humble does not declare it, so the override is ignored and the tree comes from `default_nav_to_pose_bt_xml` in `bt_navigator.yaml`. Use `{'default_nav_to_pose_bt_xml': default_bt_xml_path}`. |
+| NAV2-V52 | A-P33, A-P40, A-P40.S01 | Exercise launch files start `Node(package='nav2_recoveries', executable='recoveries_server', …)` | `nav2_recoveries` does not exist in Humble: the launch fails. Use `package='nav2_behaviors', executable='behavior_server'` (NAV2-V31). |
+| NAV2-V53 | A-P46 | Custom controller config sets `max_allowed_time_to_collision_up_to_carrot`, `max_linear_accel`, `max_linear_decel`; "`lookahead_dist` regulates up to what distance you check for collisions, limited by `min_`/`max_lookahead_dist`" | The course plugin (Galactic code, NAV2-V64) reads `max_allowed_time_to_collision`, so the `_up_to_carrot` key is ignored. No Galactic, Humble or Jazzy RPP declares `max_linear_accel`/`max_linear_decel`, so they are ignored too. `lookahead_dist` is the distance to the lookahead point on the path. `min_`/`max_lookahead_dist` bound it only with `use_velocity_scaled_lookahead_dist: true`. Collisions are checked over the time `max_allowed_time_to_collision(_up_to_carrot)`. |
+| NAV2-V54 | A-P51 | "Only one progress checker"; "currently (ROS2 Galactic) two goal checkers"; `plugin: "nav2_controller::StopedGoalChecker"`; `trajectory_generator_name: “dwb_plugins::StandardTrajectoryGenerator”` | Humble 1.1.20: progress checkers `SimpleProgressChecker`, `PoseProgressChecker`; goal checkers `SimpleGoalChecker`, `StoppedGoalChecker`, `PositionGoalChecker`. The misspelled `StopedGoalChecker` fails to load. Typographic quotes stay inside the YAML string, so the generator name does not match any plugin: use ASCII quotes. |
+| NAV2-V55 | A-P38, A-P40, A-P45 | `target_compile_definitions(… "PLUGINLIB__DISABLE_BOOST_FUNCTIONS")` "is needed to disable BOOST functions" | Humble's `pluginlib` and `class_loader` never read this define: the line is a harmless leftover. |
+
 ## Full table
 | # | Section | Statement | Humble | Jazzy | Lyrical | Action | Source | Confidence |
 |---|---|---|---|---|---|---|---|---|
-| NAV2-V01 | P37.S04, P63 | YAML key `behavior_server` for node `recoveries_server` | ✗ (see fix table) | ✗ same | ✗ same | **fix** | [rcl YAML parser][rcl-parse], [behavior_server (humble)][bs-h] | High |
+| NAV2-V01 | P37.S04, P63, A-P20 | YAML key `behavior_server` for node `recoveries_server` | ✗ (see fix table) | ✗ same | ✗ same | **fix** | [rcl YAML parser][rcl-parse], [behavior_server (humble)][bs-h] | High |
 | NAV2-V02 | P40.S01 | `local_frame`, `global_frame: map`, `transform_timeout` | ✗ `global_frame` (odom) + `transform_tolerance` | `local_frame: odom` + `global_frame: map`; `local_/global_costmap_topic`, `local_/global_footprint_topic` (Iron) | ✓ as Jazzy | **fix** | [behavior_server (humble)][bs-h], [timed_behavior (jazzy)][tb-j], [Humble→Iron][mig-h2i] | High |
-| NAV2-V03 | P37.S04 | 3 recoveries | ✗ spin, backup, drive_on_heading, wait (+ assisted_teleop) | ✓ same set | ✓ | **fix** | [behavior_server (humble)][bs-h], [nav2_params (humble)][np-h] | High |
+| NAV2-V03 | P37.S04, A-P20 | 3 recoveries | ✗ spin, backup, drive_on_heading, wait (+ assisted_teleop) | ✓ same set | ✓ | **fix** | [behavior_server (humble)][bs-h], [nav2_params (humble)][np-h] | High |
 | NAV2-V04 | P37.S01 | only NavFn | ✗ NavFn, Smac, Theta* | ✓ | ✓ | **fix** | [apt index (jammy)][apt-jammy] | High |
-| NAV2-V05 | P37.S02 | only DWB + TEB | ✗ DWB, RPP, MPPI, Rotation Shim, Graceful; no TEB | default MPPI | ✓ | **fix** | [apt index (jammy)][apt-jammy], [rosdistro][rd], [nav2_params (jazzy)][np-j] | High |
+| NAV2-V05 | P37.S02, A-P51 | only DWB + TEB (advanced: "two controllers, DWB and RPP; TEB still unavailable") | ✗ DWB, RPP, MPPI, Rotation Shim, Graceful; no TEB | default MPPI | ✓ | **fix** | [apt index (jammy)][apt-jammy], [rosdistro][rd], [nav2_params (jazzy)][np-j] | High |
 | NAV2-V06 | P38 | `expected_planner_frequency` default 20 and meaning | ✗ 1.0; only an overrun-warning threshold | ✓ same | ✓ | **fix** | [planner_server (humble)][ps-h] | High |
 | NAV2-V07 | P39 | controller thresholds and `failure_tolerance` defaults | ✗ 0.0001; 0.0 s | ✓ same | ✓ | **fix** | [controller_server (humble)][cs-h] | High |
 | NAV2-V08 | P29 | AMCL `robot_model_type`, `always_reset_initial_pose`, `save_pose_rate` | ✗ see fix table | ✓ same | ✓ | **fix** | [amcl_node (humble)][amcl-h], [Galactic→Humble][mig-g2h] | High |
@@ -74,22 +101,22 @@
 | NAV2-V14 | P43 | goal yaw in `position.z` | ✗ set orientation | ✗ | ✗ | **fix** | code reading | High |
 | NAV2-V15 | P60 | `frames.pdf` | ✗ `frames_<date>.pdf` | ✓ same | ✓ | **fix** | [view_frames (humble)][vf-h] | High |
 | NAV2-V16 | P22 | "moved to initialized" | ✗ configure + activate | ✓ | ✓ | **fix** | [lifecycle_manager (humble)][lm-h] | High |
-| NAV2-V17 | P37–P40, P50–P53 | plugin names `nav2_navfn_planner/NavfnPlanner`, `nav2_behaviors/Spin` | ✓ (Humble mixes `/` and `::`) | all `::` (`nav2_navfn_planner::NavfnPlanner`, `nav2_behaviors::Spin`); DWB stays `dwb_core::DWBLocalPlanner` | ✓ as Jazzy | annotate | [Iron→Jazzy][mig-i2j], V57 | High |
-| NAV2-V18 | P39 | `progress_checker_plugin: "progress_checker"` | ✓ string | `progress_checker_plugins: ["progress_checker"]` (Iron) | ✓ as Jazzy | annotate | [Humble→Iron][mig-h2i] | High |
-| NAV2-V19 | P37.S03, P40.S02 | `plugin_lib_names` lists the Nav2 BT libraries | ✓ (all 44 exist in Humble; Humble's default list has 49) | Nav2 BT nodes load automatically; list only custom plugins; new `navigators` param | ✓ as Jazzy | annotate | [bt_navigator (humble)][btn-h], [Iron→Jazzy][mig-i2j] | High |
-| NAV2-V20 | P37.S03 | behavior tree XML (`root main_tree_to_execute`, `SequenceStar`) | ✓ BT.CPP 3.8 (Humble's default XML uses `RoundRobin` + `BackUp` for recoveries) | BT.CPP 4.5: `<root BTCPP_format="4" …>`, SubTree syntax; `SequenceStar` still accepted (alias of `SequenceWithMemory`) | ✓ + SubTree support improvements (Kilted) | annotate | [default XML (humble)][bt-xml-h], [default XML (jazzy)][bt-xml-j], [BT.CPP factory][btcpp], V56 | High |
-| NAV2-V21 | P37.S03, P63 | `default_nav_to_pose_bt_xml` absolute path | ✓ absolute path (no substitutions in param files) | `$(find-pkg-share pkg)/…` allowed in param files | ✓ | annotate | [Iron→Jazzy][mig-i2j] | High |
+| NAV2-V17 | P37–P40, P50–P53, A-P20, A-P25, A-P39 | plugin names `nav2_navfn_planner/NavfnPlanner`, `nav2_behaviors/Spin` | ✓ (Humble mixes `/` and `::`) | all `::` (`nav2_navfn_planner::NavfnPlanner`, `nav2_behaviors::Spin`); DWB stays `dwb_core::DWBLocalPlanner` | ✓ as Jazzy | annotate | [Iron→Jazzy][mig-i2j], V57 | High |
+| NAV2-V18 | P39, A-P50 | `progress_checker_plugin: "progress_checker"` | ✓ string | `progress_checker_plugins: ["progress_checker"]` (Iron) | ✓ as Jazzy | annotate | [Humble→Iron][mig-h2i] | High |
+| NAV2-V19 | P37.S03, P40.S02, A-P18 | `plugin_lib_names` lists the Nav2 BT libraries | ✓ (all 44 exist in Humble; Humble's default list has 49; the advanced course's 28 exist too) | Nav2 BT nodes load automatically; list only custom plugins; new `navigators` param | ✓ as Jazzy | annotate | [bt_navigator (humble)][btn-h], [Iron→Jazzy][mig-i2j] | High |
+| NAV2-V20 | P37.S03, A-P16, A-P17, A-P19 | behavior tree XML (`root main_tree_to_execute`, `SequenceStar`) | ✓ BT.CPP 3.8 (Humble's default XML uses `RoundRobin` + `BackUp` for recoveries) | BT.CPP 4.5: `<root BTCPP_format="4" …>`, SubTree syntax; `SequenceStar` still accepted (alias of `SequenceWithMemory`) | ✓ + SubTree support improvements (Kilted) | annotate | [default XML (humble)][bt-xml-h], [default XML (jazzy)][bt-xml-j], [BT.CPP factory][btcpp], V56 | High |
+| NAV2-V21 | P37.S03, P63, A-P18 | `default_nav_to_pose_bt_xml` absolute path | ✓ absolute path (no substitutions in param files) | `$(find-pkg-share pkg)/…` allowed in param files | ✓ | annotate | [Iron→Jazzy][mig-i2j] | High |
 | NAV2-V22 | P22 | `ManageLifecycleNodes` commands 0–4 | ✓ | + `CONFIGURE = 5`, `CLEANUP = 6` | ✓ | annotate | [srv (humble)][srv-h], [srv (jazzy)][srv-j] | High |
 | NAV2-V23 | P62, P63 | `bond_timeout: 0.0` "required to prevent launching errors" | ✓ `bond_timeout` (default 4.0 s; ≤ 0 disables bonds = no crash detection). Likely cause: namespaced nodes vs a manager in the global namespace | + `bond_heartbeat_period` per node (default 0.1 s; ≤ 0 disables) | heartbeat default 0.25 s | annotate | [lifecycle_manager (humble)][lm-h], [Iron→Jazzy][mig-i2j], [Kilted→Lyrical][mig-k2l] | Medium |
 | NAV2-V24 | P63 | costmap-level `map_topic: /map` | ✓ exists (StaticLayer reads it) | ✓ | removed (Kilted): set `map_topic` inside `static_layer` | annotate | [static_layer (humble)][static-h], [Jazzy→Kilted][mig-j2k] | High |
 | NAV2-V25 | P62, P63 | multi-robot: absolute `/tb3_0/scan`, `/map`; per-robot YAML copies | ✓ needed (relative layer topics resolve inside the costmap namespace) | ✓ | relative topics + one `nav2_params.yaml` for single and multi-robot (Kilted) | annotate | [Jazzy→Kilted][mig-j2k] | Medium |
 | NAV2-V26 | P55 | `cmd_vel` from controller_server | ✓ Twist | opt-in `enable_stamped_cmd_vel` | **TwistStamped default** (Kilted) | annotate | V54 | High |
 | NAV2-V27 | P05, P55 | navigation nodes and cmd chain | ✓ course launch has no smoother; default bringup: controller → velocity_smoother | collision_monitor in the default chain | ✓ + route/following servers | annotate | V48, V55 | High |
-| NAV2-V28 | P50 | `ros2 run gazebo_ros spawn_entity.py -entity … -database …` | ✓ Gazebo Classic (gazebo_ros released) | ✗ gazebo_ros not released (only `gazebo_msgs`): use `ros2 run ros_gz_sim create` | ✗ same | annotate | [rosdistro][rd], [bringup (jazzy)][bringup-j], [Gazebo Classic EOL][gz-classic-eol] | High |
+| NAV2-V28 | P50, A-P52 | `ros2 run gazebo_ros spawn_entity.py -entity … -database …` | ✓ Gazebo Classic (gazebo_ros released) | ✗ gazebo_ros not released (only `gazebo_msgs`): use `ros2 run ros_gz_sim create` | ✗ same | annotate | [rosdistro][rd], [bringup (jazzy)][bringup-j], [Gazebo Classic EOL][gz-classic-eol] | High |
 | NAV2-V29 | P15, P16 | Cartographer and SLAM Toolbox | ✓ both released | ✓ both released | ✓ both released (Lyrical) | keep | [rosdistro][rd] | High |
 | NAV2-V30 | P20, P27, P37 | `use_sim_time` set per node in YAML/launch | ✓ | ✓; Nav2 launch files can set it for all nodes (Iron) | ✓ | annotate | [Humble→Iron][mig-h2i] | High |
-| NAV2-V31 | P05, P37.S04 | "Nav2 Recoveries" | ✓ renamed in Humble: `nav2_behaviors` / `behavior_server`, `behavior_plugins` | ✓ | ✓ | annotate | [Galactic→Humble][mig-g2h] | High |
-| NAV2-V32 | P38, P39, P52 | doc links `navigation.ros.org`, `github.com/ros-planning/navigation2` | moved to `docs.nav2.org` and `github.com/ros-navigation/navigation2` | ✓ | ✓ | annotate | [nav2 repo][n2-h] | High |
+| NAV2-V31 | P05, P37.S04, A-P15, A-P17, A-P20 | "Nav2 Recoveries" | ✓ renamed in Humble: `nav2_behaviors` / `behavior_server`, `behavior_plugins` | ✓ | ✓ | annotate | [Galactic→Humble][mig-g2h] | High |
+| NAV2-V32 | P38, P39, P52, A-P06, A-P08, A-P10, A-P17, A-P24–A-P29, A-P41, A-P51 | doc links `navigation.ros.org`, `github.com/ros-planning/navigation2`, old `docs.nav2.org/configuration/packages/…` pages | moved to `docs.nav2.org` and `github.com/ros-navigation/navigation2` | ✓ | ✓ | annotate | [nav2 repo][n2-h] | High |
 | NAV2-V33 | P29 | AMCL defaults (particles 500/2000, `update_min_d` 0.25, `update_min_a` 0.2, laser/odom model values, frames) | ✓ match the code | ✓ | ✓ | keep | [amcl_node (humble)][amcl-h] | High |
 | NAV2-V34 | P30, P31 | initial pose via `set_initial_pose` + `initial_pose.{x,y,z,yaw}`; `/initialpose` with `frame_id='/map'` | ✓ (AMCL strips a leading `/`; prefer `map`) | ✓ | ✓ | keep | [amcl_node (humble)][amcl-h] | High |
 | NAV2-V35 | P22 | `node_names`, `autostart` (default false), service `<manager>/manage_nodes` | ✓ (+ `<manager>/is_active`) | ✓ | ✓ | keep | [lifecycle_manager (humble)][lm-h] | High |
@@ -97,13 +124,43 @@
 | NAV2-V37 | P17 | `cartographer_node`, `cartographer_occupancy_grid_node` (`-resolution`, `-publish_period_sec`); `/map` is transient local | ✓ | ✓ | ✓ | keep | [cartographer_ros CMake][carto-cmake], [occupancy grid node][carto-og] | High |
 | NAV2-V38 | P38, P39 | NavFn params (0.5 / false / true), progress and goal checker values, DWB class `dwb_core::DWBLocalPlanner` | ✓ | ✓ | ✓ | keep | [navfn (humble)][navfn-h], [nav2_params (humble)][np-h] | High |
 | NAV2-V39 | P62, P63 | flat YAML keys `tb3_0/amcl:`; `/reinitialize_global_localization`; `goal_pose` topic | ✓ (rcl prepends `/` to the key) | ✓ | ✓ | keep | [rcl YAML parser][rcl-parse], [amcl_node (humble)][amcl-h] | High |
-| NAV2-V40 | P22 | lifecycle diagram: unconfigured, inactive, active, finalized; `on_configure` … `on_error` | ✓ (generic, see `core-lifecycle-concepts`) | ✓ | Nav2 lifecycle node moves to `nav2_ros_common` (`nav2::LifecycleNode`) (Kilted) | annotate | [Kilted→Lyrical][mig-k2l] | High |
+| NAV2-V40 | P22 | lifecycle diagram: unconfigured, inactive, active, finalized; `on_configure` … `on_error` | ✓ (generic, see `core-lifecycle-concepts`) | ✓ | Nav2 lifecycle node moves to `nav2_ros_common` (`nav2::LifecycleNode`) in Lyrical (not on the kilted branch; corrected 2026-10-10) | annotate | [Kilted→Lyrical][mig-k2l] | High |
 | NAV2-V41 | P63 | `cmd_vel_topic` parameter | ✗ not a parameter; relative `cmd_vel` | ✗ same | ✗ same | **fix** | [controller_server (humble)][cs-h] | High |
+| NAV2-V42 | A-P06 | `isNavComplete()` | ✗ `isTaskComplete()`, True on any end state | ✓ same | `isTaskComplete(task=RunningTask.NONE)` (Kilted) | **fix** | [robot_navigator (humble)][sc-h], [robot_navigator (lyrical)][sc-l] | High |
+| NAV2-V43 | A-P10, A-P32 | remove `ObstacleFootprint` (and `BaseObstacle`) from DWB `critics` | ✗ no collision check left | ✗ same; `KeepoutFilter` `override_lethal_cost`, `lethal_override_cost` | ✗ same | **fix** | [dwb_critics (humble)][dwbc-h], [keepout tutorial][tut-keepout] | High |
+| NAV2-V44 | A-P11 | mask file `map_speeds.yaml` vs `map_speed.yaml` | ✗ file not found | ✗ | ✗ | **fix** | course text | High |
+| NAV2-V45 | A-P15 | a custom BT XML is mandatory | ✗ default tree loaded | ✓ same | ✓ same | **fix** | [navigate_to_pose (humble)][nav2pose-h] | High |
+| NAV2-V46 | A-P17 | `spin_dist` in degrees; served by `nav2_recoveries` | ✗ radians; `behavior_server` | ✓ same | ✓ same | **fix** | [spin_action (humble)][spin-bt-h], NAV2-V31 | High |
+| NAV2-V47 | A-P19 | low-battery check inside the `RecoveryNode` aborts the goal | ✗ 6 recovery rounds first | ✗ same | ✗ same | **fix** | [recovery_node (humble)][recnode-h] | High (alternative tree `[verify]`) |
+| NAV2-V48 | A-P20 | `recovery_plugins`, `transform_timeout`; action list without `/drive_on_heading` | ✗ `behavior_plugins` (4 defaults), `transform_tolerance` | `local_frame` + `global_frame` (NAV2-V02) | ✓ as Jazzy | **fix** | [behavior_server (humble)][bs-h] | High |
+| NAV2-V49 | A-P25, A-P39 | the planner plugin name must be `GridBased` | ✗ any name; the BT `planner_id` must match | ✓ same | ✓ same | **fix** | [planner_server (humble)][ps-h] | High |
+| NAV2-V50 | A-P29 | cost 255 = highest risk; required layer methods | ✗ 254 lethal, 255 unknown; `isClearable()` also required | ✓ same | ✓ same API; `node_` is a `nav2::LifecycleNode` | **fix** | [cost_values (humble)][costval-h], [layer.hpp (humble)][layer-h] | High |
+| NAV2-V51 | A-P32, A-P33, A-P39, A-P40, A-P40.S01, A-P46 | launch override `default_bt_xml_filename` | ✗ Foxy name, ignored | ✗ same | ✗ same | **fix** | [bt_navigator (foxy)][btn-foxy], [navigate_to_pose (humble)][nav2pose-h] | High |
+| NAV2-V52 | A-P33, A-P40, A-P40.S01 | `package='nav2_recoveries', executable='recoveries_server'` | ✗ package absent, launch fails | ✗ | ✗ | **fix** | [rosdistro][rd], [apt index (jammy)][apt-jammy], NAV2-V31 | High |
+| NAV2-V53 | A-P46 | custom controller config keys; `lookahead_dist` "checks collisions" | ✗ see fix table | ✗ same | `max_linear_accel`/`max_linear_decel` exist again (dynamic window) | **fix** | [RPP (galactic 1.0.12)][rpp-g], [RPP (humble)][rpp-h], [RPP docs][rpp-doc] | High |
+| NAV2-V54 | A-P51 | checker lists, `StopedGoalChecker`, typographic quotes | ✗ see fix table | ✓ same plugins | + `AdaptiveToleranceGoalChecker`, `AxisGoalChecker` | **fix** | [nav2_controller plugins (humble)][ctrl-plugins-h], [nav2_controller plugins (lyrical)][ctrl-plugins-l] | High |
+| NAV2-V55 | A-P38, A-P40, A-P45 | `PLUGINLIB__DISABLE_BOOST_FUNCTIONS` is needed | ✗ never read (harmless) | ✗ | ✗ | **fix** | [pluginlib (humble)][pluginlib-h] | High |
+| NAV2-V56 | A-P31, A-P33, A-P38, A-P45 | `package.xml` `<costmap_2d plugin=…/>` / `<nav2_core plugin=…/>` tells where the plugin is | ✓ harmless: pluginlib finds the XML through the ament index entry that `pluginlib_export_plugin_description_file()` creates (the Nav2 tutorials still show the export line) | ✓ | ✓ | annotate | [pluginlib (humble)][pluginlib-h], [costmap plugin tutorial][tut-costmap] | High |
+| NAV2-V57 | A-P05, A-P06, A-P08 | Simple Commander: `BasicNavigator`, `TaskResult`, `setInitialPose`, `waitUntilNav2Active`, `goToPose`, `goThroughPoses`, `followWaypoints`, `getFeedback`, `getResult` | ✓ | + `driveOnHeading`, `followGpsWaypoints`, docking, `clearCostmapAroundRobot` | typed signatures, `getTaskError()` (Kilted); `followWaypoints(poses, number_of_loops, goal_index)`, `followObjectByTopic`/`ByFrame`, `toggleCollisionMonitor` | annotate | [robot_navigator (humble)][sc-h], [robot_navigator (jazzy)][sc-j], [robot_navigator (lyrical)][sc-l] | High |
+| NAV2-V58 | A-P06 | `NavigateToPose.action` (result `std_msgs/Empty`) | ✓ | result `error_code`, `error_msg` | error codes 9000–9003 (Kilted); `GOAL_REJECTED`, `SEND_GOAL_FAILURE`; feedback `position_tracking_error`, `heading_tracking_error` | annotate | [NavigateToPose (humble)][ntp-h], [NavigateToPose (jazzy)][ntp-j], [NavigateToPose (lyrical)][ntp-l] | High |
+| NAV2-V59 | A-P08 | `FollowWaypoints.action` (result `int32[] missed_waypoints`) | ✓ | goal `number_of_loops`, `goal_index`; result `MissedWaypoint[]`, `error_code` 600/601, `error_msg` | result `WaypointStatus[]`, codes 602/603 | annotate | [FollowWaypoints (humble)][fw-h], [FollowWaypoints (jazzy)][fw-j], [FollowWaypoints (lyrical)][fw-l] | High |
+| NAV2-V60 | A-P08 | waypoint_follower `loop_rate`, `stop_on_failure`, `waypoint_task_executor_plugin`, `waypoint_pause_duration` (ms); Wait/Photo/InputAtWaypoint; "not started by default" | ✓ (defaults: `stop_on_failure` true, pause 0 ms). "Not started" refers to the course launch file: `nav2_bringup`'s `navigation_launch.py` starts it | + `action_server_result_timeout`, `global_frame_id` | ✓ | keep | [waypoint_follower (humble)][wf-h], [navigation_launch (humble)][bringup-nav-h] | High |
+| NAV2-V61 | A-P09–A-P11 | costmap filters: `KeepoutFilter`, `SpeedFilter`, `filters` list, info server `type` 0/1/2, `base`, `multiplier`, `mask_topic`; speed formula; `mode: scale`; controller `speed_limit_topic` | ✓; 1.1.20 also has `BinaryFilter` (type 3) and the `toggle_filter` service (backported from Iron) | + `override_lethal_cost`, `lethal_override_cost` (KeepoutFilter) | keepout and speed zones in the default bringup, vector object server (Kilted); zone parameter filter (type 4) | annotate | [filter_values (humble)][fv-h], [info server (humble)][cfis-h], [Humble→Iron][mig-h2i], [Jazzy→Kilted][mig-j2k], [Kilted→Lyrical][mig-k2l] | High |
+| NAV2-V62 | A-P16, A-P17, A-P19 | BT nodes `RecoveryNode`, `PipelineSequence`, `RateController`, `ComputePathToPose`, `FollowPath`, `ClearEntireCostmap`, `Spin`, `Wait`, `SequenceStar`; `IsBatteryLow` ports `battery_topic`, `min_battery`, `is_voltage` | ✓ (`battery_topic` default `/battery_status`; `percentage` is 0–1) | ✓ same ports | ✓ | keep | [recovery_node (humble)][recnode-h], [IsBatteryLow (humble)][ibl-h] | High |
+| NAV2-V63 | A-P25, A-P29, A-P34, A-P36, A-P41, A-P43 | plugin base classes `nav2_costmap_2d::Layer`, `nav2_core::GlobalPlanner`, `nav2_core::Controller` | ✓ (Controller: `setSpeedLimit()` is pure virtual too) | `createPlan(…, cancel_checker)`; Controller + `cancel()`, `reset()` | `nav2::LifecycleNode`, `nav2::TransformBuffer`; `createPlan(start, goal, viapoints, cancel_checker)`; Controller `newPathReceived()` replaces `setPlan()`, `computeVelocityCommands(…, transformed_global_plan, global_goal)` | annotate | [global_planner.hpp (humble)][gp-h], [(jazzy)][gp-j], [(lyrical)][gp-l], [controller.hpp (humble)][ctl-h], [(jazzy)][ctl-j], [(lyrical)][ctl-l] | High |
+| NAV2-V64 | A-P40.S01, A-P41, A-P43 | controller plugin "based on the original code" at commit `b92561bd` | The code is Galactic's RPP 1.0.9–1.0.12 (98 % token match; the linked Jan 2021 commit matches 70 %) with the namespace renamed. A-P43 passes `configure()` arguments by value as Humble requires; A-P40.S01 keeps Galactic's `const &` arguments, which do not override Humble's pure virtual | – | – | annotate | [RPP (galactic 1.0.12)][rpp-g], [controller.hpp (galactic 1.0.12)][ctl-g], [controller.hpp (humble)][ctl-h] | High (builds on Humble: `[verify]`) |
+| NAV2-V65 | A-P51 | Nav2 RPP parameters (`desired_linear_vel` … `max_robot_pose_search_dist`, `use_interpolation`) | ✓ Humble names | + `use_fixed_curvature_lookahead`, `curvature_lookahead_dist`, `stateful`, `cancel_deceleration`, `use_cancel_deceleration`, `interpolate_curvature_after_goal`; − `use_interpolation` | + dynamic window (`use_dynamic_window`, velocity and acceleration limits), `min_distance_to_obstacle`, `allow_obstacle_checking_beyond_goal`; − `transform_tolerance`, `max_robot_pose_search_dist`, `stateful` (path handling moves to the controller server) | annotate | [RPP (humble)][rpp-h], [RPP (jazzy)][rpp-j], [RPP (lyrical)][rpp-l] | High |
+| NAV2-V66 | A-P51 | DWB generators `StandardTrajectoryGenerator`, `LimitedAccelGenerator`; 10 critics | ✓ | ✓ | ✓ | keep | [dwb_plugins (humble)][dwbp-h], [dwb_critics (humble)][dwbc-h] | High |
+| NAV2-V67 | A-P50, A-P51 | `controller_server`: `progress_checker_plugin`, `goal_checker_plugins`, `controller_plugins` | ✓ | `progress_checker_plugins` list (NAV2-V18) | + path handler plugin (`nav2_controller::FeasiblePathHandler`) and the goal checkers of NAV2-V54 | annotate | [Kilted→Lyrical][mig-k2l] | High |
+| NAV2-V68 | A-P31, A-P33, A-P38, A-P40, A-P45 | plugin `CMakeLists.txt` uses `ament_target_dependencies()` | ✓ | ✓ | deprecated (Kilted), removed (Lyrical): `target_link_libraries(<lib> PUBLIC <pkg>::<pkg>)` | annotate | V09 | High |
 
 ## Open `[verify]` (Phase 5 or a real robot)
 - NAV2-V10: whether the Jazzy **release** (not only the jazzy branch) has `enable_groot_monitoring`.
 - NAV2-V13: axis order of the Burger footprint (x = forward length 0.138 or 0.178 m).
 - NAV2-V23: the exact launch error that `bond_timeout: 0.0` avoids in the course's multi-robot setup.
+- NAV2-V47: a tree that aborts at once on low battery (battery check outside the `RecoveryNode`).
+- NAV2-V64: the course's costmap, planner and controller plugins build and load on Humble (`colcon build` + launch).
+- A-P52: the course's result that DWB stops in front of an unmapped cone with `PathAlign` and goes around it without it.
 
 [n2-h]: https://github.com/ros-navigation/navigation2/tree/humble
 [n2-j]: https://github.com/ros-navigation/navigation2/tree/jazzy
@@ -143,3 +200,42 @@
 [carto-og]: https://github.com/ros2/cartographer_ros/blob/ros2/cartographer_ros/src/occupancy_grid_node_main.cpp
 [tb3-burger]: https://github.com/ROBOTIS-GIT/turtlebot3/blob/humble/turtlebot3_navigation2/param/humble/burger.yaml
 [gz-classic-eol]: https://discourse.openrobotics.org/t/gazebo-classic-end-of-life/48748
+[sc-h]: https://github.com/ros-navigation/navigation2/blob/humble/nav2_simple_commander/nav2_simple_commander/robot_navigator.py
+[sc-j]: https://github.com/ros-navigation/navigation2/blob/jazzy/nav2_simple_commander/nav2_simple_commander/robot_navigator.py
+[sc-l]: https://github.com/ros-navigation/navigation2/blob/lyrical/nav2_simple_commander/nav2_simple_commander/robot_navigator.py
+[ntp-h]: https://github.com/ros-navigation/navigation2/blob/humble/nav2_msgs/action/NavigateToPose.action
+[ntp-j]: https://github.com/ros-navigation/navigation2/blob/jazzy/nav2_msgs/action/NavigateToPose.action
+[ntp-l]: https://github.com/ros-navigation/navigation2/blob/lyrical/nav2_msgs/action/NavigateToPose.action
+[fw-h]: https://github.com/ros-navigation/navigation2/blob/humble/nav2_msgs/action/FollowWaypoints.action
+[fw-j]: https://github.com/ros-navigation/navigation2/blob/jazzy/nav2_msgs/action/FollowWaypoints.action
+[fw-l]: https://github.com/ros-navigation/navigation2/blob/lyrical/nav2_msgs/action/FollowWaypoints.action
+[wf-h]: https://github.com/ros-navigation/navigation2/blob/humble/nav2_waypoint_follower/src/waypoint_follower.cpp
+[bringup-nav-h]: https://github.com/ros-navigation/navigation2/blob/humble/nav2_bringup/launch/navigation_launch.py
+[fv-h]: https://github.com/ros-navigation/navigation2/blob/humble/nav2_costmap_2d/include/nav2_costmap_2d/costmap_filters/filter_values.hpp
+[cfis-h]: https://github.com/ros-navigation/navigation2/blob/humble/nav2_map_server/src/costmap_filter_info/costmap_filter_info_server.cpp
+[tut-keepout]: https://github.com/ros-navigation/docs.nav2.org/blob/rolling/docs/tutorials/general_tutorials/navigation2_with_keepout_filter/navigation2_with_keepout_filter.md
+[dwbc-h]: https://github.com/ros-navigation/navigation2/tree/humble/nav2_dwb_controller/dwb_critics/src
+[dwbp-h]: https://github.com/ros-navigation/navigation2/blob/humble/nav2_dwb_controller/dwb_plugins/plugins.xml
+[nav2pose-h]: https://github.com/ros-navigation/navigation2/blob/humble/nav2_bt_navigator/src/navigators/navigate_to_pose.cpp
+[btn-foxy]: https://github.com/ros-navigation/navigation2/blob/foxy-devel/nav2_bt_navigator/src/bt_navigator.cpp
+[spin-bt-h]: https://github.com/ros-navigation/navigation2/blob/humble/nav2_behavior_tree/include/nav2_behavior_tree/plugins/action/spin_action.hpp
+[recnode-h]: https://github.com/ros-navigation/navigation2/blob/humble/nav2_behavior_tree/plugins/control/recovery_node.cpp
+[ibl-h]: https://github.com/ros-navigation/navigation2/blob/humble/nav2_behavior_tree/plugins/condition/is_battery_low_condition.cpp
+[costval-h]: https://github.com/ros-navigation/navigation2/blob/humble/nav2_costmap_2d/include/nav2_costmap_2d/cost_values.hpp
+[layer-h]: https://github.com/ros-navigation/navigation2/blob/humble/nav2_costmap_2d/include/nav2_costmap_2d/layer.hpp
+[gp-h]: https://github.com/ros-navigation/navigation2/blob/humble/nav2_core/include/nav2_core/global_planner.hpp
+[gp-j]: https://github.com/ros-navigation/navigation2/blob/jazzy/nav2_core/include/nav2_core/global_planner.hpp
+[gp-l]: https://github.com/ros-navigation/navigation2/blob/lyrical/nav2_core/include/nav2_core/global_planner.hpp
+[ctl-g]: https://github.com/ros-navigation/navigation2/blob/1.0.12/nav2_core/include/nav2_core/controller.hpp
+[ctl-h]: https://github.com/ros-navigation/navigation2/blob/humble/nav2_core/include/nav2_core/controller.hpp
+[ctl-j]: https://github.com/ros-navigation/navigation2/blob/jazzy/nav2_core/include/nav2_core/controller.hpp
+[ctl-l]: https://github.com/ros-navigation/navigation2/blob/lyrical/nav2_core/include/nav2_core/controller.hpp
+[rpp-g]: https://github.com/ros-navigation/navigation2/blob/1.0.12/nav2_regulated_pure_pursuit_controller/src/regulated_pure_pursuit_controller.cpp
+[rpp-h]: https://github.com/ros-navigation/navigation2/blob/humble/nav2_regulated_pure_pursuit_controller/src/regulated_pure_pursuit_controller.cpp
+[rpp-j]: https://github.com/ros-navigation/navigation2/tree/jazzy/nav2_regulated_pure_pursuit_controller/src
+[rpp-l]: https://github.com/ros-navigation/navigation2/tree/lyrical/nav2_regulated_pure_pursuit_controller/src
+[rpp-doc]: https://github.com/ros-navigation/docs.nav2.org/blob/rolling/docs/configuration_and_development/configuration_guide/controller_plugins/configuring_regulated_pp.md
+[ctrl-plugins-h]: https://github.com/ros-navigation/navigation2/blob/humble/nav2_controller/plugins.xml
+[ctrl-plugins-l]: https://github.com/ros-navigation/navigation2/blob/lyrical/nav2_controller/plugins.xml
+[pluginlib-h]: https://github.com/ros/pluginlib/blob/humble/pluginlib/include/pluginlib/class_loader_imp.hpp
+[tut-costmap]: https://github.com/ros-navigation/docs.nav2.org/blob/rolling/docs/tutorials/plugin_tutorials/writing_new_costmap2d_plugin/writing_new_costmap2d_plugin.md
