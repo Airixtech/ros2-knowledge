@@ -1,5 +1,11 @@
 ---
 id: nav2-learn-course-project
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "Course project: real robot sections I-IV and final presentation"
 domain: nav2
 area: learn

@@ -1,5 +1,11 @@
 ---
 id: nav2-learn-unit2-mapping
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "Unit 2 exercises: Cartographer, map saving, map server (2.1-2.3)"
 domain: nav2
 area: learn

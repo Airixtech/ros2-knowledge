@@ -1,5 +1,11 @@
 ---
 id: nav2-costmap-plugin-moving-obstacle
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "Moving-obstacle costmap layer (exercise solution): parameters and updateCosts"
 domain: nav2
 area: plugins

@@ -1,5 +1,11 @@
 ---
 id: nav2-rviz-displays
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "RViz2 for Nav2: map, scan, particles, pose estimate, path, costmaps"
 domain: nav2
 area: bringup

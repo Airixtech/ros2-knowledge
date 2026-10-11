@@ -1,5 +1,11 @@
 ---
 id: core-bag-play
+type: reference
+owner: equipo-ros2
+updated: 2026-10-09
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "rosbag2 info, play with sim time & convert"
 domain: core
 area: tools

@@ -1,5 +1,11 @@
 ---
 id: nav2-mp400-costmaps
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "Costmap configuration of the advanced course robot (Neobotix MP-400)"
 domain: nav2
 area: costmaps

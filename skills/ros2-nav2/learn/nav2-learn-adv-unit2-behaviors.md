@@ -1,5 +1,11 @@
 ---
 id: nav2-learn-adv-unit2-behaviors
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "Advanced Unit 2 exercise: abort on low battery behavior tree"
 domain: nav2
 area: learn

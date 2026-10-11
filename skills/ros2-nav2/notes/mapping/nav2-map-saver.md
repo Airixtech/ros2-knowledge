@@ -1,5 +1,11 @@
 ---
 id: nav2-map-saver
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "Saving a map with map_saver_cli (pgm + yaml)"
 domain: nav2
 area: mapping

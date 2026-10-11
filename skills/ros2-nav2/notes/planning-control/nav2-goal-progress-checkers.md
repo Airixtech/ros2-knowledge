@@ -1,5 +1,11 @@
 ---
 id: nav2-goal-progress-checkers
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "Progress and goal checker plugins: SimpleProgressChecker, SimpleGoalChecker, StoppedGoalChecker"
 domain: nav2
 area: planning-control

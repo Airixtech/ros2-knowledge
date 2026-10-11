@@ -1,5 +1,11 @@
 ---
 id: core-bp-comm-choice
+type: reference
+owner: equipo-ros2
+updated: 2026-10-09
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "Choosing topic vs service vs action vs parameter"
 domain: core
 area: architecture

@@ -1,5 +1,11 @@
 ---
 id: nav2-learn-demo
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "Unit 1 demo: run the Nav2 demo and send goals in RViz"
 domain: nav2
 area: learn

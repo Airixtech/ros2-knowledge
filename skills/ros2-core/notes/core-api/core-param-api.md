@@ -1,5 +1,11 @@
 ---
 id: core-param-api
+type: reference
+owner: equipo-ros2
+updated: 2026-10-09
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "Parameters API: declare, descriptors, set callback (py & cpp)"
 domain: core
 area: core-api

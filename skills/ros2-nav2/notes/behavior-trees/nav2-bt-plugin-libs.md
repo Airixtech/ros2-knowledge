@@ -1,5 +1,11 @@
 ---
 id: nav2-bt-plugin-libs
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "plugin_lib_names: BT node libraries in Humble"
 domain: nav2
 area: behavior-trees

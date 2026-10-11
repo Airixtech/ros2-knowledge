@@ -1,5 +1,11 @@
 ---
 id: nav2-learn-unit4-path-planning
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "Unit 4 exercises: path planning stack and goals (4.1-4.4)"
 domain: nav2
 area: learn
