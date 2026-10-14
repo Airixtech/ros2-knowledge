@@ -2,13 +2,13 @@
 id: core-action-cli-status
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-14
+review_by: 2027-04-12
 source: manual
 confidentiality: internal
 title: "Action CLI, GoalStatus codes & custom actions"
 domain: core
-area: core-api
+area: communication
 distro: humble
 tested: false
 audience: dev

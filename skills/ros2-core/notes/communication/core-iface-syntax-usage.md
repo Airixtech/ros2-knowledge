@@ -2,13 +2,13 @@
 id: core-iface-syntax-usage
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-14
+review_by: 2027-04-12
 source: manual
 confidentiality: internal
 title: "Interface definition syntax & use in Python/C++"
 domain: core
-area: core-api
+area: communication
 distro: humble
 tested: false
 audience: dev

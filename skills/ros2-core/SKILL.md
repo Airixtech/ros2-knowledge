@@ -37,7 +37,8 @@ If the notes do not cover the question, answer from standard Humble knowledge an
 | Area | Notes | Open | Covers |
 |---|---|---|---|
 | build-run | 16 | `notes/build-run/_index.md` | environment & sourcing, workspaces, setup.py/CMakeLists/package.xml, rosdep, colcon, launch files |
-| core-api | 21 | `notes/core-api/_index.md` | rclpy/rclcpp nodes, logging, time & timers, topics, interfaces, services, actions, parameters, executors |
+| core-api | 9 | `notes/core-api/_index.md` | rclpy/rclcpp node skeleton, logging, --ros-args, time & timers, parameters, executors & callback groups |
+| communication | 12 | `notes/communication/_index.md` | topics, services and actions (rclpy/rclcpp templates, CLI), custom and standard interfaces (msg/srv/action), message_filters sync |
 | middleware | 17 | `notes/middleware/_index.md` | QoS policies, events and demos (durability, deadline, lifespan, liveliness), DDS and RMW choice, ros2 daemon, multi-host DDS |
 | recipes | 6 | `notes/recipes/_index.md` | mobile-robot code patterns: LaserScan sectors & avoidance, odometry go-to-goal, command state machine, cv_bridge, safe stop |
 | tools | 17 | `notes/tools/_index.md` | TF2, URDF/xacro/robot_state_publisher, rosbag2, lifecycle nodes, debugging (doctor, rqt, RViz2, tracing), CLI cheat sheet |
