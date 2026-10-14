@@ -7,6 +7,7 @@ mobile-robot code patterns: LaserScan sectors & avoidance, odometry go-to-goal, 
 |---|---|---|
 | [[core-recipe-command-goals]] | Map String commands to goals, drive with a 10 Hz control timer, publish status and custom events with robot pose. | notes/recipes/core-recipe-command-goals.md |
 | [[core-recipe-cv-bridge]] | Convert sensor_msgs/Image to OpenCV and back, HSV color mask, publish debug images, DNN inference pattern, model paths. | notes/recipes/core-recipe-cv-bridge.md |
+| [[core-recipe-laser-circles]] | LaserScan to x-y points, AgglomerativeClustering on a k-neighbors graph, 3-point circle fit and rating to find round objects. | notes/recipes/core-recipe-laser-circles.md |
 | [[core-recipe-laserscan]] | Index↔angle math for LaserScan, filtering inf/nan, 6-sector minimums, priority-based avoidance and a minimal sense→act node. | notes/recipes/core-recipe-laserscan.md |
 | [[core-recipe-odom-go-to-goal]] | Yaw from quaternion without deps, angle normalization, turn-then-drive P controller to (x, y), return-home geofence. | notes/recipes/core-recipe-odom-go-to-goal.md |
 | [[core-recipe-stop-and-wait]] | Publish a zero Twist on Ctrl+C (SignalHandlerOptions.NO), time-bounded loops with ROS clock, wait for subscribers/topics, teleop. | notes/recipes/core-recipe-stop-and-wait.md |

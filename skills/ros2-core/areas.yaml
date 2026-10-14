@@ -1,8 +1,10 @@
 # Area descriptions for tools/build_index.py (display order = file order). Not packaged.
 build-run: "environment & sourcing, workspaces, setup.py/CMakeLists/package.xml, rosdep, colcon, launch files"
-core-api: "rclpy/rclcpp nodes, logging, time & timers, topics, interfaces, services, actions, parameters, executors, QoS"
+core-api: "rclpy/rclcpp nodes, logging, time & timers, topics, interfaces, services, actions, parameters, executors"
+middleware: "QoS policies, events and demos (durability, deadline, lifespan, liveliness), DDS and RMW choice, ros2 daemon, multi-host DDS"
 recipes: "mobile-robot code patterns: LaserScan sectors & avoidance, odometry go-to-goal, command state machine, cv_bridge, safe stop"
 tools: "TF2, URDF/xacro/robot_state_publisher, rosbag2, lifecycle nodes, debugging (doctor, rqt, RViz2, tracing), CLI cheat sheet"
-architecture: "naming & design rules, composition, testing/CI/Docker, layers & failures, Nav2, MoveIt2, ros2_control, perception, Gazebo, Isaac Sim, multi-robot & DDS"
+architecture: "naming & design rules, composition, testing/CI/Docker, launch_testing, layers & failures, Nav2, MoveIt2, ros2_control, perception, Gazebo, Isaac Sim, multi-robot"
 learn: "course track for students (Leo rover): concepts and Units 2–8 exercises; open only for course questions"
+learn-intermediate: "intermediate course (MP-400 simulation): Units 2–9 examples and exercises, final project; open only for course questions"
 migration: "Humble → Jazzy → Lyrical changes and a migration checklist; open for other distros or porting"

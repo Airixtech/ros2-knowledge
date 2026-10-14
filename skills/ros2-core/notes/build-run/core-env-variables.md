@@ -2,8 +2,8 @@
 id: core-env-variables
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-14
+review_by: 2027-04-12
 source: manual
 confidentiality: internal
 title: "ROS environment variables (domain, discovery, RMW, logging)"
@@ -17,6 +17,7 @@ tags: [ROS_DOMAIN_ID, ROS_LOCALHOST_ONLY, ROS_AUTOMATIC_DISCOVERY_RANGE, ROS_STA
 see: ["[[core-env-sourcing]]", "[[core-multi-pc-dds]]", "[[core-debug-triage]]"]
 requires: []
 version_notes:
+  - "humble: rmw_zenoh_cpp is also a binary package in Humble and Jazzy; Tier 1 only from Kilted — https://docs.ros.org/en/humble/Installation/RMW-Implementations/Non-DDS-Implementations/Working-with-Zenoh.html (V92)"
   - "jazzy: ROS_LOCALHOST_ONLY deprecated since Iron (still honored, warns); use ROS_AUTOMATIC_DISCOVERY_RANGE / ROS_STATIC_PEERS — https://docs.ros.org/en/rolling/Releases/Release-Iron-Irwini.html (V01)"
   - "lyrical: ROS_LOCALHOST_ONLY removed in Kilted (rcl#1169), no effect — https://docs.ros.org/en/rolling/Releases/Kilted-Kaiju-Complete-Changelog.html (V01)"
   - "lyrical: default RMW still rmw_fastrtps_cpp (Fast DDS 3.6); Kilted renamed fastrtps packages to fastdds; Zenoh Tier 1 — https://docs.ros.org/en/rolling/Releases/Release-Kilted-Kaiju.html (V03)"
@@ -50,7 +51,7 @@ export ROS_STATIC_PEERS="192.168.1.10;192.168.1.11"   # ';'-separated extra peer
 |---|---|---|---|
 | Default RMW | `rmw_fastrtps_cpp` (Fast DDS 2.6) | same (2.14) | same (Fast DDS 3.6) |
 | Cyclone DDS | 0.9.x | 0.10.x | 11.0.x |
-| Zenoh | — | — | `rmw_zenoh_cpp` Tier 1 (since Kilted) |
+| Zenoh (`rmw_zenoh_cpp`, needs `rmw_zenohd`) | binary 0.1.x | binary 0.2.x | Tier 1 (since Kilted) |
 
 ## Pitfalls
 - Different `ROS_DOMAIN_ID` or RMW between terminals or hosts → nodes do not see each other, and nothing reports an error ([[core-debug-triage]]).

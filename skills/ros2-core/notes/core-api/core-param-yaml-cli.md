@@ -2,8 +2,8 @@
 id: core-param-yaml-cli
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-14
+review_by: 2027-04-12
 source: manual
 confidentiality: internal
 title: "Parameter YAML files, passing params & param CLI"
@@ -53,6 +53,7 @@ ros2 param load /controller controller.yaml
 ros2 param delete /controller some_param   # only for undeclared/dynamic params
 ```
 GUI: `ros2 run rqt_reconfigure rqt_reconfigure`.
+Parameters live in their node (no parameter server): they disappear when the node dies. Every node has `use_sim_time`; `ros2 param list` without a node also lists the `qos_overrides.…` entries. Typical answers: `describe` → `Type: double`, `Description: …`, `Constraints:`; `get` → `The double value is: 0.0`; `set` → `Set parameter successful`; `load` → `Set parameter velocity successful`. An int for a double parameter: `ros2 param set /param_vel_node velocity 0` → `Setting parameter failed: Wrong parameter type, expected 'Type.DOUBLE' got 'Type.INTEGER'` (write `0.0`). Course walkthrough: [[core-learn-inter-unit5-params]].
 [Humble] `dump` prints to stdout, and `--print`/`--output-dir` are deprecated [changed in Jazzy: removed (Iron); `--timeout` added] [≥Lyrical: get a parameter from all nodes; get/set several at once].
 
 ## Pitfalls

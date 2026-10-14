@@ -2,8 +2,8 @@
 id: core-exec-model
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-14
+review_by: 2027-04-12
 source: manual
 confidentiality: internal
 title: "Executor model, fix matrix & thread safety"
@@ -17,6 +17,7 @@ tags: [executor, MultiThreadedExecutor, callback group, Reentrant, MutuallyExclu
 see: ["[[core-exec-callback-groups]]", "[[core-exec-spin]]", "[[core-srv-client-async]]", "[[core-learn-concepts-callbacks]]"]
 requires: []
 version_notes:
+  - "jazzy: MultiThreadedExecutor() default threads = len(os.sched_getaffinity(0)) instead of multiprocessing.cpu_count(); warns with 1 thread — https://github.com/ros2/rclpy/blob/jazzy/rclpy/rclpy/executors.py (V85)"
   - "jazzy: rclcpp executors use WaitSet; callback order no longer consistent — https://docs.ros.org/en/rolling/Releases/Release-Jazzy-Jalisco.html (V30)"
   - "lyrical: StaticSingleThreadedExecutor deprecated (Kilted) and removed — https://github.com/ros2/rclcpp/blob/kilted/rclcpp/include/rclcpp/executors/static_single_threaded_executor.hpp (V32)"
   - "lyrical: rclpy EventsExecutor (Kilted, exp.), rclcpp callback-group events executor, rclpy AsyncNode — https://docs.ros.org/en/rolling/Releases/Release-Lyrical-Luth.html (V33)"
@@ -45,7 +46,7 @@ Choose Reentrant when callbacks share no mutable state. Choose separate Mutually
 | Executor | Use |
 |---|---|
 | `SingleThreadedExecutor` | default, deterministic, simplest |
-| `MultiThreadedExecutor(num_threads=N)` | parallel callbacks (with groups) |
+| `MultiThreadedExecutor(num_threads=N)` | parallel callbacks (with groups); N omitted → `multiprocessing.cpu_count()` [changed in Jazzy: CPUs available to the process; warns when N = 1] |
 | C++ `StaticSingleThreadedExecutor` | fixed entity set, lower overhead (real-time-ish) [changed in Lyrical: deprecated in Kilted, removed → `SingleThreadedExecutor`] |
 
 There are no built-in callback priorities (research: PICAS, budget-based executors). [≥Jazzy: experimental rclcpp `EventsExecutor`] [≥Lyrical: rclpy `EventsExecutor`, rclcpp callback-group events executor, rclpy `AsyncNode` (asyncio)]

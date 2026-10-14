@@ -2,8 +2,8 @@
 id: nav2-lifecycle-manage-nodes
 type: reference
 owner: equipo-ros2
-updated: 2026-10-10
-review_by: 2027-04-08
+updated: 2026-10-14
+review_by: 2027-04-12
 source: manual
 confidentiality: internal
 title: "ManageLifecycleNodes service: pause, resume, reset from CLI or code"
@@ -75,6 +75,7 @@ The manager logs (terminal where the nodes run):
 [lifecycle_manager-2] [INFO] [1655285986.412322210] [lifecycle_manager_mapper]: Managed nodes have been paused
 ```
 While paused, the stack is running but inactive: navigation goals are not executed. Resume with `"{command: 2}"`.
+With the full navigation stack (`node_names: ['map_server', 'amcl', 'controller_server', 'planner_server', 'recoveries_server', 'bt_navigator']`, manager `lifecycle_manager`) a pause deactivates in reverse order: `bt_navigator`, the behavior server, `planner_server` (with `global_costmap`), `controller_server` (with `local_costmap`), `amcl`, `map_server`; each one logs `Destroying bond (<node>) to lifecycle manager.`
 
 ## From a program
 Create a client for `nav2_msgs/srv/ManageLifecycleNodes` and call it asynchronously ([[core-srv-client-async]]): e.g. PAUSE before a manual operation, RESUME after, RESET to reconfigure.

@@ -2,8 +2,8 @@
 id: core-humble-to-jazzy
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-14
+review_by: 2027-04-12
 source: manual
 confidentiality: internal
 title: "Humble → Jazzy changes (core)"
@@ -32,6 +32,9 @@ version_notes:
 | rclpy | `logger.warn()` deprecated alias | still deprecated (removed in Lyrical) → `warning()` | V22 |
 | rclpy params | typed declare without default allowed | rejected; pre/post set-param callbacks added | V37, V38 |
 | rclpy misc | MT executor fallback 1 thread; Time vs other type raises | fallback 2; comparisons return False; KEEP_LAST depth 0 warns | V31, V34 |
+| rclpy QoS events | `from rclpy.qos_event import PublisherEventCallbacks` | `rclpy.event_handler` (Iron); `qos_event` still imports with a deprecation warning | V86 |
+| rclpy executor threads | `MultiThreadedExecutor()` = `multiprocessing.cpu_count()` threads | CPUs available to the process (`os.sched_getaffinity`); warns with 1 thread | V85 |
+| Middleware | Fast DDS 2.6; `rmw_zenoh_cpp` binary 0.1.x | Fast DDS 2.14; `rmw_zenoh_cpp` binary 0.2.x | V03, V92 |
 | rclcpp callbacks | `shared_ptr<MsgT>` (non-const) deprecated | **removed** → `ConstSharedPtr` | V27 |
 | rclcpp executors | — | WaitSet-based; callback order not consistent; `rclcpp/qos_event.hpp` removed; EventsExecutor (exp.) | V30, V33 |
 | launch | `PushRosNamespace`, `LaunchConfigurationEquals` | `PushROSNamespace` (alias kept); `Equals`/`NotEquals` substitutions; `LifecycleTransition` action | V15 |

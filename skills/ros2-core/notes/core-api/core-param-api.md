@@ -2,8 +2,8 @@
 id: core-param-api
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-14
+review_by: 2027-04-12
 source: manual
 confidentiality: internal
 title: "Parameters API: declare, descriptors, set callback (py & cpp)"
@@ -18,6 +18,7 @@ see: ["[[core-param-yaml-cli]]", "[[core-node-skeleton]]", "[[core-launch-args-i
 requires: []
 version_notes:
   - "jazzy: declare_parameter rejects a statically typed parameter without a default — https://docs.ros.org/en/rolling/Releases/Release-Jazzy-Jalisco.html (V37)"
+  - "lyrical: declaring a parameter with only its name warns in Humble-Kilted and raises TypeError in Lyrical — https://github.com/ros2/rclpy/blob/lyrical/rclpy/rclpy/node.py (V84)"
   - "jazzy: pre/post set-parameter callbacks added (Iron) — https://docs.ros.org/en/rolling/Releases/Release-Iron-Irwini.html (V38)"
 ---
 # Parameters API: declare, descriptors, set callback
@@ -40,6 +41,7 @@ class Controller(Node):
             floating_point_range=[FloatingPointRange(from_value=0.0, to_value=10.0, step=0.0)]))
         self.declare_parameters(namespace='', parameters=[('ki', 0.0), ('kd', 0.0)])
         self.kp = self.get_parameter('kp').value                                # .value -> python type
+        # typed: self.get_parameter('kp').get_parameter_value().double_value   (bool_value, integer_value, string_value)
         self.add_on_set_parameters_callback(self.on_set_params)                # runtime validation/update
 
     def on_set_params(self, params):

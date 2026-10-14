@@ -2,8 +2,8 @@
 id: core-colcon-build
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-14
+review_by: 2027-04-12
 source: manual
 confidentiality: internal
 title: "colcon build: commands, flags, tests"
@@ -16,7 +16,8 @@ summary: "Daily colcon build commands, useful flags (symlink-install, packages-s
 tags: [colcon, build, symlink-install, packages-select, colcon test, test-result]
 see: ["[[core-colcon-errors]]", "[[core-shell-workflow]]", "[[core-testing-ci-docker]]", "[[core-env-sourcing]]"]
 requires: []
-version_notes: []
+version_notes:
+  - "all: --packages-select builds only the listed packages (not their dependencies); --packages-up-to adds them — https://github.com/colcon/colcon-package-selection/blob/master/colcon_package_selection/package_selection/select_skip.py (V105)"
 ---
 # colcon build: commands, flags, tests
 
@@ -54,6 +55,7 @@ How to write the tests (pytest, gtest, launch_testing, linters): [[core-testing-
 Shell shortcuts (`cbs my_pkg` = build one package and source): [[core-shell-workflow]].
 
 ## Pitfalls
+- `--packages-select` builds **only** the listed packages, not their dependencies: those must already be built or installed. Use `--packages-up-to` to include them.
 - `--symlink-install` only covers edits to files that already exist. A new entry point, script or data file still needs a rebuild.
 - Do not use `--symlink-install` when `install/` will be copied elsewhere, such as another Docker stage ([[core-testing-ci-docker]]).
 - Build errors and their fixes: [[core-colcon-errors]].

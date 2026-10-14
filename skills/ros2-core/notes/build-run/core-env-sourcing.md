@@ -2,8 +2,8 @@
 id: core-env-sourcing
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-14
+review_by: 2027-04-12
 source: manual
 confidentiality: internal
 title: "Sourcing & ~/.bashrc setup"
@@ -43,7 +43,7 @@ source /usr/share/colcon_cd/function/colcon_cd.sh
 export _colcon_cd_root=/opt/ros/humble/
 source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash   # Tab-complete colcon/ros2 args
 ```
-To apply it without reopening the terminal: `source ~/.bashrc`. Variable meanings are in [[core-env-variables]].
+For `colcon_cd` alone to open your workspace, use `export _colcon_cd_root=~/ros2_ws` instead ([colcon setup](https://colcon.readthedocs.io/en/released/user/installation.html#quick-directory-changes)). To apply it without reopening the terminal: `source ~/.bashrc`. Variable meanings are in [[core-env-variables]].
 
 Multi-workspace alternative (source on demand):
 ```bash
@@ -66,6 +66,7 @@ ros2 run demo_nodes_py listener  # T2 -> must print "I heard: ..."
 ## Helpers
 ```bash
 colcon_cd my_pkg          # jump to package source dir (needs colcon_cd setup above)
+colcon_cd                 # no package: jump to $_colcon_cd_root
 ros2 <cmd> --help         # list verbs; ros2 <cmd> <verb> --help for args
 ```
 CLI grammar: `ros2 <command> <verb> <args>` (e.g. `ros2 topic list`, `ros2 node info /n`).

@@ -2,13 +2,13 @@
 id: core-qos-usage
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-14
+review_by: 2027-04-12
 source: manual
 confidentiality: internal
 title: "QoS in code, per-data-type choices & diagnosis"
 domain: core
-area: core-api
+area: middleware
 distro: humble
 tested: false
 audience: dev
@@ -16,7 +16,8 @@ summary: "Creating QoSProfile in rclpy/rclcpp (sensor, latched map), recommended
 tags: [QoS, QoSProfile, SensorDataQoS, transient_local, ros2 topic info, RViz]
 see: ["[[core-qos-policies]]", "[[core-topic-cli]]", "[[core-debug-tools]]", "[[core-message-filters]]"]
 requires: []
-version_notes: []
+version_notes:
+  - "humble: echo adapts to the publishers without QoS flags; with any flag the rest comes from the sensor_data preset — https://github.com/ros2/ros2cli/blob/humble/ros2topic/ros2topic/verb/echo.py (V96)"
 ---
 # QoS in code, per-data-type choices & diagnosis
 
@@ -54,7 +55,8 @@ pub_ = create_publisher<nav_msgs::msg::OccupancyGrid>("map", map_qos);
 ```bash
 ros2 topic info /scan --verbose                          # QoS of every pub/sub endpoint
 ros2 topic echo /scan --qos-reliability best_effort      # also --qos-profile sensor_data, --qos-depth N
-ros2 topic echo /map --qos-durability transient_local
+ros2 topic echo /map                                     # Humble: no flags = copy the publishers' reliability and durability
+ros2 topic echo /map --qos-durability transient_local --qos-reliability reliable   # with flags, omitted ones come from sensor_data
 ros2 doctor --report                                     # QOS COMPATIBILITY LIST section
 ```
 RViz2: set Display → Topic → Reliability Policy = Best Effort for sensor topics. The RViz defaults may not match ([[core-debug-tools]]).

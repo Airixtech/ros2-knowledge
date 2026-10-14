@@ -5,7 +5,7 @@
 > ros2_control, Gazebo, DDS/env vars, Ubuntu/Python, EOL).
 > Baseline: **Humble is canonical**. Jazzy and Lyrical differences are annotated, not substituted.
 > Extended 2026-10-13 with the **intermediate ROS 2 course** (Python build system, launch formats, parameters,
-> executors, QoS, DDS, managed nodes): IDs V81–V104, sections `Pnn` = page of that course export (not published).
+> executors, QoS, DDS, managed nodes): IDs V81–V105, sections `Pnn` = page of that course export (not published).
 > The "Lyrical" column includes changes that first appeared in **Kilted** (May 2025, non-LTS), marked "(Kilted)".
 
 ## Method
@@ -66,6 +66,7 @@
 | V99 | P33 | incomplete (the example returns FAILURE) | "an uncaught exception jumps to `on_error`, taking the node to finalized" | An exception or `ERROR` return goes to *ErrorProcessing* → `on_error`: `SUCCESS` → **unconfigured** (recovered), `FAILURE`/`ERROR` → finalized. A transition returning `FAILURE` goes back to its start state. Docs: [default_state_machine.c (humble)][lc-sm-h] |
 | V102 | P15 | course bug | `move_robot_with_arguments.py` switches mode with `if … if …` | Both branches run on every tick, so the robot always ends turning; use `elif` (the parameter version of the course does). |
 | V103 | P04 | course typo | `ros pkg create <package_name> --build-type ament_python my_package --dependencies …` | `ros2 pkg create --build-type ament_python <package_name> --dependencies <deps>` |
+| V105 | P05 | course mistake | "`colcon build --packages-select <pkg>` compiles the packages specified and their dependencies" | `--packages-select` builds **only** the listed packages (their dependencies must already be built or installed); `--packages-up-to <pkg>` builds the package and its recursive dependencies. Docs: [colcon package selection][colcon-sel] |
 
 ## Full table
 | # | Sheet | Statement | Humble | Jazzy | Lyrical | Action | Source | Confidence |
@@ -174,6 +175,7 @@
 | V102 | P15 | `if … if …` mode switch in `move_robot_with_arguments.py` | ✗ course bug: use `elif` | — | — | **fix** | — (logic) | High |
 | V103 | P04 | `ros pkg create <package_name> … my_package` | ✗ typo: `ros2 pkg create --build-type ament_python <name>` | — | — | **fix** | [ros2pkg create (humble)][create-h] | High |
 | V104 | P12, P15 | `IncludeLaunchDescription(PythonLaunchDescriptionSource(path))` | ✓; a plain path also works (`AnyLaunchDescriptionSource` picks Python/XML/YAML by extension) | ✓ | ✓ | keep | [include_launch_description.py (humble)][include-h] | High |
+| V105 | P05 | `--packages-select` also builds the dependencies | ✗ only the listed packages; `--packages-up-to` adds the dependencies | same | same | **fix** | [colcon package selection][colcon-sel] | High |
 
 ## Open `[verify]` items (for Phase 5 / Docker)
 1. V10: `target_link_libraries(tgt PUBLIC rclcpp::rclcpp ${std_msgs_TARGETS})` builds on `ros:humble`.
@@ -300,3 +302,4 @@
 [tpl-dir-k]: https://github.com/ros2/ros2cli/tree/kilted/ros2pkg/ros2pkg/resource/ament_python
 [create-h]: https://github.com/ros2/ros2cli/blob/humble/ros2pkg/ros2pkg/verb/create.py
 [include-h]: https://github.com/ros2/launch/blob/humble/launch/launch/actions/include_launch_description.py
+[colcon-sel]: https://github.com/colcon/colcon-package-selection/blob/master/colcon_package_selection/package_selection/select_skip.py

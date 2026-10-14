@@ -2,8 +2,8 @@
 id: core-learn-start-here
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-14
+review_by: 2027-04-12
 source: manual
 confidentiality: internal
 title: "Learning path & course environment"
@@ -33,6 +33,8 @@ version_notes: []
 7. Actions: [[core-action-server]] · [[core-action-client]] → [[core-learn-unit7-actions]]
 8. Debugging: [[core-debug-triage]] · [[core-debug-tools]] → [[core-learn-unit8-debugging]]
 9. Then: [[core-tf-basics]] · [[core-urdf-basics]] · [[core-bag-record]] · [[core-lifecycle-concepts]] · architecture notes ([[core-arch-layers]]).
+
+Next course: the intermediate track (build system, launch formats, parameters, executors, QoS, DDS, managed nodes) starts at [[core-learn-inter-start-here]].
 
 ## Course cloud environment
 - The platform-managed `~/.bash_aliases` sources `/opt/ros/$SELECTED_ROS_DISTRO`, `~/ros2_ws/install/local_setup.bash` and `/home/simulations/ros2_sims_ws/install/setup.bash` when `SOURCE_ROS2_WS` is set. Do NOT edit it: changes are not persisted.

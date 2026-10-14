@@ -2,8 +2,8 @@
 id: core-jazzy-to-lyrical
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-14
+review_by: 2027-04-12
 source: manual
 confidentiality: internal
 title: "Jazzy → Lyrical changes (core, incl. Kilted)"
@@ -31,6 +31,8 @@ version_notes:
 | Discovery | `ROS_LOCALHOST_ONLY` deprecated | K: **removed** (no effect) | V01 |
 | CMake | `ament_target_dependencies` | K: deprecated (warning) → Lyrical: **removed** → `target_link_libraries(t PUBLIC rclcpp::rclcpp ${msg_pkg_TARGETS})`; new `ament_cmake_ros_core::ament_ros_defaults` | V09 |
 | rclpy | `warn()` deprecated | **removed** → `warning()`; K: EventsExecutor (exp.); `AsyncNode` (asyncio) | V22, V33 |
+| rclpy API | `rclpy.qos_event` deprecated alias; name-only `declare_parameter('x')` warns | `rclpy.qos_event` **removed** (use `rclpy.event_handler`); name-only declaration raises **TypeError** (give a default, a type or `dynamic_typing=True`) | V84, V86 |
+| Package template | ament_python tests: copyright, flake8, pep257 | K: + `test_mypy.py`, `test_xmllint.py`, `py.typed` | V101 |
 | rclcpp | `StaticSingleThreadedExecutor` | K: deprecated → **removed**; callback-group events executor; array range checks for params | V32, V33 |
 | tf2 | `.h` and `.hpp` | K: `Quaternion.h` deprecated → **removed**; `tf2_ros/*.h` deprecated (`#warning`) | V44 |
 | static TF CLI | positional args deprecated | **removed** (flags only) | V43 |

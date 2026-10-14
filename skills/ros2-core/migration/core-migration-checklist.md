@@ -2,8 +2,8 @@
 id: core-migration-checklist
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-14
+review_by: 2027-04-12
 source: manual
 confidentiality: internal
 title: "Checklist to migrate a Humble project (to Jazzy / Lyrical)"
@@ -31,6 +31,8 @@ grep -rn "ament_target_dependencies" --include=CMakeLists.txt .   # -> target_li
 grep -rn "tf2_ros/.*\.h\"\|LinearMath/.*\.h\"\|tf2_geometry_msgs.h" --include=*.?pp .   # -> .hpp
 grep -rn "StaticSingleThreadedExecutor\|qos_event.hpp" --include=*.?pp .
 grep -rn "PushRosNamespace\|LaunchConfigurationEquals" --include=*.py .
+grep -rn "rclpy.qos_event" --include=*.py .                      # -> rclpy.event_handler (removed in Lyrical)
+grep -rn "declare_parameter('[a-z_]*')" --include=*.py .           # name only -> TypeError in Lyrical
 grep -rn "action_tutorials_interfaces\|partial_sequence" .          # -> example_interfaces (Kilted+)
 grep -rn "ROS_LOCALHOST_ONLY\|bag record.* -x \|static_transform_publisher [0-9-]" ~/.bashrc .
 grep -rn "switch_controllers.*--st\(art\|op\)\|robot_description" --include=*.py --include=*.yaml .

@@ -11,7 +11,13 @@ environment & sourcing, workspaces, setup.py/CMakeLists/package.xml, rosdep, col
 | [[core-env-variables]] | ROS_DOMAIN_ID, ROS_LOCALHOST_ONLY vs ROS_AUTOMATIC_DISCOVERY_RANGE, RMW_IMPLEMENTATION, logging vars, per-distro DDS. | notes/build-run/core-env-variables.md |
 | [[core-launch-args-include]] | Launch args, YAML from share, GroupAction+PushRosNamespace, includes, IfCondition, OpaqueFunction. | notes/build-run/core-launch-args-include.md |
 | [[core-launch-basics]] | ros2 launch CLI, minimal Python launch file with params/remaps, installing launch files, process/timer recipes, anti-patterns. | notes/build-run/core-launch-basics.md |
+| [[core-launch-node-arguments]] | Pass non-ROS arguments to an rclpy node with Node(arguments=[...]), strip ROS args with remove_ros_args, parse with argparse. | notes/build-run/core-launch-node-arguments.md |
+| [[core-launch-substitutions]] | Required vs optional launch arguments, LogInfo, TextSubstitution, launch CLI common to Python/XML/YAML, a main launch with namespace. | notes/build-run/core-launch-substitutions.md |
+| [[core-launch-xml-yaml]] | ROS 2 XML and YAML launch syntax: arg, $(var), $(find-pkg-share), include with args, group with push-ros-namespace, node params. | notes/build-run/core-launch-xml-yaml.md |
 | [[core-pkg-ament-cmake]] | Canonical CMakeLists.txt for C++ executables, installing Python scripts and modules in ament_cmake; Lyrical-safe linking. | notes/build-run/core-pkg-ament-cmake.md |
+| [[core-pkg-ament-index]] | Why every package has an empty resource/<pkg> file: the ament resource index marker; 'Package not found' when it is missing. | notes/build-run/core-pkg-ament-index.md |
 | [[core-pkg-ament-python]] | Canonical ament_python layout, setup.py template (entry points, data_files for launch/config) and setup.cfg. | notes/build-run/core-pkg-ament-python.md |
 | [[core-pkg-dependencies]] | package.xml format 3 dependency tags, installing deps with rosdep, multi-repo workspaces with vcstool .repos files. | notes/build-run/core-pkg-dependencies.md |
+| [[core-pkg-setup-py-fields]] | setuptools keywords of an ament_python setup.py, entry point syntax and naming, data_files destinations, glob(), setup.cfg. | notes/build-run/core-pkg-setup-py-fields.md |
 | [[core-pkg-workspace]] | Workspace layout, underlay/overlay, ros2 pkg create for ament_python and ament_cmake, inspecting installed packages. | notes/build-run/core-pkg-workspace.md |
+| [[core-symlink-install]] | What colcon build --symlink-install links for ament_python packages (module, data_files), the entry-point wrapper, when to rebuild. | notes/build-run/core-symlink-install.md |
