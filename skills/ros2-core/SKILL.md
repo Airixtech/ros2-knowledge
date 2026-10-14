@@ -1,6 +1,6 @@
 ---
 name: ros2-core
-description: "ROS 2 Humble core (rclpy/rclcpp): nodes, topics, services, actions, params, launch, colcon, QoS, executors, TF, URDF, rosbag2, debugging. Jazzy/Lyrical migration notes."
+description: "ROS 2 Humble core (rclpy/rclcpp): nodes, topics, services, actions, params, launch, colcon, QoS, DDS/RMW, executors, lifecycle, TF, URDF, rosbag2, debugging. Jazzy/Lyrical migration notes."
 ---
 # ros2-core — ROS 2 Humble core reference
 
@@ -10,12 +10,12 @@ Atomic notes for writing correct ROS 2 code and debugging it. **Humble is canoni
 1. Python node = `Node` subclass; `main()`: `rclpy.init` → node → `spin` in try/except (`KeyboardInterrupt`, `ExternalShutdownException`) → `destroy_node()` → `rclpy.shutdown()` if `rclpy.ok()` ([[core-node-skeleton]]).
 2. Timers, never `time.sleep` loops; ROS clock (`get_clock().now()`), never `time.time()`; logs, not `print`; `get_logger().warning()`, never `.warn()` (removed in Lyrical).
 3. Declare parameters before reading them; validate changes in `add_on_set_parameters_callback` ([[core-param-api]]).
-4. Sensor subscriptions: `qos_profile_sensor_data`; latched data (`/map`, `/tf_static`): RELIABLE + TRANSIENT_LOCAL. Mismatched QoS fails silently ([[core-qos-policies]]).
+4. Sensor subscriptions: `qos_profile_sensor_data`; latched data (`/map`, `/tf_static`): RELIABLE + TRANSIENT_LOCAL. Mismatched QoS fails silently: check `ros2 topic info --verbose`, catch it with an `incompatible_qos` event callback ([[core-qos-policies]], [[core-qos-events]]).
 5. Never block inside a callback (no `spin_until_future_complete`, no sync `call()`): use `call_async` + done-callback/`await`, or a MultiThreadedExecutor + separate callback groups ([[core-srv-client-async]]).
 6. A long callback that needs fresh data from other callbacks ⇒ MultiThreadedExecutor + Reentrant or separate MutuallyExclusive groups ([[core-exec-callback-groups]]).
 7. Action servers always end with `succeed()`, `abort()` or `canceled()`; clients always `wait_for_server()` ([[core-action-server]]).
 8. Interfaces live in a dedicated ament_cmake package; server and client import from the same package; re-source after building ([[core-iface-package]]).
-9. New entry points / launch / config files ⇒ register them in setup.py (or CMake `install`) + rebuild + `source install/setup.bash` ([[core-pkg-ament-python]]).
+9. New entry points / launch / config files ⇒ register them in setup.py (or CMake `install`) + rebuild (`--symlink-install` too) + `source install/setup.bash` ([[core-pkg-ament-python]], [[core-symlink-install]]).
 10. Relative topic names + remaps/namespaces; one publisher per TF transform; `use_sim_time` consistent across all nodes in simulation ([[core-time-timers]]).
 
 ## Retrieval protocol
@@ -24,7 +24,7 @@ Atomic notes for writing correct ROS 2 code and debugging it. **Humble is canoni
 3. Open 1–3 notes. Use their code as the template: keep the structure, adapt the names.
 4. No clear match → `grep -ril "<keyword>" notes/` (API names work best: `call_async`, `TRANSIENT_LOCAL`) and open the top hits.
 5. Follow a note's `see:` links **one hop** at most.
-6. Do not open `learn/` unless the question is about the course (Leo rover, Units 2–8, quizzes).
+6. Do not open `learn/` or `learn-intermediate/` unless the question is about a course (`learn/`: Leo rover, Units 2–8, quizzes; `learn-intermediate/`: MP-400 simulation, Units 2–9, final project). For a concept, prefer the note without `-demo`; open the `-demo` note when the user needs the test program.
 7. Jazzy, Lyrical or porting a project → open `migration/` and apply the version marks.
 If the notes do not cover the question, answer from standard Humble knowledge and say so. Never invent APIs or flags.
 

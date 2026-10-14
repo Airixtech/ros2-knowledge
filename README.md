@@ -13,9 +13,10 @@ Base de conocimiento de **ROS 2** en notas atómicas de Markdown, con dos skills
 
 | Carpeta | Qué hay |
 |---|---|
-| `skills/ros2-core/` | Skill base de ROS 2: 84 notas ([índice](skills/ros2-core/SKILL.md)) |
-| `skills/ros2-core/notes/` | Notas técnicas por área: `build-run`, `core-api`, `recipes`, `tools`, `architecture` |
+| `skills/ros2-core/` | Skill base de ROS 2: 121 notas ([índice](skills/ros2-core/SKILL.md)) |
+| `skills/ros2-core/notes/` | Notas técnicas por área: `build-run`, `core-api`, `middleware` (QoS, DDS y RMW), `recipes`, `tools`, `architecture` |
 | `skills/ros2-core/learn/` | Material del curso: conceptos y ejercicios de las Units 2–8 ([empieza aquí](skills/ros2-core/learn/core-learn-start-here.md)) |
+| `skills/ros2-core/learn-intermediate/` | Material del curso intermedio con el MP-400 en simulación: Units 2–9 y proyecto final ([empieza aquí](skills/ros2-core/learn-intermediate/core-learn-inter-start-here.md)) |
 | `skills/ros2-core/migration/` | Cambios Humble → Jazzy → Lyrical y una checklist para migrar proyectos |
 | `skills/ros2-nav2/` | Skill de Nav2: 96 notas ([índice](skills/ros2-nav2/SKILL.md)). Necesita `ros2-core` |
 | `skills/ros2-nav2/notes/` | Notas técnicas por área: `bringup`, `mapping`, `localization`, `planning-control`, `behavior-trees`, `costmaps` (con filtros), `commander` (Simple Commander, waypoints), `plugins` (plugins propios de costmap, planner y controller), `multi-robot` |
@@ -41,7 +42,7 @@ Cada nota sigue el mismo formato: un TL;DR de 1–2 líneas, luego el código o 
    ```
 2. En Obsidian, abre la carpeta como bóveda, o simplemente ábrela si ya está dentro de la tuya.
 3. Por dónde empezar:
-   - **Estudiantes:** `skills/ros2-core/learn/core-learn-start-here.md` (ROS 2 base) y `skills/ros2-nav2/learn/nav2-learn-start-here.md` (navegación) y `skills/ros2-nav2/learn/nav2-learn-adv-start-here.md` (navegación avanzada).
+   - **Estudiantes:** `skills/ros2-core/learn/core-learn-start-here.md` (ROS 2 base), `skills/ros2-core/learn-intermediate/core-learn-inter-start-here.md` (ROS 2 intermedio), `skills/ros2-nav2/learn/nav2-learn-start-here.md` (navegación) y `skills/ros2-nav2/learn/nav2-learn-adv-start-here.md` (navegación avanzada).
    - **Consulta técnica:** el índice de áreas en `skills/ros2-core/SKILL.md` y en `skills/ros2-nav2/SKILL.md`.
 4. Para actualizar: `git pull`.
 
