@@ -30,6 +30,7 @@ version_notes:
 | `data_files` (launch, yaml) in `install/<pkg>/share/<pkg>/` | copies | symlinks to `src/` [colcon-core ≥ 0.16] |
 | entry-point wrapper `install/<pkg>/lib/<pkg>/<exe>` | generated file | generated file (not a link) |
 | `setup.py`, `setup.cfg` in `build/<pkg>/` | — | symlinks |
+
 For ament_cmake packages, `--symlink-install` also turns the `install()` calls into symlinks.
 
 [Older colcon, as in the course (2022)] The experiment below found hard copies in `install/` even with the flag: launch and params files were only linked inside `build/`, so editing them in `src/` did nothing until the next build. Check your version: `ls -l install/<pkg>/share/<pkg>/launch/` shows `->` arrows when they are linked.

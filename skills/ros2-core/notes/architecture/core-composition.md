@@ -2,8 +2,8 @@
 id: core-composition
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-14
+review_by: 2027-04-12
 source: manual
 confidentiality: internal
 title: "Composition, intra-process & component containers"
@@ -62,6 +62,7 @@ CLI: `ros2 component list` · `ros2 component load /container <pkg> <ns::Class> 
 | Latency | DDS serialization | <10 µs zero-copy |
 | Debugging | simple | multithreaded |
 | Memory | higher | lower |
+
 Compose per latency domain (perception→planning→control). Keep the UI, logger, rosbag and watchdog separate.
 
 ## Intra-process (zero-copy, rclcpp only in Humble)

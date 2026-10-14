@@ -34,6 +34,7 @@ version_notes:
 | Depth | int queue size | 10 |
 | Deadline / Lifespan | Duration | "default" (middleware usually treats it as infinite) |
 | Liveliness | enum + lease duration | SYSTEM_DEFAULT (lease "default") |
+
 Every non-duration policy also has a `SYSTEM_DEFAULT` value, meaning "use the middleware's default".
 
 ## Compatibility (Publisher → Subscriber)
@@ -45,6 +46,7 @@ Every non-duration policy also has a `SYSTEM_DEFAULT` value, meaning "use the mi
 | TRANSIENT_LOCAL | VOLATILE | yes (no history) |
 | TRANSIENT_LOCAL | TRANSIENT_LOCAL | yes (latched) |
 | VOLATILE | TRANSIENT_LOCAL | **NO** |
+
 Rule: a BEST_EFFORT + VOLATILE subscriber connects to anything. The publisher defines the topic's QoS, so check it first.
 
 Durations (deadline, liveliness lease): compatible when publisher ≤ subscriber, or when the subscriber is "default" (infinite); publisher "default" with a subscriber value → **NO**. Liveliness kind: MANUAL_BY_TOPIC publishers serve AUTOMATIC or MANUAL_BY_TOPIC subscribers; AUTOMATIC publisher + MANUAL_BY_TOPIC subscriber → **NO**. Source: [QoS compatibility (humble)](https://docs.ros.org/en/humble/Concepts/Intermediate/About-Quality-of-Service-Settings.html). Per policy (each note links its test programs): [[core-qos-events]] · [[core-qos-durability]] · [[core-qos-deadline]] · [[core-qos-lifespan]] · [[core-qos-liveliness]].
@@ -56,6 +58,7 @@ Durations (deadline, liveliness lease): compatible when publisher ≤ subscriber
 | `qos_profile_services_default` | `ServicesQoS()` | RELIABLE | VOLATILE | 10 | services |
 | `qos_profile_parameters` | `ParametersQoS()` | RELIABLE | VOLATILE | 1000 | params |
 | `qos_profile_system_default` | `SystemDefaultsQoS()` | SYSTEM_DEFAULT | SYSTEM_DEFAULT | SYSTEM_DEFAULT | whatever the RMW decides (vendor-specific) |
+
 Passing an int (e.g. `10`) = the default profile: KEEP_LAST depth 10, RELIABLE, VOLATILE.
 How to use these in code, and per-data-type choices: [[core-qos-usage]].
 

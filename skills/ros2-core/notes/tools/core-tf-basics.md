@@ -2,8 +2,8 @@
 id: core-tf-basics
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-14
+review_by: 2027-04-12
 source: manual
 confidentiality: internal
 title: "TF2 conventions (REP 103/105), CLI & errors"
@@ -33,6 +33,7 @@ version_notes:
 | `map → odom` | AMCL / SLAM Toolbox |
 | `odom → base_link` | odometry driver / `robot_localization` EKF / sim plugin |
 | `base_link → sensors` | `robot_state_publisher` from URDF (static + joint-driven) |
+
 One publisher per transform. Topics: `/tf` (dynamic) and `/tf_static` (TRANSIENT_LOCAL).
 
 ## CLI
@@ -56,4 +57,5 @@ The legacy positional form prints a deprecation warning in Humble [changed in Ly
 | `"X" passed to lookupTransform argument target_frame does not exist` | no publisher for X yet (e.g. `map` before AMCL initial pose) |
 | Jittery/ flickering frames | two publishers of the same transform or low rate |
 | Laser misaligned with robot in RViz | wrong extrinsic/joint origin in URDF or wrong parent frame |
+
 Code: [[core-tf-broadcaster]] · [[core-tf-listener]] · model: [[core-urdf-basics]].

@@ -2,8 +2,8 @@
 id: nav2-learn-course-project
 type: reference
 owner: equipo-ros2
-updated: 2026-10-10
-review_by: 2027-04-08
+updated: 2026-10-14
+review_by: 2027-04-12
 source: manual
 confidentiality: internal
 title: "Course project: real robot sections I-IV and final presentation"
@@ -34,6 +34,7 @@ version_notes: []
 | II | Unit 3, localization | [[nav2-learn-unit3-localization]] |
 | III | Unit 4, path planning | [[nav2-learn-unit4-path-planning]] |
 | IV | Unit 5, obstacle avoidance | [[nav2-learn-unit5-costmaps]] |
+
 Finish each section of the project before attempting the next unit of the course.
 
 ## Final presentation

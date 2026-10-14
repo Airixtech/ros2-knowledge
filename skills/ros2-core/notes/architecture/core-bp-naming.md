@@ -2,8 +2,8 @@
 id: core-bp-naming
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-14
+review_by: 2027-04-12
 source: manual
 confidentiality: internal
 title: "Naming conventions (REP 144/105) & package rules"
@@ -33,6 +33,7 @@ version_notes: []
 | TF frame | lowercase standard | `map`, `odom`, `base_link`, `camera_optical_frame` | `BaseLink` |
 | Msg type / field | `PascalCase` / `snake_case` | `PoseStamped.position` | `pose_stamped.msg`, `myField` |
 | Parameter | `snake_case`, hierarchical `.` | `controller.max_velocity` | `MaxVel` |
+
 Use relative names + remap/namespace, and avoid hard-coded absolute "magic strings" ([[core-ros-args]]).
 
 ## Package rules

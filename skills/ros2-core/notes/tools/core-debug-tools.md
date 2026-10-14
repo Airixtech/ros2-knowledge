@@ -2,8 +2,8 @@
 id: core-debug-tools
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-14
+review_by: 2027-04-12
 source: manual
 confidentiality: internal
 title: "rqt, RViz2, teleop & ros2_tracing"
@@ -52,6 +52,7 @@ Steps: Global Options → Fixed Frame (it must exist in TF: `map`/`odom`/`base_l
 | PointCloud2 / Image / Camera | 3D points / images |
 | Map / Path / Odometry / Pose | nav data |
 | Marker / MarkerArray | custom debug shapes |
+
 Nothing shown → check the Fixed Frame, topic, QoS and TF.
 
 ## Other tools

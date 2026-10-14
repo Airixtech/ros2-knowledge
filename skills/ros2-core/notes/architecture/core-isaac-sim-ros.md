@@ -2,8 +2,8 @@
 id: core-isaac-sim-ros
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-14
+review_by: 2027-04-12
 source: manual
 confidentiality: internal
 title: "Isaac Sim with ROS 2 Humble: setup, Fast DDS, troubleshooting"
@@ -62,4 +62,5 @@ The `<participant>` block alone is not enough: `UdpTransport` must be declared i
 | TF in echo, not in RViz | RViz display QoS → Best Effort |
 | /clock arrives, nodes use wall time | global `use_sim_time` ([[core-time-timers]]) |
 | FastDDS deadlock in Docker | UDP-only profile or Cyclone |
+
 Checklist: ROS env set before Isaac · same RMW + domain on both sides · Publish Clock in the graph · global `use_sim_time` · NITROS GEMs for GPU perception ([[core-perception-basics]]).

@@ -35,6 +35,8 @@ Optional checks:
   is never parsed; label it (```python, ```yaml, ```xml; logs and trees: ```text).
   Launch/YAML names (WARNING): a params YAML whose node key matches an executable launched in the same skill
   under a different name is never applied (ROS 2 matches params by node name).
+  Text glued to a table (WARNING): a plain text line right after a table row, without a blank line, is shown
+  as one more row of the table (GitHub, Obsidian); leave a blank line after every table.
 
 Usage: python tools/validate.py [--strict] [--brief] [--forbidden FILE]
   --strict  warnings also fail
@@ -75,6 +77,20 @@ FIX_SECTION_RE = re.compile(r'^## Real .*\(fix\)\s*$(.*?)(?=^## |\Z)', re.S | re
 AUDIT_ID_RE = re.compile(r'^\| *((?:[A-Z0-9]+-)?V\d{2,3}) *\|', re.M)
 LINK_ITEM_RE = re.compile(r'^\[\[[^\]]+\]\]$')
 COMPLETE_PY_RE = re.compile(r'^(?:import|from)\s', re.M)
+TABLE_ROW_RE = re.compile(r'^\s*\|.*\|\s*$')
+BLOCK_START_RE = re.compile(r'^\s*(?:#|[-*+]\s|\d+[.)]\s|>|```|<|\|)')    # these end a table by themselves
+
+
+def text_after_table(body):
+    """Body line numbers of plain text lines glued to the table row above them (outside code blocks)."""
+    hits, prev, in_code = [], '', False
+    for i, line in enumerate(body.splitlines(), 1):
+        if OPEN_FENCE_RE.match(line):
+            in_code = not in_code
+        elif not in_code and line.strip() and TABLE_ROW_RE.match(prev) and not BLOCK_START_RE.match(line):
+            hits.append(i)
+        prev = '' if in_code else line
+    return hits
 
 
 def fenced_blocks(body):
@@ -280,6 +296,10 @@ def main(argv):
             if not lang and LOOKS_LIKE_CODE_RE.search(block):
                 warnings.append(f'{where}: code block without a language looks like Python/YAML/XML '
                                 f'(not parsed): label it')
+        glued = text_after_table(n['body'])
+        if glued:
+            warnings.append(f'{where}: text glued to a table (body line {", ".join(map(str, glued))}) is shown '
+                            f'as a table row: add a blank line after the table')
         m = SECRET_RE.search(n['text'])
         if m:
             errors.append(f'{where}: signed link or local user path ({m.group(0)}): remove it')

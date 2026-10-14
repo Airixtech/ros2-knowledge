@@ -2,8 +2,8 @@
 id: core-arch-layers
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-14
+review_by: 2027-04-12
 source: manual
 confidentiality: internal
 title: "Layered architecture, node roles, state management & bridges"
@@ -39,6 +39,7 @@ Hardware           sensors, actuators, MCU, FPGA
 | Planning | Path, trajectories | map, pose, goal |
 | Control | cmd_vel, actuator refs | path, odom |
 | Behavior | goals | state |
+
 Needing data from two non-adjacent layers is a modeling smell.
 
 ## Responsibilities
@@ -51,6 +52,7 @@ Single Responsibility per node, named with a concrete noun (`LocalPlanner`, `Bat
 | FSM (YASMIN, SMACC2) | mission | rigid, few states |
 | Behavior Trees (BT.CPP) | mission | reactive, modular, reusable recovery subtrees |
 | plansys2 (PDDL) | symbolic | combinatorial task planning |
+
 Nav2 style: a BT orchestrator + lifecycle servers under lifecycle_manager.
 
 ## External integration
@@ -61,4 +63,5 @@ Nav2 style: a BT orchestrator + lifecycle servers under lifecycle_manager.
 | Recording | rosbag2 (MCAP) ([[core-bag-record]]) |
 | IoT | MQTT bridge |
 | Time series | InfluxDB/Prometheus via custom bridge |
+
 Process boundaries and zero-copy: [[core-composition]]. Failures and real-time: [[core-arch-failure-rt]].

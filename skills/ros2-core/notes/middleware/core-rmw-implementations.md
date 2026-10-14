@@ -43,6 +43,7 @@ ros2 doctor --report            # section "RMW MIDDLEWARE": middleware name : rm
 | `rmw_connextdds` | RTI Connext, commercial; free for prototyping, research, non-commercial and academic use | `sudo apt install ros-humble-rmw-connextdds` |
 | `rmw_gurumdds_cpp` | GurumDDS, commercial | `ros-humble-rmw-gurumdds-cpp` plus GurumDDS itself (separate) |
 | `rmw_zenoh_cpp` (not DDS) | Zenoh | `sudo apt install ros-humble-rmw-zenoh-cpp`, then run the router `ros2 run rmw_zenoh_cpp rmw_zenohd` |
+
 If Fast DDS is not installed, the first RMW in alphabetical order becomes the default. Reference: [middleware vendors (humble)](https://docs.ros.org/en/humble/Concepts/Intermediate/About-Different-Middleware-Vendors.html).
 ```bash
 sudo apt update

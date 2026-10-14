@@ -2,8 +2,8 @@
 id: nav2-multirobot-rviz
 type: reference
 owner: equipo-ros2
-updated: 2026-10-10
-review_by: 2027-04-08
+updated: 2026-10-14
+review_by: 2027-04-12
 source: manual
 confidentiality: internal
 title: "RViz2 for several robots: per-robot displays and tool topics"
@@ -46,6 +46,7 @@ Save the config again.
 | `Path` | `/tb3_1/plan` | Billboards, green |
 | `Map` | `/tb3_0/global_costmap/costmap`, `/tb3_1/global_costmap/costmap` | Color Scheme `costmap` |
 | `Map` | `/tb3_0/local_costmap/costmap`, `/tb3_1/local_costmap/costmap` | Color Scheme `costmap` |
+
 For each robot: set the 2D Goal Pose topic to `/tb3_0/goal_pose` (or `/tb3_1/goal_pose`), click **2D Goal Pose** and a destination: that robot moves and its path appears. Each robot avoids the other as a dynamic obstacle and replans.
 
 ## Pitfalls

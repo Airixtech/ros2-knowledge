@@ -2,8 +2,8 @@
 id: nav2-rviz-displays
 type: reference
 owner: equipo-ros2
-updated: 2026-10-10
-review_by: 2027-04-08
+updated: 2026-10-14
+review_by: 2027-04-12
 source: manual
 confidentiality: internal
 title: "RViz2 for Nav2: map, scan, particles, pose estimate, path, costmaps"
@@ -29,6 +29,7 @@ version_notes:
 | `Map` | `/map` | Durability **Transient Local** (the map is latched); otherwise you see nothing |
 | `TF` | | frames of the robot |
 | `LaserScan` | `/scan` | Reliability **Best Effort** (instead of Reliable) for the scan to show |
+
 In the map, grey pixels are free space, black pixels occupied space and transparent areas unknown. Save the config as `mapper_rviz_config.rviz` in `ros2_ws/src`. QoS background: [[core-qos-usage]].
 
 ## Localization
@@ -45,6 +46,7 @@ Save as `localization_rviz_config`.
 | `Path` | `/plan` | Line Style **Billboards**, Line Width **0.05** |
 | `Map` (global costmap) | `/global_costmap/costmap` | Color Scheme `map` |
 | `Map` (local costmap) | `/local_costmap/costmap` | Color Scheme `costmap` |
+
 Send a goal with **Nav2 Goal** (Nav2 RViz plugin) or RViz's **2D Goal Pose** (publishes `/goal_pose`): a green line is the planned path. **Publish Point** publishes `/clicked_point` and prints the coordinates in the RViz terminal. Save as `pathplanning_rviz_config`.
 
 ## Pitfalls

@@ -36,6 +36,7 @@ unconfigured --configure--> inactive --activate--> active
 | `deactivate` | active → inactive | stop timers/HW, keep resources |
 | `cleanup` | inactive → unconfigured | release resources |
 | `shutdown` | any → finalized | final release |
+
 Lifecycle publishers only publish while `active`.
 
 ## CLI
