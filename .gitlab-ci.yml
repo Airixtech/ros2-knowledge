@@ -1,0 +1,28 @@
+# CI de la bóveda de conocimiento (airix). Instala airix y valida las notas sin fuente, caché ni token.
+#
+# Antes de usarla, define la variable de CI AIRIX_CLI_GIT_URL con la URL git de airix-cli que pueda leer el runner
+# (Settings > CI/CD > Variables) y crea una programación semanal (Build > Pipeline schedules) para el informe.
+
+stages: [validate, report]
+
+default:
+  image: ghcr.io/astral-sh/uv:python3.14-bookworm
+  before_script:
+    - uv tool install "git+${AIRIX_CLI_GIT_URL}"
+    - export PATH="$HOME/.local/bin:$PATH"
+
+# En cada push y merge request: falla si hay notas inválidas o referencias de trazabilidad rotas.
+validate-vault:
+  stage: validate
+  script:
+    - airix kb check --vault .
+  rules:
+    - if: $CI_PIPELINE_SOURCE != "schedule"
+
+# Programado (semanal): falla si hay notas vencidas o inválidas, para que el equipo las revise.
+stale-report:
+  stage: report
+  script:
+    - airix kb stale --vault . --strict
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
