@@ -6,23 +6,22 @@ updated: 2026-10-14
 review_by: 2027-04-12
 source: manual
 confidentiality: internal
-title: "Durability demo: transient_local for late subscribers"
+title: "Durability demo: one-shot publisher and late subscriber"
 domain: core
 area: middleware
 distro: humble
 tested: false
 audience: dev
-summary: "Publish one message, start the subscriber later: it still gets it only when both use TRANSIENT_LOCAL; ros2 topic echo flags."
-tags: [durability, TRANSIENT_LOCAL, VOLATILE, latched topic, late joiner, robot_description, QoSDurabilityPolicy, topic echo qos-durability]
-see: ["[[core-qos-policies]]", "[[core-qos-usage]]", "[[core-qos-events]]", "[[core-qos-lifespan]]"]
+summary: "Test programs for durability: one-message publisher and subscriber, both with -durability transient_local|volatile."
+tags: [durability demo, qos_tests_pkg, publisher_durability, subscriber_durability, TRANSIENT_LOCAL, argparse]
+see: ["[[core-qos-durability]]", "[[core-qos-events-demo]]", "[[core-qos-lifespan-demo]]", "[[core-qos-events]]"]
 requires: []
 version_notes:
-  - "humble: without QoS flags ros2 topic echo adapts reliability and durability to the publishers; with any flag the rest comes from sensor_data — https://github.com/ros2/ros2cli/blob/humble/ros2topic/ros2topic/verb/echo.py (V96)"
   - "jazzy: rclpy.qos_event -> rclpy.event_handler; removed in Lyrical — https://github.com/ros2/rclpy/blob/jazzy/rclpy/rclpy/event_handler.py (V86)"
 ---
-# Durability demo: transient_local for late subscribers
+# Durability demo: one-shot publisher and late subscriber
 
-**TL;DR** Durability decides whether a message stays available for subscribers that join **after** it was published. `TRANSIENT_LOCAL`: the publisher keeps its last `depth` messages for late joiners (how `robot_description`, `/map` or `/tf_static` work). `VOLATILE`: nothing is kept. A late subscriber gets the old message only if **both** sides use `TRANSIENT_LOCAL` ([[core-qos-policies]]).
+**TL;DR** The publisher publishes a single message, then spins; start the subscriber afterwards. Both take `-durability transient_local|volatile`. Concepts and results: [[core-qos-durability]].
 
 ## Subscriber (`subscriber_durability.py`)
 ```python
@@ -201,16 +200,7 @@ source install/setup.bash
 ros2 run qos_tests_pkg publisher_durability_exe -durability transient_local   # shell 1: publishes once
 ros2 run qos_tests_pkg subscriber_durability_exe -durability transient_local  # shell 2, started later
 ```
-```text
-transient_local
-[INFO] [1644605352.435077445] [subscriber_qos_obj]: Data Received =1644605326,985073117
-```
-The subscriber gets the message although it started 25 s after the publication. From the terminal:
-```bash
-ros2 topic echo --qos-durability transient_local --qos-reliability reliable /qos_test
-```
-[Humble] `ros2 topic echo /qos_test` without QoS flags also works: echo copies the reliability and durability of the publishers. Once you pass a flag, the policies you omit come from the `sensor_data` preset (best effort), which is why the course had to add `--qos-reliability reliable`.
 
 ## Pitfalls
-- A VOLATILE subscriber connects to a TRANSIENT_LOCAL publisher but receives only new messages; a TRANSIENT_LOCAL subscriber with a VOLATILE publisher is incompatible.
-- `depth` is how many old messages a late joiner can get: depth 1 = only the last one.
+- Start the subscriber **after** the publisher has published: that is the point of the test.
+- Same `RMW_IMPLEMENTATION` in both shells ([[core-rmw-implementations]]).

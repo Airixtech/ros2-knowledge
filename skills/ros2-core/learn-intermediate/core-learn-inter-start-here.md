@@ -36,7 +36,7 @@ version_notes: []
 | 4 | XML and YAML launch | [[core-launch-xml-yaml]] | [[core-learn-inter-unit4-launch-formats]] |
 | 5 | Node parameters | [[core-param-api]], [[core-param-yaml-cli]] | [[core-learn-inter-unit5-params]] |
 | 6 | Executors and callback groups | [[core-exec-model]], [[core-exec-callback-groups]] | [[core-learn-inter-unit6-blocking]], [[core-learn-inter-unit6-executor]], [[core-learn-inter-unit6-exercises]], [[core-learn-inter-unit6-groups-demo]] |
-| 7 | QoS | [[core-qos-policies]], [[core-qos-events]], [[core-qos-durability-demo]], [[core-qos-deadline]], [[core-qos-lifespan]], [[core-qos-liveliness]] | [[core-learn-inter-unit7-8-qos-dds]] |
+| 7 | QoS | [[core-qos-policies]], [[core-qos-events]], [[core-qos-durability]], [[core-qos-deadline]], [[core-qos-lifespan]], [[core-qos-liveliness]] | [[core-learn-inter-unit7-8-qos-dds]]; programs: [[core-qos-events-demo]], [[core-qos-durability-demo]], [[core-qos-deadline-demo]], [[core-qos-lifespan-demo]], [[core-qos-liveliness-demo]] |
 | 8 | DDS | [[core-dds-overview]], [[core-rmw-implementations]], [[core-dds-loss-test]], [[core-ros2-daemon]] | [[core-learn-inter-unit7-8-qos-dds]] |
 | 9 | Managed nodes | [[core-lifecycle-concepts]], [[core-lifecycle-cpp-node]], [[core-lifecycle-services-cli]], [[core-lifecycle-manager-client]] | [[core-learn-inter-unit9-lifecycle]] |
 | 10 | Final project | [[core-recipe-laser-circles]] | [[core-learn-inter-project]] |

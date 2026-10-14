@@ -38,7 +38,7 @@ If the notes do not cover the question, answer from standard Humble knowledge an
 |---|---|---|---|
 | build-run | 16 | `notes/build-run/_index.md` | environment & sourcing, workspaces, setup.py/CMakeLists/package.xml, rosdep, colcon, launch files |
 | core-api | 21 | `notes/core-api/_index.md` | rclpy/rclcpp nodes, logging, time & timers, topics, interfaces, services, actions, parameters, executors |
-| middleware | 12 | `notes/middleware/_index.md` | QoS policies, events and demos (durability, deadline, lifespan, liveliness), DDS and RMW choice, ros2 daemon, multi-host DDS |
+| middleware | 17 | `notes/middleware/_index.md` | QoS policies, events and demos (durability, deadline, lifespan, liveliness), DDS and RMW choice, ros2 daemon, multi-host DDS |
 | recipes | 6 | `notes/recipes/_index.md` | mobile-robot code patterns: LaserScan sectors & avoidance, odometry go-to-goal, command state machine, cv_bridge, safe stop |
 | tools | 17 | `notes/tools/_index.md` | TF2, URDF/xacro/robot_state_publisher, rosbag2, lifecycle nodes, debugging (doctor, rqt, RViz2, tracing), CLI cheat sheet |
 | architecture | 18 | `notes/architecture/_index.md` | naming & design rules, composition, testing/CI/Docker, launch_testing, layers & failures, Nav2, MoveIt2, ros2_control, perception, Gazebo, Isaac Sim, multi-robot |

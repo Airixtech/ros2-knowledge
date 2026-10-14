@@ -20,7 +20,7 @@ version_notes: []
 ---
 # Intermediate Units 7-8: QoS and DDS exercises
 
-**TL;DR** Unit 7 builds `qos_tests_pkg` (one publisher/subscriber pair per QoS policy: [[core-qos-events]], [[core-qos-durability-demo]], [[core-qos-deadline]], [[core-qos-lifespan]], [[core-qos-liveliness]]) and replays a bag with other QoS ([[core-bag-play]]). Unit 8 compares DDS implementations with `dds_tests_pkg` ([[core-dds-loss-test]]).
+**TL;DR** Unit 7 builds `qos_tests_pkg` (one publisher/subscriber pair per QoS policy: [[core-qos-events-demo]], [[core-qos-durability-demo]], [[core-qos-deadline-demo]], [[core-qos-lifespan-demo]], [[core-qos-liveliness-demo]]; concepts and results in the notes without `-demo`) and replays a bag with other QoS ([[core-bag-play]]). Unit 8 compares DDS implementations with `dds_tests_pkg` ([[core-dds-loss-test]]).
 
 ## Package
 ```bash
@@ -42,7 +42,7 @@ With `publisher_deadline_exe` and `subscriber_deadline_exe`:
 1. the publisher misses its own deadline (deadline shorter than its publishing period);
 2. the subscriber does not get messages in time (subscriber deadline shorter than the publisher's period, or than its pause);
 3. incompatible QoS between them (see the compatibility rules).
-Solutions and outputs: [[core-qos-deadline]].
+Solutions and outputs: [[core-qos-deadline]]; programs: [[core-qos-deadline-demo]].
 
 ## Unit 8 examples
 - **8.1**: `dds_tests_pkg` with `publisher_dds.py` / `subscriber_dds.py` and a launch file each; run them with Cyclone DDS.

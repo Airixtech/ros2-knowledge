@@ -8,11 +8,16 @@ QoS policies, events and demos (durability, deadline, lifespan, liveliness), DDS
 | [[core-dds-loss-test]] | Publisher with sequence ids and timestamps, subscriber that counts lost messages and pub-to-sub delay; flood test per RMW. | notes/middleware/core-dds-loss-test.md |
 | [[core-dds-overview]] | What DDS is, how ROS 2 builds on it (rmw layer) and its foundations: data centricity, QoS, discovery, security. | notes/middleware/core-dds-overview.md |
 | [[core-multi-pc-dds]] | Multi-host checklist, multicast test, static peers, Fast DDS discovery server (correct Humble flags), domain_bridge, Cyclone XML, kernel buffers. | notes/middleware/core-multi-pc-dds.md |
-| [[core-qos-deadline]] | QoS deadline: maximum time between messages, deadline event callbacks on publisher and subscriber, compatibility rule, test scenarios. | notes/middleware/core-qos-deadline.md |
-| [[core-qos-durability-demo]] | Publish one message, start the subscriber later: it still gets it only when both use TRANSIENT_LOCAL; ros2 topic echo flags. | notes/middleware/core-qos-durability-demo.md |
-| [[core-qos-events]] | Publisher/SubscriptionEventCallbacks to catch incompatible QoS (and deadline, liveliness), a configurable QoS test publisher, /scan QoS. | notes/middleware/core-qos-events.md |
-| [[core-qos-lifespan]] | QoS lifespan: messages older than the duration are dropped and never delivered; demo that measures message age with transient_local. | notes/middleware/core-qos-lifespan.md |
-| [[core-qos-liveliness]] | Liveliness kinds and lease duration, assert_liveliness(), liveliness event counts, a publisher with 3 callback groups and 3 threads. | notes/middleware/core-qos-liveliness.md |
+| [[core-qos-deadline]] | QoS deadline: maximum time between messages, deadline events on publisher and subscriber, compatibility, test scenarios. | notes/middleware/core-qos-deadline.md |
+| [[core-qos-deadline-demo]] | Deadline test programs: 1 Hz publisher with 2 s pauses and a subscriber, both with -deadline and event callbacks. | notes/middleware/core-qos-deadline-demo.md |
+| [[core-qos-durability]] | QoS durability: TRANSIENT_LOCAL keeps the last depth messages for late subscribers, VOLATILE keeps nothing; ros2 topic echo flags. | notes/middleware/core-qos-durability.md |
+| [[core-qos-durability-demo]] | Test programs for durability: one-message publisher and subscriber, both with -durability transient_local\|volatile. | notes/middleware/core-qos-durability-demo.md |
+| [[core-qos-events]] | Publisher/SubscriptionEventCallbacks for incompatible QoS, deadline and liveliness; QoS defaults; /scan QoS with topic info. | notes/middleware/core-qos-events.md |
+| [[core-qos-events-demo]] | Test programs for QoS events: publisher with -reliability argument and incompatible_qos callback, RELIABLE subscriber. | notes/middleware/core-qos-events-demo.md |
+| [[core-qos-lifespan]] | QoS lifespan: messages older than the duration are dropped and never delivered; what the age test shows. | notes/middleware/core-qos-lifespan.md |
+| [[core-qos-lifespan-demo]] | Test programs for lifespan: subscriber that prints the message age, one-shot publisher; both RELIABLE + TRANSIENT_LOCAL with -lifespan. | notes/middleware/core-qos-lifespan-demo.md |
+| [[core-qos-liveliness]] | Liveliness kinds and lease duration, assert_liveliness(), liveliness event counts, test scenarios and results. | notes/middleware/core-qos-liveliness.md |
+| [[core-qos-liveliness-demo]] | Test programs for liveliness: publisher with publish/assert periods, 3 groups and 3 threads; subscriber printing liveliness counts. | notes/middleware/core-qos-liveliness-demo.md |
 | [[core-qos-policies]] | QoS policies and defaults, publisher/subscriber compatibility rules, preset profiles (sensor_data, services, parameters, system default). | notes/middleware/core-qos-policies.md |
 | [[core-qos-usage]] | Creating QoSProfile in rclpy/rclcpp (sensor, latched map), recommended QoS per data type, diagnosing QoS mismatch, RViz settings. | notes/middleware/core-qos-usage.md |
 | [[core-rmw-implementations]] | Fast DDS (default), Cyclone DDS, Connext, Zenoh in Humble: install, switch with RMW_IMPLEMENTATION, verify with doctor and the daemon. | notes/middleware/core-rmw-implementations.md |

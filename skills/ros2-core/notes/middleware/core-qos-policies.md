@@ -47,7 +47,7 @@ Every non-duration policy also has a `SYSTEM_DEFAULT` value, meaning "use the mi
 | VOLATILE | TRANSIENT_LOCAL | **NO** |
 Rule: a BEST_EFFORT + VOLATILE subscriber connects to anything. The publisher defines the topic's QoS, so check it first.
 
-Durations (deadline, liveliness lease): compatible when publisher ≤ subscriber, or when the subscriber is "default" (infinite); publisher "default" with a subscriber value → **NO**. Liveliness kind: MANUAL_BY_TOPIC publishers serve AUTOMATIC or MANUAL_BY_TOPIC subscribers; AUTOMATIC publisher + MANUAL_BY_TOPIC subscriber → **NO**. Source: [QoS compatibility (humble)](https://docs.ros.org/en/humble/Concepts/Intermediate/About-Quality-of-Service-Settings.html). Demos and events: [[core-qos-events]] · [[core-qos-durability-demo]] · [[core-qos-deadline]] · [[core-qos-lifespan]] · [[core-qos-liveliness]].
+Durations (deadline, liveliness lease): compatible when publisher ≤ subscriber, or when the subscriber is "default" (infinite); publisher "default" with a subscriber value → **NO**. Liveliness kind: MANUAL_BY_TOPIC publishers serve AUTOMATIC or MANUAL_BY_TOPIC subscribers; AUTOMATIC publisher + MANUAL_BY_TOPIC subscriber → **NO**. Source: [QoS compatibility (humble)](https://docs.ros.org/en/humble/Concepts/Intermediate/About-Quality-of-Service-Settings.html). Per policy (each note links its test programs): [[core-qos-events]] · [[core-qos-durability]] · [[core-qos-deadline]] · [[core-qos-lifespan]] · [[core-qos-liveliness]].
 
 ## Preset profiles (rclpy names / rclcpp classes)
 | Python | C++ | Rel | Dur | Depth | Use |
