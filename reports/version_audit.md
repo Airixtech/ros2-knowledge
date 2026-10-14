@@ -4,6 +4,8 @@
 > (CLI/flags, rclpy/rclcpp APIs, CMake/ament, setup.py/setup.cfg, launch, rosbag2, tf2, Nav2, MoveIt2,
 > ros2_control, Gazebo, DDS/env vars, Ubuntu/Python, EOL).
 > Baseline: **Humble is canonical**. Jazzy and Lyrical differences are annotated, not substituted.
+> Extended 2026-10-13 with the **intermediate ROS 2 course** (Python build system, launch formats, parameters,
+> executors, QoS, DDS, managed nodes): IDs V81–V104, sections `Pnn` = page of that course export (not published).
 > The "Lyrical" column includes changes that first appeared in **Kilted** (May 2025, non-LTS), marked "(Kilted)".
 
 ## Method
@@ -47,6 +49,23 @@
 | V30 | B7, E1 | "executor runs callbacks FIFO" | It is roughly FIFO only while callbacks finish faster than events arrive. Under backlog the executor serves ready entities **round-robin, not FIFO**, with no ordering guarantee. |
 | V22 | all py code | `get_logger().warn(...)` | `warn()` is already a deprecated alias in Humble. Use `warning()`, which works in every distro. `warn()` is **removed in Lyrical**. |
 | V07 | A2 | "Canonical" setup.py uses `tests_require=['pytest']` | The current Humble `ros2 pkg create` template (ros2cli #1103, Sept 2025) uses `extras_require={'test': ['pytest']}`. Both still build on Humble, but the canonical template should match. |
+
+### Intermediate course
+| ID | Section | Origin | Error | Correct Humble statement |
+|---|---|---|---|---|
+| V81 | P09 | true for colcon-core < 0.16 (the course was written in 2022) | "`--symlink-install` only helps Python scripts; launch and param files in `install/` are hard copies" | colcon-core ≥ 0.16.0 (2024; the ROS apt repo for Jammy ships 0.21.3) also **symlinks every `data_files` entry** of an ament_python package into `install/`: edits to existing launch/config files apply without a rebuild; a new file still needs `colcon build` (the glob runs at build time). ament_cmake packages symlink installed files too. Docs: [colcon-core #592][colcon592], [symlink_data.py][colcon-symlink], [apt index][apt-jammy] |
+| V83 | P15 | course mistake: remap syntax used for parameters | `ros2 run <pkg> <exe> --ros-args argument1:=VALUE` passes a value to the node | After `--ros-args` a bare `name:=value` is an unknown ROS argument: creating the node raises `UnknownROSArgsError`. Parameter: `--ros-args -p name:=value`; remap: `-r from:=to`; file: `--params-file f.yaml`. `--show-args` exists only for `ros2 launch`. Docs: [rcl arguments.c (humble)][rcl-args-h], [node arguments][node-args-h] |
+| V87 | P29 | course claim, not true for Humble's rmw_fastrtps | "Fast DDS does not support incompatible QoS events; Cyclone does" | Humble's `rmw_fastrtps` raises `OFFERED_QOS_INCOMPATIBLE` / `REQUESTED_QOS_INCOMPATIBLE`; both RMWs call the `incompatible_qos` event callbacks. Docs: [custom_publisher_info.cpp (humble)][fastrtps-ev-h], [QoS concept][qos-doc] |
+| V88 | P28, P29 | Galactic's default (Cyclone) | "In Humble, by default, cyclonedds is used"; "Cyclone is installed when you install ROS 2" | Humble's default is **Fast DDS** (`rmw_fastrtps_cpp`, V03). `ros-humble-rmw-implementation` depends on `rmw-fastrtps-cpp \| rmw-cyclonedds-cpp \| rmw-connextdds`, so apt installs Fast DDS only; Cyclone needs `sudo apt install ros-humble-rmw-cyclonedds-cpp`. Docs: [middleware vendors (humble)][mw-vendors-h], [apt index][apt-jammy] |
+| V89 | P29 | course mistake | "after `export RMW_IMPLEMENTATION=…`, `ros2 doctor` still reports the default Fast DDS" | `ros2 doctor --report` prints `rclpy.get_rmw_implementation_identifier()` of its own process: it shows the RMW exported in that shell. Docs: [ros2doctor rmw.py (humble)][doctor-rmw-h] |
+| V90 | P29 | course mistake | Connext: "a 30-day trial, you cannot use it for commercial purposes" | The RTI Connext libraries of the ROS apt repo (`rti-connext-dds-6.0.1` or `rti-connext-dds-7.3.0-ros`; `sudo apt install ros-humble-rmw-connextdds` pulls them in) are free for prototyping, research, non-commercial and academic use; commercial use needs an RTI license. Docs: [Connext (humble)][connext-h] |
+| V91 | P29 | course mistake | "the ros2 daemon lets a new node avoid discovering the whole graph" | The daemon only serves the **command-line tools** (`ros2 node list`, `ros2 topic list`, …): the first CLI command starts it, nodes never use it. It keeps the RMW it was started with: after changing `RMW_IMPLEMENTATION` run `ros2 daemon stop`, or the CLI shows nothing or fails. Docs: [CLI tools (humble)][cli-concepts-h], [multiple RMWs (humble)][multi-rmw-h] |
+| V94 | P25 | generalization from one AUTOMATIC test | "LeaseDuration is only used with MANUAL_BY_TOPIC" | The lease duration applies to both kinds and to compatibility (publisher lease ≤ subscriber lease). With AUTOMATIC the DDS RMWs assert the writer's liveliness while its process runs, so it is lost only when the process hangs or dies; a cleanly stopped publisher is reported at once (`alive_count_change=-1`). Docs: [QoS concept][qos-doc], [DDS 1.4 LIVELINESS][dds-spec] |
+| V97 | P33 | course mistake (lines appended after `ament_package()`) | `CMakeLists.txt` with `ament_package()` before `add_executable` / `install` | `ament_package()` gathers information from the whole file and should be the **last** call. Docs: [ament_cmake docs (humble)][ament-doc-h] |
+| V98 | P33 | true until Galactic | "managed nodes are available for C++, not Python" | Humble has `rclpy.lifecycle` (V51): Python lifecycle nodes and publishers. Docs: [rclpy lifecycle (humble)][lc-h] |
+| V99 | P33 | incomplete (the example returns FAILURE) | "an uncaught exception jumps to `on_error`, taking the node to finalized" | An exception or `ERROR` return goes to *ErrorProcessing* → `on_error`: `SUCCESS` → **unconfigured** (recovered), `FAILURE`/`ERROR` → finalized. A transition returning `FAILURE` goes back to its start state. Docs: [default_state_machine.c (humble)][lc-sm-h] |
+| V102 | P15 | course bug | `move_robot_with_arguments.py` switches mode with `if … if …` | Both branches run on every tick, so the robot always ends turning; use `elif` (the parameter version of the course does). |
+| V103 | P04 | course typo | `ros pkg create <package_name> --build-type ament_python my_package --dependencies …` | `ros2 pkg create --build-type ament_python <package_name> --dependencies <deps>` |
 
 ## Full table
 | # | Sheet | Statement | Humble | Jazzy | Lyrical | Action | Source | Confidence |
@@ -131,6 +150,30 @@
 | V78 | C6, B5 | `ros2 action type /a` | ✗ absent (use `ros2 action list -t`) | ✓ added | ✓ | annotate | [Jazzy notes][jazzy] | High |
 | V79 | C6 | `ros2 component load … -e use_intra_process_comms:=true` | ✓ | ✓ | ✓ | keep | [ros2cli (humble)][cli-h] | High |
 | V80 | E3 | Unit 5 tracing on the course platform (Humble) | Depends on V40: the course image must ship instrumented `tracetools` `[verify on the platform]` | — | — | annotate | [ros2_tracing README][trace-readme-h] | Medium |
+| V81 | P09 | `--symlink-install` links only Python modules; launch/param files are copies | ✗ outdated: colcon-core ≥ 0.16 (Jammy repo: 0.21.3) symlinks `data_files` too; new files need a build | same | same | **fix** | [colcon-core #592][colcon592], [symlink_data.py][colcon-symlink], [apt index][apt-jammy] | High |
+| V82 | P10 | resource marker: "in future versions you will have to add it to setup.py" | The template already installs it (`share/ament_index/resource_index/packages`). If the line or `package.xml` is missing, colcon-ros still installs both implicitly with a warning that this fallback will be removed | same | same | keep | [colcon-ros ament_python build.py][colcon-ros-py] | High |
+| V83 | P15 | `ros2 run <pkg> <exe> --ros-args argument1:=VALUE` | ✗ unknown ROS argument → `UnknownROSArgsError`; use `-p name:=value` | same | same | **fix** | [rcl arguments.c (humble)][rcl-args-h], [node arguments][node-args-h] | High |
+| V84 | P15, P16 | "declare a default value, otherwise warnings now and errors in future versions" | ✓ name-only declaration: deprecation warning. Options: default value, a `Parameter.Type`, or `dynamic_typing=True` | ✓ warning (also Kilted) | **TypeError** (declaring only a name is not allowed) | annotate | [node.py (humble)][rclpy-node-h], [node.py (lyrical)][rclpy-node-l] | High |
+| V85 | P19 | `MultiThreadedExecutor()` without `num_threads` uses `multiprocessing.cpu_count()` | ✓ | CPUs available to the process (`os.sched_getaffinity`), else `os.cpu_count()`, else 2; warns when `num_threads=1` | same as Jazzy | annotate | [executors.py (humble)][exec-py-h], [executors.py (jazzy)][exec-py-j] | High |
+| V86 | P23, P25 | `from rclpy.qos_event import PublisherEventCallbacks, SubscriptionEventCallbacks` | ✓ | moved to `rclpy.event_handler` (Iron); `qos_event` still imports with a deprecation warning (also Kilted) | `rclpy.qos_event` **removed** | annotate | [event_handler.py (jazzy)][evh-j], [rclpy (lyrical)][rclpy-l] | High |
+| V87 | P29 | "Fast DDS does not support incompatible QoS events" | ✗ supported (`OFFERED/REQUESTED_QOS_INCOMPATIBLE`) | ✓ | ✓ | **fix** | [custom_publisher_info.cpp (humble)][fastrtps-ev-h] | High |
+| V88 | P28, P29 | "Humble default is cyclonedds"; "Cyclone installed with ROS 2" | ✗ default Fast DDS (V03); apt installs only Fast DDS; Cyclone = `ros-humble-rmw-cyclonedds-cpp` | same | same (packages renamed fastrtps→fastdds in Kilted, V03) | **fix** | [middleware vendors (humble)][mw-vendors-h], [apt index][apt-jammy] | High |
+| V89 | P29 | `ros2 doctor` keeps reporting Fast DDS after the export | ✗ it reports its own process's RMW | ✓ | ✓ (report adds env vars, V77) | **fix** | [ros2doctor rmw.py (humble)][doctor-rmw-h] | High |
+| V90 | P29 | Connext "30-day trial, no commercial use" | ✗ free for prototyping, research, non-commercial and academic use (`rti-connext-dds-6.0.1` / `7.3.0-ros`) | same docs and packages | `[verify]` package version | **fix** | [Connext (humble)][connext-h] | High |
+| V91 | P29 | ros2 daemon speeds up node discovery | ✗ it serves the CLI only; keeps its RMW until `ros2 daemon stop` | ✓ (process shown as `_ros2_daemon` in newer ros2cli) | ✓ | **fix** | [CLI tools (humble)][cli-concepts-h], [multiple RMWs][multi-rmw-h] | High |
+| V92 | P29 | Zenoh only as a DDS bridge over Wi-Fi/Internet | Bridge exists (zenoh-plugin-dds); also a native **`rmw_zenoh_cpp` binary in Humble (0.1.x)** — needs the router `ros2 run rmw_zenoh_cpp rmw_zenohd` | binary (0.2.x) | **Tier 1** (Kilted) | annotate | [Zenoh (humble)][zenoh-h], [apt index][apt-jammy], [Kilted notes][kilted] | High |
+| V93 | P29 | "Navigation, MoveIt, RMF work better with Cyclone" | Community advice from the Humble era; the current Nav2 docs give no RMW recommendation (only a CPU comparison). Test both | — | — | annotate `[verify]` | [Nav2 tuning guide][nav2-tuning] | Medium |
+| V94 | P25 | lease duration only used with MANUAL_BY_TOPIC | ✗ used by both kinds and by the compatibility check; AUTOMATIC is asserted by the RMW while the process runs | same | same | **fix** | [QoS concept][qos-doc], [DDS 1.4][dds-spec] | Medium |
+| V95 | P25 | "lifespan is only useful with reliable + transient_local" | Lifespan drops any sample older than the duration, whatever the durability; it matters most when old samples are stored (transient_local) | same | same | annotate | [QoS concept][qos-doc] | High |
+| V96 | P25 | `ros2 topic echo --qos-durability transient_local` alone fails (Galactic) | Without QoS flags `echo` adapts reliability and durability to the publishers; with any flag the rest comes from the `sensor_data` preset (best effort), so add `--qos-reliability reliable` | ✓ | ✓ | annotate | [echo.py (humble)][echo-h] | High |
+| V97 | P33 | `ament_package()` placed before `add_executable` / `install` | ✗ must be the last call | same | same | **fix** | [ament_cmake docs (humble)][ament-doc-h] | High |
+| V98 | P33 | managed nodes only in C++ | ✗ `rclpy.lifecycle` exists (V51) | ✓ | ✓ | **fix** | [rclpy lifecycle][lc-h] | High |
+| V99 | P33 | uncaught exception → `on_error` → finalized | `on_error` SUCCESS → unconfigured; FAILURE/ERROR → finalized | same | same | **fix** | [default_state_machine.c (humble)][lc-sm-h] | High |
+| V100 | P33 | "no lifecycle class for subscribers" | ✓ only `LifecyclePublisher` | ✓ | ✓ still only the publisher | keep | [rclcpp_lifecycle (lyrical)][rclcpp-lc-l] | High |
+| V101 | P04, P10 | ament_python template: tests `test_copyright`, `test_flake8`, `test_pep257`; `my_node.py` in the create output | ✓ (`my_node.py` only with `--node-name`) | ✓ same files | + `test_mypy.py`, `test_xmllint.py`, `py.typed` (Kilted) | annotate | [templates (humble)][tpl-dir-h], [templates (kilted)][tpl-dir-k] | High |
+| V102 | P15 | `if … if …` mode switch in `move_robot_with_arguments.py` | ✗ course bug: use `elif` | — | — | **fix** | — (logic) | High |
+| V103 | P04 | `ros pkg create <package_name> … my_package` | ✗ typo: `ros2 pkg create --build-type ament_python <name>` | — | — | **fix** | [ros2pkg create (humble)][create-h] | High |
+| V104 | P12, P15 | `IncludeLaunchDescription(PythonLaunchDescriptionSource(path))` | ✓; a plain path also works (`AnyLaunchDescriptionSource` picks Python/XML/YAML by extension) | ✓ | ✓ | keep | [include_launch_description.py (humble)][include-h] | High |
 
 ## Open `[verify]` items (for Phase 5 / Docker)
 1. V10: `target_link_libraries(tgt PUBLIC rclcpp::rclcpp ${std_msgs_TARGETS})` builds on `ros:humble`.
@@ -139,6 +182,8 @@
 4. V67/V68: Isaac Sim / Isaac ROS version matrix (outside core; move to the future simulation skill).
 5. V61: Fast DDS 3 discovery CLI on Lyrical. V71: Cyclone 11 XML. V72/V73/V52: Lyrical API checks.
 6. V80: is tracing enabled in the course platform Humble image?
+7. V90: RTI Connext package version on Jazzy/Lyrical. V93: is Cyclone still advised for Nav2 on Humble? Compare both RMWs
+   on the robot. V94: AUTOMATIC liveliness lost after `kill -9` of the publisher (expected: after the lease).
 
 ## Sources
 [rep2000]: https://www.ros.org/reps/rep-2000.html
@@ -228,3 +273,30 @@
 [pep668]: https://peps.python.org/pep-0668/
 [noble-t3d]: https://packages.ubuntu.com/noble/python3-transforms3d
 [mf-h]: https://github.com/ros2/message_filters/blob/humble/src/message_filters/__init__.py
+[colcon592]: https://github.com/colcon/colcon-core/pull/592
+[colcon-symlink]: https://github.com/colcon/colcon-core/blob/master/colcon_core/distutils/commands/symlink_data.py
+[colcon-ros-py]: https://github.com/colcon/colcon-ros/blob/master/colcon_ros/task/ament_python/build.py
+[rcl-args-h]: https://github.com/ros2/rcl/blob/humble/rcl/src/rcl/arguments.c
+[node-args-h]: https://docs.ros.org/en/humble/How-To-Guides/Node-arguments.html
+[rclpy-node-h]: https://github.com/ros2/rclpy/blob/humble/rclpy/rclpy/node.py
+[rclpy-node-l]: https://github.com/ros2/rclpy/blob/lyrical/rclpy/rclpy/node.py
+[exec-py-j]: https://github.com/ros2/rclpy/blob/jazzy/rclpy/rclpy/executors.py
+[evh-j]: https://github.com/ros2/rclpy/blob/jazzy/rclpy/rclpy/event_handler.py
+[rclpy-l]: https://github.com/ros2/rclpy/tree/lyrical/rclpy/rclpy
+[fastrtps-ev-h]: https://github.com/ros2/rmw_fastrtps/blob/humble/rmw_fastrtps_shared_cpp/src/custom_publisher_info.cpp
+[mw-vendors-h]: https://docs.ros.org/en/humble/Concepts/Intermediate/About-Different-Middleware-Vendors.html
+[doctor-rmw-h]: https://github.com/ros2/ros2cli/blob/humble/ros2doctor/ros2doctor/api/rmw.py
+[connext-h]: https://docs.ros.org/en/humble/Installation/RMW-Implementations/DDS-Implementations/Working-with-RTI-Connext-DDS.html
+[cli-concepts-h]: https://docs.ros.org/en/humble/Concepts/Basic/About-Command-Line-Tools.html
+[multi-rmw-h]: https://docs.ros.org/en/humble/How-To-Guides/Working-with-multiple-RMW-implementations.html
+[zenoh-h]: https://docs.ros.org/en/humble/Installation/RMW-Implementations/Non-DDS-Implementations/Working-with-Zenoh.html
+[nav2-tuning]: https://github.com/ros-navigation/docs.nav2.org/blob/rolling/docs/configuration_and_development/tuning_guide.md
+[dds-spec]: https://www.omg.org/spec/DDS/1.4/PDF
+[echo-h]: https://github.com/ros2/ros2cli/blob/humble/ros2topic/ros2topic/verb/echo.py
+[ament-doc-h]: https://docs.ros.org/en/humble/How-To-Guides/Ament-CMake-Documentation.html
+[lc-sm-h]: https://github.com/ros2/rcl/blob/humble/rcl_lifecycle/src/default_state_machine.c
+[rclcpp-lc-l]: https://github.com/ros2/rclcpp/tree/lyrical/rclcpp_lifecycle/include/rclcpp_lifecycle
+[tpl-dir-h]: https://github.com/ros2/ros2cli/tree/humble/ros2pkg/ros2pkg/resource/ament_python
+[tpl-dir-k]: https://github.com/ros2/ros2cli/tree/kilted/ros2pkg/ros2pkg/resource/ament_python
+[create-h]: https://github.com/ros2/ros2cli/blob/humble/ros2pkg/ros2pkg/verb/create.py
+[include-h]: https://github.com/ros2/launch/blob/humble/launch/launch/actions/include_launch_description.py
