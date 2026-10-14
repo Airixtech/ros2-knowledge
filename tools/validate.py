@@ -16,6 +16,10 @@ Errors (exit 1):
     XML block (launch files, behavior trees) that is not well-formed
   - SKILL.md: name != folder, missing/oversized (>1024) description, missing INDEX markers,
     broken or cross-skill wikilinks
+  - a link with credentials or a signed token (AWSAccessKeyId=, X-Amz-Signature=, Signature=, token=) or a
+    Windows user path (C:\\Users\\...) in a note or SKILL.md
+  - an ID of a "## Real ... (fix)" section of reports/version_audit*.md that no note cites (the fix never
+    reached the notes); a report without that section is a WARNING (its fixes are not checked)
 Warnings: > MAX_TOKENS (≈ chars/4 without the knowledge-base fields), summary > 20 words, audience not dev|students,
   learn/ note not audience: students, SKILL.md description > 200 chars or body > 2500 tokens,
   generated indexes out of date, review_by date passed (the server reports the note as overdue),
@@ -24,8 +28,11 @@ Warnings: > MAX_TOKENS (≈ chars/4 without the knowledge-base fields), summary 
   def main / __main__).
 
 Optional checks:
-  --forbidden FILE  one term per line ('#' = comment): any note containing a term (case-insensitive) is an
-                    ERROR. Keep the file outside the repo when the terms themselves must not be published.
+  --forbidden FILE  one term per line ('#' = comment): any text file of the repo (.md, .yaml, .yml, .txt:
+                    notes, SKILL.md, README, reports...) containing a term (case-insensitive) is an ERROR.
+                    Keep the file outside the repo when the terms themselves must not be published.
+  Unlabelled code blocks (WARNING): a block without a language that looks like Python, a params YAML or XML
+  is never parsed; label it (```python, ```yaml, ```xml; logs and trees: ```text).
   Launch/YAML names (WARNING): a params YAML whose node key matches an executable launched in the same skill
   under a different name is never applied (ROS 2 matches params by node name).
 
@@ -54,11 +61,35 @@ MAX_DESC_HARD = 1024           # Claude skill limit
 MAX_SKILL_BODY_TOKENS = 2500
 MD_LINK_RE = re.compile(r'(?<!!)\[[^\]\n]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)')
 FENCE_RE = re.compile(r'^\s*```', re.M)
-PY_BLOCK_RE = re.compile(r'^\s*```(?:python|py)\s*\n(.*?)^\s*```', re.S | re.M)
-YAML_BLOCK_RE = re.compile(r'^\s*```ya?ml\s*\n(.*?)^\s*```', re.S | re.M)
-XML_BLOCK_RE = re.compile(r'^\s*```xml\s*\n(.*?)^\s*```', re.S | re.M)
+PY_BLOCK_RE = re.compile(r'^\s*```(?:python|py)\s*\n(.*?)^\s*```', re.S | re.M | re.I)
+YAML_BLOCK_RE = re.compile(r'^\s*```ya?ml\s*\n(.*?)^\s*```', re.S | re.M | re.I)
+XML_BLOCK_RE = re.compile(r'^\s*```xml\s*\n(.*?)^\s*```', re.S | re.M | re.I)
+OPEN_FENCE_RE = re.compile(r'^\s*```(.*)$')
+LOOKS_LIKE_CODE_RE = re.compile(r'^\s*(?:import \w|from [\w.]+ import |def \w+\(|class \w+[(:])|ros__parameters:'
+                                r'|^\s*<\?xml|^\s*<(?:launch|root|package|library|BehaviorTree)\b', re.M)
+SECRET_RE = re.compile(r'AWSAccessKeyId=|X-Amz-(?:Signature|Credential)=|[?&](?:Signature|token)=|'
+                       r'\b[A-Za-z]:\\+Users\\+', re.I)
+TEXT_SUFFIXES = {'.md', '.yaml', '.yml', '.txt'}
+SKIP_DIRS = {'.git', 'dist', '.venv', '__pycache__', '.obsidian', '.trash'}
+FIX_SECTION_RE = re.compile(r'^## Real .*\(fix\)\s*$(.*?)(?=^## |\Z)', re.S | re.M)
+AUDIT_ID_RE = re.compile(r'^\| *((?:[A-Z0-9]+-)?V\d{2,3}) *\|', re.M)
 LINK_ITEM_RE = re.compile(r'^\[\[[^\]]+\]\]$')
 COMPLETE_PY_RE = re.compile(r'^(?:import|from)\s', re.M)
+
+
+def fenced_blocks(body):
+    """[(language, code)] of the ``` blocks of a note, paired line by line (opening fence, closing fence)."""
+    blocks, lang, cur = [], None, []
+    for line in body.splitlines():
+        m = OPEN_FENCE_RE.match(line)
+        if m and lang is None:
+            lang, cur = m.group(1).strip().lower(), []
+        elif m:
+            blocks.append((lang, '\n'.join(cur)))
+            lang = None
+        elif lang is not None:
+            cur.append(line)
+    return blocks
 
 
 def pyflakes_messages(code):
@@ -245,10 +276,13 @@ def main(argv):
                 except ElementTree.ParseError:
                     errors.append(f'{where}: XML block is not well-formed ({e})')
 
-        low = n['text'].lower()
-        hits = [term for term in forbidden if term in low]
-        if hits:
-            errors.append(f'{where}: contains forbidden terms ({", ".join(hits)})')
+        for lang, block in fenced_blocks(n['body']):
+            if not lang and LOOKS_LIKE_CODE_RE.search(block):
+                warnings.append(f'{where}: code block without a language looks like Python/YAML/XML '
+                                f'(not parsed): label it')
+        m = SECRET_RE.search(n['text'])
+        if m:
+            errors.append(f'{where}: signed link or local user path ({m.group(0)}): remove it')
 
         tok = tokens_estimate(split_kb(n['text'])[0])     # the six fixed knowledge-base lines do not count
         if tok > MAX_TOKENS:
@@ -303,6 +337,30 @@ def main(argv):
                 errors.append(f"{where}: links to [[{target}]] in another skill ('{t['skill']}')")
         if tokens_estimate(body) > MAX_SKILL_BODY_TOKENS:
             warnings.append(f'{where}: body ~{tokens_estimate(body)} tokens (> {MAX_SKILL_BODY_TOKENS})')
+        m = SECRET_RE.search(text)
+        if m:
+            errors.append(f'{where}: signed link or local user path ({m.group(0)}): remove it')
+
+    cited = '\n'.join(n['text'] for n in notes)       # every audit fix must reach a note (version_notes)
+    for report in sorted((ROOT / 'reports').glob('version_audit*.md')):
+        where = report.relative_to(ROOT).as_posix()
+        sections = FIX_SECTION_RE.findall(report.read_text(encoding='utf-8'))
+        if not sections:
+            warnings.append(f"{where}: no '## Real ... (fix)' section: its fixes are not checked against the notes")
+        for aid in sorted({i for s in sections for i in AUDIT_ID_RE.findall(s)}):
+            if not re.search(rf'(?<![\w-]){re.escape(aid)}(?!\d)', cited):
+                errors.append(f'{where}: fix {aid} is cited by no note (add it to the version_notes of the '
+                              f'note that carries the correction)')
+
+    if forbidden:                                      # every text file of the repo, not only the notes
+        for path in sorted(ROOT.rglob('*')):
+            rel = path.relative_to(ROOT)
+            if path.suffix not in TEXT_SUFFIXES or any(p in SKIP_DIRS for p in rel.parts) or not path.is_file():
+                continue
+            low = path.read_text(encoding='utf-8', errors='replace').lower()
+            hits = [term for term in forbidden if term in low]
+            if hits:
+                errors.append(f'{rel.as_posix()}: contains forbidden terms ({", ".join(hits)})')
 
     try:
         import build_index

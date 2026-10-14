@@ -77,7 +77,7 @@ Sube `dist/ros2-core.zip` y `dist/ros2-nav2.zip` en la configuración de Skills 
   ```bash
   python tools/build_index.py      # regenera los _index.md y el índice de SKILL.md (no los edites a mano)
   python tools/kb_meta.py          # añade los campos de mantenimiento que falten; en las notas que cambiaste pone updated = hoy y aleja review_by (necesita git)
-  python tools/validate.py --brief # debe terminar con 0 errores (revisa YAML y XML, que cada YAML de parámetros use el nombre del nodo del launch; con pyflakes, también los programas Python)
+  python tools/validate.py --brief # debe terminar con 0 errores (revisa YAML y XML, que cada YAML de parámetros use el nombre del nodo del launch; con pyflakes, también los programas Python; que cada corrección de la auditoría esté citada en una nota)
   python tools/backlinks.py        # opcional: actualiza reports/backlinks.md
   ```
 

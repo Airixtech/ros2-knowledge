@@ -2,8 +2,8 @@
 id: core-qos-policies
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-13
+review_by: 2027-04-11
 source: manual
 confidentiality: internal
 title: "QoS policies, compatibility & preset profiles"
@@ -17,6 +17,8 @@ tags: [QoS, reliability, durability, BEST_EFFORT, TRANSIENT_LOCAL, qos_profile_s
 see: ["[[core-qos-usage]]", "[[core-topic-pub-sub-py]]", "[[core-debug-triage]]"]
 requires: []
 version_notes:
+  - "humble: qos_profile_system_default sets every policy to SYSTEM_DEFAULT (not RELIABLE/VOLATILE/10) — https://github.com/ros2/rmw/blob/humble/rmw/include/rmw/qos_profiles.h (V35)"
+  - "humble: default liveliness is SYSTEM_DEFAULT with lease \"default\" (not AUTOMATIC); deadline/lifespan \"default\" — https://github.com/ros2/rmw/blob/humble/rmw/include/rmw/qos_profiles.h (V36)"
   - "jazzy: warning printed for KEEP_LAST with depth 0 (Iron) — https://docs.ros.org/en/rolling/Releases/Release-Iron-Irwini.html (V34)"
 ---
 # QoS policies, compatibility & preset profiles
