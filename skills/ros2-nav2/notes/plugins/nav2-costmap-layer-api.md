@@ -1,5 +1,11 @@
 ---
 id: nav2-costmap-layer-api
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "nav2_costmap_2d::Layer API: required and optional methods, update windows, cost values"
 domain: nav2
 area: plugins

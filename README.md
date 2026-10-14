@@ -21,7 +21,7 @@ Base de conocimiento de **ROS 2** en notas atómicas de Markdown, con dos skills
 | `skills/ros2-nav2/notes/` | Notas técnicas por área: `bringup`, `mapping`, `localization`, `planning-control`, `behavior-trees`, `costmaps` (con filtros), `commander` (Simple Commander, waypoints), `plugins` (plugins propios de costmap, planner y controller), `multi-robot` |
 | `skills/ros2-nav2/learn/` | Material de dos cursos: navegación con TurtleBot3, Units 1–6 y proyecto ([empieza aquí](skills/ros2-nav2/learn/nav2-learn-start-here.md)), y navegación avanzada en un almacén con el MP-400, Units 1–4 ([empieza aquí](skills/ros2-nav2/learn/nav2-learn-adv-start-here.md)) |
 | `skills/ros2-nav2/migration/` | Cambios de Nav2 Humble → Jazzy → Lyrical y una checklist para migrar configuraciones |
-| `tools/` | Scripts para generar índices, validar, ver enlaces y empaquetar los skills |
+| `tools/` | Scripts para generar índices, mantener los campos de revisión, validar, ver enlaces y empaquetar los skills |
 | `reports/` | Auditorías de versiones con fuentes (las notas citan sus IDs: `Vxx` en core, `NAV2-Vxx` en Nav2) y reporte de enlaces |
 
 Cada nota sigue el mismo formato: un TL;DR de 1–2 líneas, luego el código o los comandos, y al final los errores típicos. Marcas que vas a encontrar:
@@ -70,12 +70,13 @@ Sube `dist/ros2-core.zip` y `dist/ros2-nav2.zip` en la configuración de Skills 
 ## Para quienes editan
 
 - **Una idea por nota, sin duplicar.** Si un concepto ya existe, enlázalo con `[[id-de-la-nota]]`.
-- **Formato:** el `id` es igual al nombre del archivo y lleva el prefijo del dominio (`core-…`, `nav2-…`). El frontmatter obligatorio es `id`, `title`, `domain` y `summary` (máximo 20 palabras).
+- **Formato:** el `id` es igual al nombre del archivo y lleva el prefijo del dominio (`core-…`, `nav2-…`). El frontmatter obligatorio es `id`, `title`, `domain` y `summary` (máximo 20 palabras), más 6 campos de mantenimiento que usa un servidor MCP de base de conocimiento para saber quién cuida cada nota y cuándo revisarla: `type`, `owner`, `updated`, `review_by`, `source` y `confidentiality`. No los escribas a mano: los pone `tools/kb_meta.py`.
 - **Tamaño:** 400–900 tokens por nota, más o menos 1.600–3.600 caracteres.
 - **Enlaces:** nunca hacia fuera del repo. Las notas de `ros2-nav2` pueden enlazar a `ros2-core` (lo declaran en `requires`); las de core nunca enlazan a nav2.
 - **Antes de cada commit:**
   ```bash
   python tools/build_index.py      # regenera los _index.md y el índice de SKILL.md (no los edites a mano)
+  python tools/kb_meta.py          # añade los campos de mantenimiento que falten; en las notas que cambiaste pone updated = hoy y aleja review_by (necesita git)
   python tools/validate.py --brief # debe terminar con 0 errores (revisa YAML y XML, que cada YAML de parámetros use el nombre del nodo del launch; con pyflakes, también los programas Python)
   python tools/backlinks.py        # opcional: actualiza reports/backlinks.md
   ```
@@ -83,6 +84,12 @@ Sube `dist/ros2-core.zip` y `dist/ros2-nav2.zip` en la configuración de Skills 
 Formato del frontmatter de una nota:
 ```yaml
 id: core-srv-client-async        # = nombre del archivo
+type: reference                  # campos de mantenimiento (tools/kb_meta.py): notas de skills/ = reference
+owner: equipo-ros2               # quién la mantiene
+updated: 2026-10-09              # último cambio de contenido (AAAA-MM-DD)
+review_by: 2027-04-08            # pasada esta fecha, la nota queda vencida (validate.py lo avisa)
+source: manual                   # manual | gitlab | generated
+confidentiality: internal        # internal | restricted (restricted nunca va en este repo)
 title: "Service client patterns (async)"
 domain: core
 area: core-api                   # = carpeta de la nota

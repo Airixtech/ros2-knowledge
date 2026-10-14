@@ -1,5 +1,11 @@
 ---
 id: nav2-jazzy-to-lyrical
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "Jazzy → Lyrical changes (Nav2, includes Kilted)"
 domain: nav2
 area: migration

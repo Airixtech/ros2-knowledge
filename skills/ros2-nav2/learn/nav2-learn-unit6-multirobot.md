@@ -1,5 +1,11 @@
 ---
 id: nav2-learn-unit6-multirobot
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "Unit 6 exercises: multi-robot mapping, localization, planning (6.1-6.2)"
 domain: nav2
 area: learn

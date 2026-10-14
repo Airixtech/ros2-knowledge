@@ -1,5 +1,11 @@
 ---
 id: nav2-initial-pose-publisher
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "Initial pose from a node: /clicked_point -> /initialpose"
 domain: nav2
 area: localization

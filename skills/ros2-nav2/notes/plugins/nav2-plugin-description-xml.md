@@ -1,5 +1,11 @@
 ---
 id: nav2-plugin-description-xml
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "Plugin description XML: library path, class name, type, base_class_type"
 domain: nav2
 area: plugins

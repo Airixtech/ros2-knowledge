@@ -1,5 +1,11 @@
 ---
 id: nav2-bt-navigator
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "bt_navigator: role, launch and parameters"
 domain: nav2
 area: behavior-trees

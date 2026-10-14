@@ -1,5 +1,11 @@
 ---
 id: nav2-controller-plugin-rpp
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "Custom controller plugin (nav2_core::Controller) from Regulated Pure Pursuit: interface and configure"
 domain: nav2
 area: plugins

@@ -1,5 +1,11 @@
 ---
 id: nav2-learn-unit3-localization
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "Unit 3 exercises: AMCL launch, initial pose, global localization (3.1-3.5)"
 domain: nav2
 area: learn

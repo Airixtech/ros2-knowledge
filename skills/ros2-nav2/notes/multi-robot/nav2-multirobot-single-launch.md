@@ -1,5 +1,11 @@
 ---
 id: nav2-multirobot-single-launch
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "One XML launch for multi-robot localization, planning and RViz"
 domain: nav2
 area: multi-robot

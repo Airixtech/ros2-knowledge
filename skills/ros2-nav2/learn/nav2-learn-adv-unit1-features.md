@@ -1,5 +1,11 @@
 ---
 id: nav2-learn-adv-unit1-features
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "Advanced Unit 1: setup, Simple Commander demos, waypoints, costmap filters"
 domain: nav2
 area: learn

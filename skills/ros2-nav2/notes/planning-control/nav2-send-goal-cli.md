@@ -1,5 +1,11 @@
 ---
 id: nav2-send-goal-cli
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "Sending goals from the CLI: navigate_to_pose action and /goal_pose"
 domain: nav2
 area: planning-control

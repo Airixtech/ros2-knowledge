@@ -1,5 +1,11 @@
 ---
 id: core-pkg-ament-cmake
+type: reference
+owner: equipo-ros2
+updated: 2026-10-09
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "ament_cmake package: CMakeLists for C++ and Python scripts"
 domain: core
 area: build-run

@@ -3,6 +3,8 @@
 
 Errors (exit 1):
   - missing/invalid frontmatter; missing required fields (id, title, domain, summary)
+  - knowledge-base server fields (tools/kb_meta.py): type, owner, updated, review_by, source, confidentiality
+    missing; type/source/confidentiality outside the allowed values; updated/review_by not YYYY-MM-DD
   - id != file name, id without the '<domain>-' prefix, duplicate id anywhere in the repo
   - `area` different from the note's folder name
   - wikilink to an id that does not exist in the repo
@@ -14,10 +16,12 @@ Errors (exit 1):
     XML block (launch files, behavior trees) that is not well-formed
   - SKILL.md: name != folder, missing/oversized (>1024) description, missing INDEX markers,
     broken or cross-skill wikilinks
-Warnings: > MAX_TOKENS (≈ chars/4), summary > 20 words, audience not dev|students,
+Warnings: > MAX_TOKENS (≈ chars/4 without the knowledge-base fields), summary > 20 words, audience not dev|students,
   learn/ note not audience: students, SKILL.md description > 200 chars or body > 2500 tokens,
-  generated indexes out of date, pyflakes findings in complete Python programs (only if
-  pyflakes is installed; a block is "complete" when it has an import and def main / __main__).
+  generated indexes out of date, review_by date passed (the server reports the note as overdue),
+  knowledge-base fields out of date (python tools/kb_meta.py --check; needs git), pyflakes findings in
+  complete Python programs (only if pyflakes is installed; a block is "complete" when it has an import and
+  def main / __main__).
 
 Optional checks:
   --forbidden FILE  one term per line ('#' = comment): any note containing a term (case-insensitive) is an
@@ -30,6 +34,7 @@ Usage: python tools/validate.py [--strict] [--brief] [--forbidden FILE]
   --brief   print the summary, the errors and the warnings grouped by kind (one line)
 """
 import ast
+import datetime
 import re
 import sys
 import textwrap
@@ -39,6 +44,7 @@ from xml.etree import ElementTree
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from notes_lib import (ROOT, RELATION_FIELDS, as_list, discover_skills,  # noqa: E402
                        load_notes, parse_frontmatter, strip_code, tokens_estimate, wikilinks)
+from kb_meta import KB_FIELDS, KB_VALUES, parse_date, split_kb  # noqa: E402
 
 REQUIRED = ('id', 'title', 'domain', 'summary')
 MAX_TOKENS = 1000
@@ -163,6 +169,17 @@ def main(argv):
         for k in REQUIRED:
             if not fm.get(k):
                 errors.append(f'{where}: missing required field `{k}`')
+        for k in KB_FIELDS:                           # knowledge-base server fields
+            v = fm.get(k)
+            if v is None or v == '':
+                errors.append(f'{where}: missing knowledge-base field `{k}` (run python tools/kb_meta.py)')
+            elif k in KB_VALUES and v not in KB_VALUES[k]:
+                errors.append(f"{where}: {k} '{v}' not in {'|'.join(KB_VALUES[k])}")
+            elif k in ('updated', 'review_by') and parse_date(str(v)) is None:
+                errors.append(f"{where}: {k} '{v}' is not a YYYY-MM-DD date")
+        due = parse_date(str(fm.get('review_by', '')))
+        if due and due < datetime.date.today():
+            warnings.append(f'{where}: review_by {due} has passed (overdue: review the note, then kb_meta.py)')
         nid, domain = fm.get('id'), fm.get('domain')
         if nid and nid != n['path'].stem:
             errors.append(f"{where}: id '{nid}' != file name '{n['path'].stem}'")
@@ -233,7 +250,7 @@ def main(argv):
         if hits:
             errors.append(f'{where}: contains forbidden terms ({", ".join(hits)})')
 
-        tok = tokens_estimate(n['text'])
+        tok = tokens_estimate(split_kb(n['text'])[0])     # the six fixed knowledge-base lines do not count
         if tok > MAX_TOKENS:
             warnings.append(f'{where}: ~{tok} tokens (> {MAX_TOKENS})')
         words = len(str(fm.get('summary', '')).split())
@@ -296,6 +313,16 @@ def main(argv):
                 warnings.append('generated indexes are out of date: run python tools/build_index.py')
     except SystemExit as e:
         warnings.append(f'index check skipped: {e}')
+    try:
+        import kb_meta
+        import contextlib
+        import io
+        with contextlib.redirect_stdout(io.StringIO()):
+            if kb_meta.main(['--check']) != 0:
+                warnings.append('knowledge-base fields out of date (an edited note keeps an old `updated`): '
+                                'run python tools/kb_meta.py')
+    except SystemExit as e:
+        warnings.append(f'knowledge-base freshness check skipped: {e}')
 
     print(f'skills: {len(skills)} ({", ".join(skills)}) | notes: {len(notes)} | '
           f'errors: {len(errors)} | warnings: {len(warnings)}'

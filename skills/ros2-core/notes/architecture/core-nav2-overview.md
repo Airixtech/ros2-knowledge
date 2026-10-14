@@ -1,5 +1,11 @@
 ---
 id: core-nav2-overview
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "Nav2 architecture, cmd_vel chain & rates"
 domain: core
 area: architecture

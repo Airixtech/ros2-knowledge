@@ -1,5 +1,11 @@
 ---
 id: nav2-multirobot-planning-launch
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "Multi-robot path planning launch and lifecycle manager"
 domain: nav2
 area: multi-robot

@@ -1,5 +1,11 @@
 ---
 id: nav2-rpp-controller-params
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "Regulated Pure Pursuit controller (nav2_regulated_pure_pursuit_controller) parameters"
 domain: nav2
 area: planning-control

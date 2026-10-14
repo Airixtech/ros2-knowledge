@@ -1,5 +1,11 @@
 ---
 id: nav2-map-concepts
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "Occupancy grid maps and SLAM (Cartographer, SLAM Toolbox)"
 domain: nav2
 area: mapping

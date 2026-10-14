@@ -1,5 +1,11 @@
 ---
 id: nav2-simple-commander
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "nav2_simple_commander BasicNavigator: setInitialPose, goToPose, followWaypoints, feedback, result"
 domain: nav2
 area: commander

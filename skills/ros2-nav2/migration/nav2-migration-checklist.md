@@ -1,5 +1,11 @@
 ---
 id: nav2-migration-checklist
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "Nav2 migration checklist: porting a Humble course setup"
 domain: nav2
 area: migration

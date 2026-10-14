@@ -1,5 +1,11 @@
 ---
 id: nav2-amcl-params-filter
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "AMCL filter parameters: particles, update thresholds, recovery, initial pose"
 domain: nav2
 area: localization

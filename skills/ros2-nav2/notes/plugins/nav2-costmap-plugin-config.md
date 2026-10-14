@@ -1,5 +1,11 @@
 ---
 id: nav2-costmap-plugin-config
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "Using a custom costmap layer: plugins list in both costmaps, launch, setup.py"
 domain: nav2
 area: plugins

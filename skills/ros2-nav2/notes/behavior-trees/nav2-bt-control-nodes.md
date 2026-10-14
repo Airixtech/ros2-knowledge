@@ -1,5 +1,11 @@
 ---
 id: nav2-bt-control-nodes
+type: reference
+owner: equipo-ros2
+updated: 2026-10-10
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "Nav2 BT control nodes: RecoveryNode, PipelineSequence, RateController, SequenceStar; ports and blackboard"
 domain: nav2
 area: behavior-trees

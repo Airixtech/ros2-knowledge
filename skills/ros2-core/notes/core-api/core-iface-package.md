@@ -1,5 +1,11 @@
 ---
 id: core-iface-package
+type: reference
+owner: equipo-ros2
+updated: 2026-10-09
+review_by: 2027-04-08
+source: manual
+confidentiality: internal
 title: "Custom interface package (rosidl_generate_interfaces)"
 domain: core
 area: core-api
