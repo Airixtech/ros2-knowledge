@@ -2,8 +2,8 @@
 id: nav2-behavior-tree-xml
 type: reference
 owner: equipo-ros2
-updated: 2026-10-10
-review_by: 2027-04-08
+updated: 2026-10-16
+review_by: 2027-04-14
 source: manual
 confidentiality: internal
 title: "Navigation behavior tree XML: replanning and recoveries"
@@ -15,7 +15,7 @@ audience: dev
 summary: "behavior.xml for bt_navigator: replan at 1 Hz (RateController, ComputePathToPose), FollowPath, RecoveryNode, clear costmaps, Spin, Wait; BT.CPP v4 changes."
 tags: [behavior tree, BT XML, RecoveryNode, PipelineSequence, RateController, ComputePathToPose, FollowPath, ClearEntireCostmap, Spin, Wait, BehaviorTree.CPP]
 see: ["[[nav2-bt-navigator]]", "[[nav2-bt-plugin-libs]]", "[[nav2-behavior-server]]", "[[core-nav2-tuning]]"]
-requires: [ros2-core]
+requires: [ros2-core, ros2-bt]
 version_notes:
   - "humble: BehaviorTree.CPP 3.8; Nav2's default XML uses RoundRobin + BackUp for recoveries — https://github.com/ros-navigation/navigation2/blob/humble/nav2_bt_navigator/behavior_trees/navigate_to_pose_w_replanning_and_recovery.xml (NAV2-V20)"
   - "jazzy: BT.CPP 4.5: <root BTCPP_format=\"4\" …>, new SubTree syntax; SequenceStar still accepted as an alias of SequenceWithMemory — https://github.com/ros-navigation/docs.nav2.org/blob/rolling/docs/configuration_and_development/migration_guides/iron/Iron.md (NAV2-V20)"
@@ -67,4 +67,4 @@ Install it and point `default_nav_to_pose_bt_xml` to it ([[nav2-bt-navigator]]).
 
 ## Pitfalls
 - Every node in the XML needs its library in `plugin_lib_names` (Humble) ([[nav2-bt-plugin-libs]]).
-- [changed in Jazzy: add `BTCPP_format="4"` to `<root>` and migrate SubTrees; the script `convert_v3_to_v4.py` of BehaviorTree.CPP helps]
+- [changed in Jazzy: add `BTCPP_format="4"` to `<root>` and migrate SubTrees; the script `convert_v3_to_v4.py` of BehaviorTree.CPP helps] Full v3 → v4 list: [[bt-humble-to-jazzy]].

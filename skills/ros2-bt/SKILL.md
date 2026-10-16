@@ -1,13 +1,22 @@
 ---
 name: ros2-bt
-description: "Behavior trees with BehaviorTree.CPP v3 on ROS 2 Humble: Sequence, Fallback, reactive and async nodes, ports, blackboard, SubTrees, Groot, ROS 2 nodes. v4 notes."
+description: "Behavior trees with BehaviorTree.CPP v3 on ROS 2 Humble: Sequence, Fallback, reactive and async nodes, ports, blackboard, SubTrees, Groot, rclcpp BT nodes. v4 migration."
 ---
 # ros2-bt — behavior trees with BehaviorTree.CPP on ROS 2
 
 Atomic notes for designing behavior trees and writing correct BehaviorTree.CPP code with ROS 2. **Humble with BehaviorTree.CPP v3.8 (`behaviortree_cpp_v3`) is canonical**; v4 (`behaviortree_cpp`) differences are marked, never substituted. Paths are relative to this skill's folder. `[[note-id]]` means the file `<note-id>.md`; find it via the area index or a glob `**/<note-id>.md`.
 
 ## Golden rules (always apply)
-<!-- Phase 4 -->
+1. A Sequence stops at the first child that returns FAILURE or RUNNING, a Fallback at the first SUCCESS or RUNNING; later children are not ticked, so order them on purpose ([[bt-sequence-fallback]]).
+2. Choose the sequence type deliberately: `Sequence` continues with the RUNNING child, `ReactiveSequence` re-checks every condition on every tick, `SequenceStar` remembers finished children ([[bt-sequence-variants]]).
+3. Conditions answer SUCCESS or FAILURE, never RUNNING; an action that takes time returns RUNNING at once and finishes on a later tick ([[bt-node-types]]).
+4. Never block or sleep inside `tick()`: the engine is single-threaded and one blocked tick freezes the whole tree ([[bt-concurrency]]).
+5. Asynchronous actions: prefer `StatefulActionNode` (`onStart`/`onRunning`/`onHalted`); an `AsyncActionNode` checks `isHaltRequested()` and, if it overrides `halt()`, calls `AsyncActionNode::halt()` ([[bt-cpp-async-action]]).
+6. Every XML tag must be a registered ID or a built-in node; register before `createTreeFromText`, and keep port names identical in `providedPorts()`, the code and the XML ([[bt-cpp-registration]], [[bt-cpp-sync-action-ports]]).
+7. `port="{key}"` reads/writes a blackboard entry, `port="text"` is a literal; every SubTree has its own blackboard, so remap its ports in the `<SubTree>` tag ([[bt-cpp-blackboard]], [[bt-cpp-port-remapping]]).
+8. With ROS 2: one `rclcpp::Node` stored in the blackboard as `"node"`; each BT node creates its publishers and subscriptions once, in its own callback group with its own executor, and calls `spin_some()` in `tick()`. No globals, no `rclcpp::Node` per BT node ([[bt-ros2-shared-node]]).
+9. Constant setup values go to the constructor (`registerBuilder`) or an `init()` before the first tick, not through ports ([[bt-cpp-constructor-args]]).
+10. Match the versions: `behaviortree_cpp_v3` + Groot 1 (`.fbl`) or `behaviortree_cpp` v4 + Groot2 (`.btlog`, `BTCPP_format="4"`); Nav2 Humble links v3 ([[bt-humble-to-jazzy]], [[bt-cpp-groot-logging]]).
 
 ## Retrieval protocol
 1. Pick the area from the **Areas** table below (column "Covers").
@@ -15,7 +24,7 @@ Atomic notes for designing behavior trees and writing correct BehaviorTree.CPP c
 3. Open 1–3 notes. Use their code as the template: keep the structure, adapt the names.
 4. No clear match → `grep -ril "<keyword>" notes/` (API names work best) and open the top hits.
 5. Follow a note's `see:` links **one hop** at most.
-6. Do not open `learn/` unless the question is about the course.
+6. Do not open `learn/` unless the question is about the course (TurtleBot 3 simulation, `bt_uN_exM`, `test_unitN`, the project). Course figures that disagree with their XML are marked in the notes: trust the XML.
 7. BehaviorTree.CPP v4, Jazzy, Lyrical or porting → open `migration/` and apply the version marks.
 If the notes do not cover the question, answer from standard knowledge and say so. Never invent APIs or flags.
 
@@ -35,4 +44,4 @@ If the notes do not cover the question, answer from standard knowledge and say s
 <!-- INDEX:END -->
 
 ## Related skills
-ros2-core (required): nodes, executors, callback groups, QoS, TF. ros2-nav2: Nav2's behavior trees (bt_navigator, Nav2 BT nodes).
+ros2-core (required): nodes, executors, callback groups, QoS, TF; install it together with this skill. ros2-nav2 requires this skill: Nav2's own behavior trees (bt_navigator, Nav2 BT nodes, recoveries) live there; this skill never links to it.

@@ -2,8 +2,8 @@
 id: nav2-bt-battery-abort
 type: reference
 owner: equipo-ros2
-updated: 2026-10-10
-review_by: 2027-04-08
+updated: 2026-10-16
+review_by: 2027-04-14
 source: manual
 confidentiality: internal
 title: "Custom BT: abort navigation on low battery (IsBatteryLow + Inverter)"
@@ -15,7 +15,7 @@ audience: dev
 summary: "abort_when_low_battery.xml: IsBatteryLow ports, Inverter, why the course tree retries 6 recoveries first, immediate-abort variant, test."
 tags: [IsBatteryLow, Inverter, low battery, abort_when_low_battery.xml, battery_topic, min_battery, is_voltage, sensor_msgs/BatteryState, PipelineSequence, RecoveryNode]
 see: ["[[nav2-bt-control-nodes]]", "[[nav2-behavior-tree-xml]]", "[[nav2-bt-navigator]]", "[[nav2-learn-adv-unit2-behaviors]]"]
-requires: [ros2-core]
+requires: [ros2-core, ros2-bt]
 version_notes:
   - "humble: IsBatteryLow ports battery_topic (default /battery_status), min_battery, is_voltage (default false); percentage is compared as 0–1; same in Jazzy and Lyrical — https://github.com/ros-navigation/navigation2/blob/humble/nav2_behavior_tree/plugins/condition/is_battery_low_condition.cpp (NAV2-V62)"
   - "humble: inside RecoveryNode number_of_retries=6 a low battery triggers 6 recovery rounds before the goal aborts — https://github.com/ros-navigation/docs.nav2.org/blob/rolling/docs/configuration_and_development/configuration_guide/core_servers/bt_plugins/controls/RecoveryNode.md (NAV2-V47)"
@@ -88,3 +88,4 @@ ros2 topic pub /battery sensor_msgs/BatteryState '{voltage: 12.0, percentage: 0.
 ## Pitfalls
 - `min_battery="25"` with `is_voltage="false"`: percentage is 0–1, so the battery is always "low".
 - `nav2_is_battery_low_condition_bt_node` must be in `plugin_lib_names` in Humble ([[nav2-bt-plugin-libs]]).
+- To write a similar condition yourself: the C++ of `IsBatteryLow` (shared node from the blackboard, own callback group, `spin_some()` in `tick()`) is the pattern in [[bt-ros2-shared-node]].

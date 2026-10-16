@@ -2,8 +2,8 @@
 id: nav2-bt-plugin-libs
 type: reference
 owner: equipo-ros2
-updated: 2026-10-10
-review_by: 2027-04-08
+updated: 2026-10-16
+review_by: 2027-04-14
 source: manual
 confidentiality: internal
 title: "plugin_lib_names: BT node libraries in Humble"
@@ -15,7 +15,7 @@ audience: dev
 summary: "Course bt_navigator.yaml with the Humble plugin_lib_names list of Nav2 BT libraries; when to list them; Jazzy change."
 tags: [bt_navigator.yaml, plugin_lib_names, BT nodes, nav2_behavior_tree, behavior tree plugins]
 see: ["[[nav2-bt-navigator]]", "[[nav2-behavior-tree-xml]]"]
-requires: [ros2-core]
+requires: [ros2-core, ros2-bt]
 version_notes:
   - "humble: all 44 libraries below exist; Humble's built-in default list has 49 — https://github.com/ros-navigation/navigation2/blob/humble/nav2_bt_navigator/src/bt_navigator.cpp (NAV2-V19)"
   - "jazzy: plugin_lib_names implicitly includes all Nav2 BT nodes; list only your own plugins — https://github.com/ros-navigation/docs.nav2.org/blob/rolling/docs/configuration_and_development/migration_guides/iron/Iron.md (NAV2-V19)"
@@ -85,5 +85,5 @@ bt_navigator:
 - The absolute XML path is how the course does it; prefer passing it from the launch file ([[nav2-bt-navigator]]).
 
 ## Pitfalls
-- An XML node whose library is missing from the list → "node not registered" when bt_navigator configures.
+- An XML node whose library is missing from the list → "node not registered" when bt_navigator configures. Each library registers its node types in the `BehaviorTreeFactory` with `BT_REGISTER_NODES(factory)`, and Nav2 loads it with `factory.registerFromPlugin(…)` ([[bt-cpp-factory]]).
 - Copying this list into a Jazzy (or later) config → remove it: the Nav2 libraries load automatically there.

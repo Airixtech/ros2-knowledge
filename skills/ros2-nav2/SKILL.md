@@ -51,3 +51,4 @@ If the notes do not cover the question, answer from standard Humble knowledge an
 
 ## Related skills
 ros2-core (required): install it together with this skill; this skill links into it, never the other way round.
+ros2-bt (required): generic behavior trees and the BehaviorTree.CPP v3 API (sequence types, ports and blackboard, SubTrees, writing a BT node with rclcpp, v3 → v4); the behavior-tree notes here link into it for those details. Install ros2-core, ros2-bt and ros2-nav2 together.
