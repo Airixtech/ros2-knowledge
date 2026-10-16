@@ -1,0 +1,6 @@
+# Area descriptions for tools/build_index.py (display order = file order). Not packaged.
+concepts: "what a behavior tree is: tick, SUCCESS/FAILURE/RUNNING, Sequence, Fallback, Parallel, decorators, reactive and async nodes, concurrency, BT vs FSM, planning, stochastic BTs"
+btcpp: "BehaviorTree.CPP v3 API: XML schema, BehaviorTreeFactory, registerNodeType, SyncActionNode, StatefulActionNode, AsyncActionNode, ports, blackboard, SubTree remapping, Groot, FileLogger"
+ros2: "BT nodes that talk to ROS 2 (rclcpp): shared node, callback groups, spin_some in tick, tick/spin loop, course pattern pitfalls, BehaviorTree.ROS2"
+learn: "Behavior Trees in ROS 2 course (TurtleBot3 simulation): Units 1–5 exercises and project; open only for course questions"
+migration: "BehaviorTree.CPP v3 (Humble) to v4 (Jazzy, Lyrical): renamed nodes and methods, XML format 4, Groot2"
