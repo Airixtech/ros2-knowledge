@@ -13,10 +13,11 @@ Base de conocimiento de **ROS 2** en notas atómicas de Markdown, con tres skill
 
 | Carpeta | Qué hay |
 |---|---|
-| `skills/ros2-core/` | Skill base de ROS 2: 121 notas ([índice](skills/ros2-core/SKILL.md)) |
-| `skills/ros2-core/notes/` | Notas técnicas por área: `build-run`, `core-api` (nodos, parámetros, executors), `communication` (topics, services, actions, interfaces), `middleware` (QoS, DDS y RMW), `recipes`, `tools`, `architecture` |
+| `skills/ros2-core/` | Skill base de ROS 2: 134 notas ([índice](skills/ros2-core/SKILL.md)) |
+| `skills/ros2-core/notes/` | Notas técnicas por área: `build-run`, `core-api` (nodos, parámetros, executors), `communication` (topics, services, actions, interfaces), `middleware` (QoS, DDS y RMW), `security` (SROS2: keystore, enclaves, permisos), `recipes`, `tools`, `architecture` |
 | `skills/ros2-core/learn/` | Material del curso: conceptos y ejercicios de las Units 2–8 ([empieza aquí](skills/ros2-core/learn/core-learn-start-here.md)) |
 | `skills/ros2-core/learn-intermediate/` | Material del curso intermedio con el MP-400 en simulación: Units 2–9 y proyecto final ([empieza aquí](skills/ros2-core/learn-intermediate/core-learn-inter-start-here.md)) |
+| `skills/ros2-core/learn-security/` | Material del curso de seguridad (SROS2) con TurtleBot3 en simulación: Units 2–3 ([empieza aquí](skills/ros2-core/learn-security/core-learn-sec-start-here.md)) |
 | `skills/ros2-core/migration/` | Cambios Humble → Jazzy → Lyrical y una checklist para migrar proyectos |
 | `skills/ros2-bt/` | Skill de behavior trees (BehaviorTree.CPP v3, con las diferencias de v4): 32 notas ([índice](skills/ros2-bt/SKILL.md)). Necesita `ros2-core` |
 | `skills/ros2-bt/notes/` | Notas técnicas por área: `concepts` (qué es un BT, Sequence/Fallback, nodos reactivos y asíncronos, BT vs FSM, BT estocásticos), `btcpp` (la API: XML, factory, ports, blackboard, SubTrees, Groot), `ros2` (nodos BT que hablan con ROS 2) |
@@ -47,7 +48,7 @@ Cada nota sigue el mismo formato: un TL;DR de 1–2 líneas, luego el código o 
    ```
 2. En Obsidian, abre la carpeta como bóveda, o simplemente ábrela si ya está dentro de la tuya.
 3. Por dónde empezar:
-   - **Estudiantes:** `skills/ros2-core/learn/core-learn-start-here.md` (ROS 2 base), `skills/ros2-core/learn-intermediate/core-learn-inter-start-here.md` (ROS 2 intermedio), `skills/ros2-bt/learn/bt-learn-start-here.md` (behavior trees), `skills/ros2-nav2/learn/nav2-learn-start-here.md` (navegación) y `skills/ros2-nav2/learn/nav2-learn-adv-start-here.md` (navegación avanzada).
+   - **Estudiantes:** `skills/ros2-core/learn/core-learn-start-here.md` (ROS 2 base), `skills/ros2-core/learn-intermediate/core-learn-inter-start-here.md` (ROS 2 intermedio), `skills/ros2-core/learn-security/core-learn-sec-start-here.md` (seguridad con SROS2), `skills/ros2-bt/learn/bt-learn-start-here.md` (behavior trees), `skills/ros2-nav2/learn/nav2-learn-start-here.md` (navegación) y `skills/ros2-nav2/learn/nav2-learn-adv-start-here.md` (navegación avanzada).
    - **Consulta técnica:** el índice de áreas en `skills/ros2-core/SKILL.md`, `skills/ros2-bt/SKILL.md` y `skills/ros2-nav2/SKILL.md`.
 4. Para actualizar: `git pull`.
 

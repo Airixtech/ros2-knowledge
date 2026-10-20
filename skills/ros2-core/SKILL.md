@@ -1,6 +1,6 @@
 ---
 name: ros2-core
-description: "ROS 2 Humble core (rclpy/rclcpp): nodes, topics, services, actions, params, launch, colcon, QoS, DDS/RMW, executors, lifecycle, TF, URDF, rosbag2, debugging. Jazzy/Lyrical migration notes."
+description: "ROS 2 Humble core (rclpy/rclcpp): nodes, topics, services, actions, params, launch, colcon, QoS, DDS/RMW, SROS2 security, executors, lifecycle, TF, URDF, rosbag2, debugging. Jazzy/Lyrical migration."
 ---
 # ros2-core — ROS 2 Humble core reference
 
@@ -17,6 +17,7 @@ Atomic notes for writing correct ROS 2 code and debugging it. **Humble is canoni
 8. Interfaces live in a dedicated ament_cmake package; server and client import from the same package; re-source after building ([[core-iface-package]]).
 9. New entry points / launch / config files ⇒ register them in setup.py (or CMake `install`) + rebuild (`--symlink-install` too) + `source install/setup.bash` ([[core-pkg-ament-python]], [[core-symlink-install]]).
 10. Relative topic names + remaps/namespaces; one publisher per TF transform; `use_sim_time` consistent across all nodes in simulation ([[core-time-timers]]).
+11. Security (SROS2): every secured shell needs `ROS_SECURITY_KEYSTORE`, `ROS_SECURITY_ENABLE=true` and `ROS_SECURITY_STRATEGY=Enforce`, spelled exactly (otherwise nodes silently run unsecured); give each process its enclave with `--enclave` (none = root `/`); change permissions through the policy + `generate_artifacts`, since the RMW reads only the signed `.p7s`; never ship `private/` ([[core-sros2-env-vars]], [[core-sros2-generate-artifacts]]).
 
 ## Retrieval protocol
 1. Pick the area from the **Areas** table below (column "Covers").
@@ -24,7 +25,7 @@ Atomic notes for writing correct ROS 2 code and debugging it. **Humble is canoni
 3. Open 1–3 notes. Use their code as the template: keep the structure, adapt the names.
 4. No clear match → `grep -ril "<keyword>" notes/` (API names work best: `call_async`, `TRANSIENT_LOCAL`) and open the top hits.
 5. Follow a note's `see:` links **one hop** at most.
-6. Do not open `learn/` or `learn-intermediate/` unless the question is about a course (`learn/`: Leo rover, Units 2–8, quizzes; `learn-intermediate/`: MP-400 simulation, Units 2–9, final project). For a concept, prefer the note without `-demo`; open the `-demo` note when the user needs the test program.
+6. Do not open `learn/`, `learn-intermediate/` or `learn-security/` unless the question is about a course (`learn/`: Leo rover, Units 2–8, quizzes; `learn-intermediate/`: MP-400 simulation, Units 2–9, final project; `learn-security/`: TurtleBot3 security course, Units 2–3). For a concept, prefer the note without `-demo`; open the `-demo` note when the user needs the test program.
 7. Jazzy, Lyrical or porting a project → open `migration/` and apply the version marks.
 If the notes do not cover the question, answer from standard Humble knowledge and say so. Never invent APIs or flags.
 
