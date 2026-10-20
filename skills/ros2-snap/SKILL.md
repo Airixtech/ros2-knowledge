@@ -4,24 +4,32 @@ description: "ROS 2 apps as snaps (Humble, core22): snapcraft.yaml, ros2-humble 
 ---
 # ros2-snap — package and deploy ROS 2 apps as snaps
 
-Atomic notes for writing correct code and debugging it. **<Canonical version> is canonical**; differences for later versions are marked, never substituted. Paths are relative to this skill's folder. `[[note-id]]` means the file `<note-id>.md`; find it via the area index or a glob `**/<note-id>.md`.
+Atomic notes for packaging ROS 2 applications as snaps and deploying them. **Humble is canonical** (base `core22`, extension `ros2-humble`); Jazzy (`core24`) and Lyrical (`core26`) differences are marked, never substituted. Paths are relative to this skill's folder. `[[note-id]]` means the file `<note-id>.md`; find it via the area index or a glob `**/<note-id>.md`.
 
 ## Golden rules (always apply)
-1. <rule> (filled in Phase 4).
-<!-- 8–10 rules, each pointing to the note that explains it -->
+1. The base follows the ROS 2 distro inside the snap, not the host: Humble = `base: core22` + `extensions: [ros2-humble]` on every app + `plugin: colcon` on the parts ([[snap-ros2-extensions-bases]]).
+2. Build with `snapcraft` (= `snapcraft pack`) at the project root; it builds in LXD (user in the `lxd` group). `SNAPCRAFT_ENABLE_EXPERIMENTAL_EXTENSIONS=1` is not needed for Humble or Jazzy, only for experimental extensions (Lyrical, content sharing) ([[snap-build-install-run]], [[snap-install-tools]]).
+3. Ship `confinement: strict` with `plugs: [network, network-bind]` for any ROS 2 app; `devmode` only while developing; a local strict build installs with `--dangerous` ([[snap-confinement]]).
+4. Add run-time ROS packages that rosdep does not bring to `stage-packages` (`ros-humble-ros2launch` for `ros2 launch`); packages need `install` rules or their files are missing from the snap ([[snap-snapcraft-yaml]]).
+5. `command` is relative to the snap root (`opt/ros/humble/bin/ros2 …`); apps are `<snap>.<app>`, and an app named like the snap collapses to the snap name ([[snap-snapcraft-yaml]]).
+6. `daemon: simple` makes a boot service; `enabled` = starts at boot, restart after failure is `restart-condition` (default `on-failure`); read daemons with `snap logs` ([[snap-daemon]]).
+7. A snap is read-only: write to `SNAP_DATA`/`SNAP_USER_DATA` (per revision, copied on refresh) or `SNAP_COMMON`/`SNAP_USER_COMMON` (shared by all revisions); daemons run as root ([[snap-env-data]]).
+8. Parameters: `snap set` + a `configure` hook that validates with `snapctl get` and rejects with `exit 1`, then restarts the services ([[snap-config-hooks]]).
+9. Fast DDS shared memory fails in strict snaps (UDP still works): use the `shared-memory` plug with `private: true`, a slot/plug pair across snaps, or disable SHM ([[snap-confinement]]).
+10. Releasing: `grade: stable` is required for `candidate`/`stable`; channels are `<track>/<risk>/<branch>`; CI publishes `edge` from `main` and `candidate` from tags with artifact actions v4+ ([[snap-channels-updates]], [[snap-ci-github-actions]]).
 
 ## Retrieval protocol
 1. Pick the area from the **Areas** table below (column "Covers").
 2. Open that area's `_index.md` and choose notes by their summary.
-3. Open 1–3 notes. Use their code as the template: keep the structure, adapt the names.
-4. No clear match → `grep -ril "<keyword>" notes/` (API names work best) and open the top hits.
+3. Open 1–3 notes. Use their YAML and commands as the template: keep the structure, adapt the names.
+4. No clear match → `grep -ril "<keyword>" notes/` (keys and commands work best: `stage-packages`, `snapctl`, `--dangerous`) and open the top hits.
 5. Follow a note's `see:` links **one hop** at most.
-6. Do not open `learn/` unless the question is about the course.
-7. Other versions or porting a project → open `migration/` and apply the version marks.
-If the notes do not cover the question, answer from standard knowledge and say so. Never invent APIs or flags.
+6. Do not open `learn/` unless the question is about the snaps workshop (talker-listener snap, `ros2topic` exercise).
+7. Jazzy, Kilted, Lyrical or porting a snap → open `migration/` and apply the version marks.
+If the notes do not cover the question, answer from standard snapcraft knowledge and say so. Never invent keys, flags or interfaces.
 
 ## Version marks in notes
-`[Humble]` Humble-only · `[≥Jazzy]` added in Jazzy (or later) · `[changed in Jazzy: …]` / `[changed in Lyrical: …]` what to use there instead · `[verify]` not confirmed by a source or a build: tell the user. Each note's frontmatter `version_notes` holds the source URL of every difference.
+`[Humble]` Humble-only · `[≥Jazzy]` added in Jazzy (or later) · `[changed in Jazzy: …]` / `[changed in Lyrical: …]` what to use there instead · `[verify]` not confirmed by a source or a build: tell the user. Snapcraft has its own release line: the notes give the Snapcraft version an extension needs (e.g. ≥ 7.3, ≥ 9). Each note's frontmatter `version_notes` holds the source URL of every difference.
 
 ## Areas
 <!-- INDEX:START -->
@@ -36,4 +44,4 @@ If the notes do not cover the question, answer from standard knowledge and say s
 <!-- INDEX:END -->
 
 ## Related skills
-<Base skill this one requires, e.g. ros2-core (nodes, topics, TF, QoS, launch). / Domain skills that require this one.>
+ros2-core (required): nodes, topics, launch, colcon, package.xml dependencies, DDS/RMW, Docker and CI notes. Install both together: this skill's notes link into ros2-core.

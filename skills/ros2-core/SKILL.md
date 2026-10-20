@@ -52,4 +52,4 @@ If the notes do not cover the question, answer from standard Humble knowledge an
 <!-- INDEX:END -->
 
 ## Related skills
-ros2-nav2: Nav2 in detail (map server, Cartographer, AMCL, planners, controllers, costmaps and filters, behavior trees, Simple Commander, custom plugins, multi-robot). ros2-bt: behavior trees with BehaviorTree.CPP (concepts, XML, ports, blackboard, async nodes, BT nodes with rclcpp). Domain skills declare `requires: [ros2-core]`; this skill never links to them.
+ros2-nav2: Nav2 in detail (map server, Cartographer, AMCL, planners, controllers, costmaps and filters, behavior trees, Simple Commander, custom plugins, multi-robot). ros2-bt: behavior trees with BehaviorTree.CPP (concepts, XML, ports, blackboard, async nodes, BT nodes with rclcpp). ros2-snap: package and deploy ROS 2 apps as snaps (snapcraft, confinement, Snap Store, Ubuntu Core). Domain skills declare `requires: [ros2-core]`; this skill never links to them.
