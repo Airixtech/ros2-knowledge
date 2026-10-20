@@ -6,6 +6,8 @@
 > Baseline: **Humble is canonical**. Jazzy and Lyrical differences are annotated, not substituted.
 > Extended 2026-10-13 with the **intermediate ROS 2 course** (Python build system, launch formats, parameters,
 > executors, QoS, DDS, managed nodes): IDs V81–V105, sections `Pnn` = page of that course export (not published).
+> Extended 2026-10-19 with the **ROS 2 security course** (SROS2: keystore, enclaves, governance, permissions,
+> `ROS_SECURITY_*`): IDs V106–V137, sections `sec Pnn` = page of that course export (not published).
 > The "Lyrical" column includes changes that first appeared in **Kilted** (May 2025, non-LTS), marked "(Kilted)".
 
 ## Method
@@ -14,6 +16,13 @@
   rclcpp, rcl, rmw, launch_ros, geometry2, rosbag2, ros2_tracing, ament_cmake, rosidl, message_filters,
   ros2_control, navigation2, docs.nav2.org, moveit2, ros_gz, example_interfaces, demos), the rosdistro
   `humble/distribution.yaml` and the packages.ros.org apt index for Jammy.
+- Security course (V106–V137): `ros2/sros2`, `ros2/rcl` (`security.c`, `init.c`), `ros2/rmw_dds_common`
+  (`security.cpp`) and `ros2/rmw_fastrtps` on the humble, jazzy, kilted and lyrical branches; the official
+  security tutorials and concept page (humble, lyrical); the design articles "ROS 2 DDS-Security integration",
+  "ROS 2 Security Enclaves" and "Topic and Service name mapping"; the `ros-swg/turtlebot3_demo` policies;
+  `ROBOTIS-GIT/turtlebot3` and `turtlebot3_simulations` (humble, jazzy); rosdistro `humble`/`jazzy`/`lyrical`.
+  The course follows the official keystore tutorial closely; its contradictions with its own output and XML are
+  fix rows ("course mistake").
 - docs.ros.org and ros.org block automated fetching (Anubis). Their content was read from the official
   source repos (`ros2/ros2_documentation`, `ros-infrastructure/rep`) on the matching branch. The tables
   cite the canonical docs.ros.org URL. The text is identical.
@@ -33,6 +42,7 @@
 | Default RMW | rmw_fastrtps_cpp (Fast DDS 2.6) | rmw_fastrtps_cpp (Fast DDS 2.14) | rmw_fastrtps_cpp (2.14); Zenoh Tier 1 | rmw_fastrtps_cpp (Fast DDS 3.6) |
 | Cyclone DDS | 0.9.x | 0.10.x | 0.10.x | 11.0.x |
 | Gazebo pairing | Fortress (+ Classic 11) | Harmonic | Ionic | Jetty |
+| SROS2 (`ros2 security`) | 6 verbs + deprecated `create_key`, `list_keys`; enclave files only as PEM files | same verbs; PKCS#11 URIs (`*.p11`) for keys/certs | `create_key`, `list_keys` removed | certificates valid from creation time (no 1-day backdate); Windows: hard links instead of symlinks |
 | Sources | [REP 2000][rep2000] | [REP 2000][rep2000], [Jazzy notes][jazzy] | [REP 2000][rep2000], [Kilted notes][kilted] | [Lyrical notes][lyrical], [Lyrical platforms][lyr-plat] |
 
 ## Real Humble errors (fix)
@@ -67,6 +77,21 @@
 | V102 | P15 | course bug | `move_robot_with_arguments.py` switches mode with `if … if …` | Both branches run on every tick, so the robot always ends turning; use `elif` (the parameter version of the course does). |
 | V103 | P04 | course typo | `ros pkg create <package_name> --build-type ament_python my_package --dependencies …` | `ros2 pkg create --build-type ament_python <package_name> --dependencies <deps>` |
 | V105 | P05 | course mistake | "`colcon build --packages-select <pkg>` compiles the packages specified and their dependencies" | `--packages-select` builds **only** the listed packages (their dependencies must already be built or installed); `--packages-up-to <pkg>` builds the package and its recursive dependencies. Docs: [colcon package selection][colcon-sel] |
+
+### Security course (SROS2)
+| ID | Section | Origin | Error | Correct Humble statement |
+|---|---|---|---|---|
+| V106 | sec P12 | course mistake | `governance.p7s` is "a Synchronized Multimedia Integration Language (SMIL) signed file" | It is an **S/MIME** document: the XML in clear text plus a detached PKCS#7 signature made with the **Permissions CA** key. SMIL is unrelated. Code: [`_sign_bytes`][sros2-util-h]; docs: [keystore tutorial][sec-ks-h] |
+| V107 | sec P12 | course mistake | An enclave "must contain six files", listed as governance.p7s, `identity_ca.cert.pm`, `permissions_ca.cert.pm`, **permissions.xml ("signed")**, cert.pem, key.pem | The six files the RMW loads are `identity_ca.cert.pem`, `cert.pem`, `key.pem`, `permissions_ca.cert.pem`, `governance.p7s` and **`permissions.p7s`** (the signed file); `crl.pem` is optional. `permissions.xml` is the unsigned source, kept to re-sign; DDS does not read it. Code: [rmw_dds_common][rdc-sec-h]; docs: [keystore tutorial][sec-ks-h], [About security][sec-about-h] |
+| V108 | sec P12 | course mistake | After showing `permissions.xml`: "if you change this policy, insert a space…, the signature becomes invalid and the robot will not launch" | That happens when **`permissions.p7s`** is edited (with `Enforce`, the node fails to start). Editing `permissions.xml` alone changes nothing at runtime: change the policy and rerun `generate_artifacts` (or `create_permission`), or re-sign the XML with `openssl smime -sign` and the Permissions CA private key. Docs: [keystore quiz][sec-ks-h], [access controls][sec-ac-h] |
+| V109 | sec P07, P12 | course contradiction (its own XML and `ll` output) | "Two enclaves have been generated, gazebo and teleop" | The policy defines **three**: `/gazebo`, `/teleop` and the root enclave `/` (allow-all `*`). The root enclave's `cert.pem`, `key.pem`, `permissions.xml/.p7s` sit directly in `enclaves/`, as the course's own listing shows. It is also the enclave of every node started without `--enclave` or override (V127). Code: [`create_enclave`][sros2-encl-h], [`exact_match_lookup`][rcl-sec-h] |
+| V110 | sec P06, P10 | course contradiction (2.1.1 says the certificate binds the key to a name) | "A certificate is a public key" | A certificate **contains** a public key plus the subject name, signed by a CA (the CA certificate is self-signed). Docs: [keystore tutorial][sec-ks-h], [About security][sec-about-h] |
+| V111 | sec P10 | course mistake | "The default user is sros2CA" | `sros2CA` is the default **common name** of the CA certificate (subject = issuer), not a user. Code: [`_DEFAULT_COMMON_NAME`][sros2-ks-h] |
+| V112 | sec P11 | course mistake | "Every robot should have a different key; your key materials will not work on another robot" | Keys are files and work wherever they are copied; that is why `private/` should stay off the robot. A CA may be unique per robot or shared by a fleet that must trust each other; participants only accept certificates signed by their own identity CA. Docs: [keystore tutorial][sec-ks-h], [deployment guidelines][sec-deploy-h] |
+| V113 | sec P12 | course claim, partly wrong | "The certificates are keyed to a domain; if you change your domain ID, they will not work" | Certificates have no domain. `governance.xml` and every `permissions.xml` contain `<id>` = `ROS_DOMAIN_ID` at generation time (default `0`): set `ROS_DOMAIN_ID` before creating the keystore and artifacts, or regenerate after a change. Runtime effect of a mismatch `[verify]`. Code: [`_create_governance_file`][sros2-ks-h], [`create_permission_file`][sros2-perm-h] |
+| V114 | sec P13 | course contradiction (its own `ros2 pkg create` output) | "Go to `~/ros2_ws/src/unit2_pkg/unit2_pkg/setup.py`" (same for `package.xml`) | Both files are in the package root `~/ros2_ws/src/unit2_pkg/`; the inner `unit2_pkg/` folder holds the Python module. Template: [ament_python][tpl-dir-h] |
+| V115 | sec P13 | course mistake | `package.xml` with only `<exec_depend>geometry_msgs</exec_depend>` for a node that imports `rclpy` | Add `<exec_depend>rclpy</exec_depend>`: the course package runs only because rclpy is already installed, and rosdep would not install it. Docs: [Python pub/sub tutorial][pubsub-py-h] |
+| V116 | sec P02 | course claim, imprecise | "SROS2 … is contained within the ROS Client Library (RCL)" | The `ros2 security` tools are the **`sros2`** package (a ros2cli extension in the `ros_core` variant, [REP 2001][rep2001]); rcl only reads the `ROS_SECURITY_*` variables and finds the enclave directory, and the RMW loads the DDS-Security plugins. Code: [sros2 verbs][sros2-verbs-h], [rcl security.c][rcl-sec-h] |
 
 ## Full table
 | # | Sheet | Statement | Humble | Jazzy | Lyrical | Action | Source | Confidence |
@@ -176,6 +201,38 @@
 | V103 | P04 | `ros pkg create <package_name> … my_package` | ✗ typo: `ros2 pkg create --build-type ament_python <name>` | — | — | **fix** | [ros2pkg create (humble)][create-h] | High |
 | V104 | P12, P15 | `IncludeLaunchDescription(PythonLaunchDescriptionSource(path))` | ✓; a plain path also works (`AnyLaunchDescriptionSource` picks Python/XML/YAML by extension) | ✓ | ✓ | keep | [include_launch_description.py (humble)][include-h] | High |
 | V105 | P05 | `--packages-select` also builds the dependencies | ✗ only the listed packages; `--packages-up-to` adds the dependencies | same | same | **fix** | [colcon package selection][colcon-sel] | High |
+| V106 | sec P12 | `governance.p7s` = "SMIL signed file" | ✗ S/MIME (clear text + detached PKCS#7), signed by the Permissions CA | ✓ (signed with `cryptography`'s PKCS7 builder) | ✓ | **fix** | [sros2 utilities][sros2-util-h], [keystore][sec-ks-h], [Jazzy changelog][jazzy-cl] | High |
+| V107 | sec P12 | 6 enclave files incl. "signed permissions.xml" | ✗ runtime files: identity_ca.cert.pem, cert.pem, key.pem, permissions_ca.cert.pem, governance.p7s, permissions.p7s (+ optional crl.pem) | + PKCS#11 alternatives `*.p11` (V133) | same (moved to `rmw_security_common`, Kilted) | **fix** | [rmw_dds_common][rdc-sec-h], [rmw_security_common (lyrical)][rsc-sec-l], [keystore][sec-ks-h] | High |
+| V108 | sec P12 | editing `permissions.xml` breaks the signature | ✗ editing `permissions.p7s` does; the XML is not read at runtime; re-sign or regenerate | same | same | **fix** | [keystore][sec-ks-h], [access controls][sec-ac-h] | High |
+| V109 | sec P07, P12 | "two enclaves generated" | ✗ three: `/gazebo`, `/teleop`, `/` (files in `enclaves/` itself) | same | same | **fix** | [create_enclave][sros2-encl-h], [rcl security.c][rcl-sec-h] | High |
+| V110 | sec P06, P10 | "a certificate is a public key" | ✗ it contains the public key + subject, signed by a CA | same | same | **fix** | [keystore][sec-ks-h] | High |
+| V111 | sec P10 | "default user is sros2CA" | ✗ default CA common name | same | same | **fix** | [_keystore.py][sros2-ks-h] | High |
+| V112 | sec P11 | keys "will not work on another robot" | ✗ copied keys work; protect `private/`; CA per robot or per fleet | same | same | **fix** | [keystore][sec-ks-h], [deployment][sec-deploy-h] | High |
+| V113 | sec P12 | certificates keyed to the domain ID | ✗ governance/permissions carry `ROS_DOMAIN_ID` at generation; certificates do not | same | same | **fix** | [_keystore.py][sros2-ks-h], [_permission.py][sros2-perm-h] | High (code); runtime effect `[verify]` |
+| V114 | sec P13 | `setup.py`/`package.xml` in `unit2_pkg/unit2_pkg/` | ✗ package root | same | same | **fix** | [template][tpl-dir-h] | High |
+| V115 | sec P13 | `package.xml` without `rclpy` | ✗ add `<exec_depend>rclpy</exec_depend>` | same | same | **fix** | [pub/sub tutorial][pubsub-py-h] | High |
+| V116 | sec P02 | SROS2 "contained within RCL" | ✗ separate `sros2` package (ros_core variant); rcl handles env vars + enclave lookup | same | same | **fix** | [REP 2001][rep2001], [rcl security.c][rcl-sec-h] | High |
+| V117 | sec P12 | `openssl smime -verify -in governance.p7s -CAfile ../public/permissions_ca.cert.pem` → `Verification successful` | ✓ checks the Permissions CA signature (works on `permissions.p7s` too) | ✓ | ✓ | keep | [keystore][sec-ks-h] | High |
+| V118 | sec P07, P09–P11 | `ros2 security create_keystore <dir>` → `public/` (ca.cert.pem + identity/permissions symlinks), `private/` (ca.key.pem + symlinks), `enclaves/` (governance.xml, governance.p7s); fails if the keystore exists | ✓ | ✓ | ✓; Windows: hard links or copies instead of symlinks | annotate | [_keystore.py][sros2-ks-h], [sros2 utilities (lyrical)][sros2-util-l] | High |
+| V119 | sec P10 | CA: ECDSA P-256, SHA-256, `CA:TRUE, pathlen:1`, 10 years | ✓ not before = creation − 1 day, not after = creation + 3650 days | ✓ | not before = creation time (backdate removed) | annotate | [sros2 utilities][sros2-util-h], [Lyrical changelog][lyrical-cl] | High |
+| V120 | sec P11 | `ca.key.pem` = root of trust, needed only to add enclaves or change permissions, can live on another machine | ✓ (written as unencrypted PKCS#8 PEM: protect it, keep it offline) | ✓ | ✓ | keep | [sros2 utilities][sros2-util-h], [keystore][sec-ks-h], [deployment][sec-deploy-h] | High |
+| V121 | sec P07, P13 | `ros2 security generate_artifacts -k <keystore> -p <policy.xml>` | ✓ `-k`, `-e`, `-p`; creates a missing keystore; keeps existing cert/key, rewrites `permissions.*`; uses current `ROS_DOMAIN_ID` and RMW (`ros_discovery_info` rule only for Fast DDS, Cyclone, Connext) | ✓ | ✓ | keep | [generate_artifacts][sros2-gen-h], [_permission.py][sros2-perm-h] | High |
+| V122 | sec P07 | `ros2 security` verbs | ✓ create_keystore, create_enclave, create_permission, generate_artifacts, generate_policy, list_enclaves (+ deprecated create_key, list_keys) | same | **removed (Kilted)**: create_key, list_keys | annotate | [setup.py (humble)][sros2-verbs-h], [setup.py (kilted)][sros2-verbs-k], [Kilted changelog][kilted-cl] | High |
+| V123 | sec P12, P13 | policy XML: `<policy version="0.2.0">`, enclave `path`, profile `ns` + `node`, topics publish/subscribe, services reply/request, actions call/execute, ALLOW/DENY, XInclude profiles | ✓ version fixed to 0.2.0 | ✓ | ✓ | keep | [policy.xsd][sros2-xsd-h] | High |
+| V124 | sec P12 | "each enclave must contain all the nodes that share the same security policies" | ✓ all profiles of an enclave merge into ONE grant (`CN=<enclave path>`); `node`/`ns` only expand relative and `~` names; nodes of one process share one enclave | ✓ | ✓ | annotate | [permissions.xsl][sros2-xsl-h], [enclaves design][design-encl] | High; wrong `node` name → `~` services denied `[verify]` |
+| V125 | sec P12 | teleop `permissions.xml`: `rt/…`, `rq/…Request`, `rr/…Reply`, `ros_discovery_info`, `<default>DENY</default>`, validity = certificate | ✓ DDS topic names | + `~/get_type_description` service in node profiles (sros2 `common/node/types.xml`) | ✓ | annotate | [permissions.xsl][sros2-xsl-h], [name mapping][design-names], [types.xml (jazzy)][sros2-types-j] | High; missing on Jazzy `[verify]` |
+| V126 | sec P12 | governance defaults (no unauthenticated participants, join access control, discovery/liveliness ENCRYPT, RTPS SIGN, rule `*` with read/write access control, metadata/data ENCRYPT) | ✓ sros2 default file | ✓ | ✓ | keep | [governance.xml][sros2-gov-h] | High |
+| V127 | sec P08 | `ROS_SECURITY_KEYSTORE`, `ROS_SECURITY_ENABLE=true`, `ROS_SECURITY_STRATEGY=Enforce`, `ROS_SECURITY_ENCLAVE_OVERRIDE` | ✓ `true` and `Enforce` case-sensitive (anything else = off / permissive); permissive: missing enclave → node runs unsecured; Enforce → fails; override beats `--enclave`/`-e`; default enclave `/` | ✓ (rcl unchanged) | ✓ | annotate | [rcl security.c][rcl-sec-h], [rcl init.c][rcl-init-h], [DDS-Security design][design-sec], [About security][sec-about-h] | High |
+| V128 | sec P08, P13 | `[rcl]: Found security directory: …` INFO line | ✓ | ✓ | ✓ | keep | [rcl security.c][rcl-sec-h] | High |
+| V129 | sec P08 | an unsecured shell lists only `/parameter_events`, `/rosout` and no nodes: "the data is encrypted" | ✓; reason: unauthenticated participants cannot join. To inspect the secured graph: same variables + an allowed enclave, `ros2 node list --no-daemon --spin-time 3` | ✓ | ✓ | annotate | [setting up security][sec-intro-h] | High |
+| V130 | sec P02, P06 | DDS-Security built-in plugins: authentication, access control, cryptography | ✓ Fast DDS: `builtin.PKI-DH`, `builtin.Access-Permissions`, `builtin.AES-GCM-GMAC`; no secure communication between vendors | ✓ | ✓; `rmw_zenoh_cpp` (Tier 1 in Kilted) is not DDS: `zenoh_security_tools` builds Zenoh configs from the sros2 keystore (router enclave `/zenohd`) | annotate | [Fast DDS participant][fastrtps-part-h], [setting up security][sec-intro-h], [setting up security (lyrical)][sec-intro-l] | High (DDS), Medium (Zenoh) |
+| V131 | sec P06 | access control: governance + permissions, both signed by a CA the plugin trusts (may be the identity CA) | ✓ | ✓ | ✓ | keep | [About security][sec-about-h] | High |
+| V132 | sec P06 | "encryption and decryption can affect the real-time control loop unless there is dedicated hardware" | course claim, no measurement in the course | — | — | keep (as the course's claim) | — | Medium |
+| V133 | sec P11 | "there could be some hardware where security is saved" | files only (`*.pem`) | + PKCS#11 URIs: `key.p11`, `cert.p11`, `*_ca.cert.p11` holding a `pkcs11:` URI (HSM), when the RMW supports it | ✓ | annotate | [rmw_dds_common (jazzy)][rdc-sec-j], [Jazzy changelog][jazzy-cl], [deployment][sec-deploy-h] | High |
+| V134 | sec P08 | TurtleBot3: `turtlebot3_gazebo turtlebot3_world.launch.py`, `turtlebot3_teleop teleop_keyboard`, `TURTLEBOT3_MODEL=burger`; teleop limits 0.22/2.84 (Burger), 0.26/1.82 (Waffle) | ✓ binaries; Gazebo Classic 11 (node `/gazebo`) | same launch names, new Gazebo (`ros_gz_sim`, `ros_gz_bridge`): the Classic node profiles no longer match, regenerate (`ros2 security generate_policy`) `[verify]` | same as Jazzy `[verify]` | annotate | [rosdistro humble][rosdistro-h], [rosdistro jazzy][rosdistro-j], [tb3 world launch (jazzy)][tb3-sim-j], [teleop (humble)][tb3-teleop-h] | High; policy on Jazzy `[verify]` |
+| V135 | sec P13 | `cmd_vel_subscriber` subscribes `geometry_msgs/Twist` | ✓ Humble teleop publishes `Twist` | ✗ teleop publishes `TwistStamped` (types differ, no data) | same | annotate | [teleop (jazzy)][tb3-teleop-j] | High |
+| V136 | sec P07 | policy files from a course repository | the profiles match the public `ros-swg/turtlebot3_demo` `policies/` (Apache-2.0; its `tb3_gazebo_policy.xml` adds Nav2 enclaves) | ✓ | ✓ | keep (public source) | [turtlebot3_demo policies][tb3-demo] | High |
+| V137 | sec P12 | "node directories are no longer relevant" | ✓ since Foxy one participant per context; the enclave path is independent of node names | ✓ | ✓ | keep | [enclaves design][design-encl] | High |
 
 ## Open `[verify]` items (for Phase 5 / Docker)
 1. V10: `target_link_libraries(tgt PUBLIC rclcpp::rclcpp ${std_msgs_TARGETS})` builds on `ros:humble`.
@@ -186,6 +243,12 @@
 6. V80: is tracing enabled in the course platform Humble image?
 7. V90: RTI Connext package version on Jazzy/Lyrical. V93: is Cyclone still advised for Nav2 on Humble? Compare both RMWs
    on the robot. V94: AUTOMATIC liveliness lost after `kill -9` of the publisher (expected: after the lease).
+8. V113: what a node does (Enforce) when `ROS_DOMAIN_ID` differs from the domain in its governance/permissions files.
+9. V124/V125: with Enforce, does a node fail to start when its profile's `node` name differs from the real node name
+   (its `~` parameter services are not granted), and on Jazzy when the profile lacks `~/get_type_description`?
+10. V134: TurtleBot3 + security on Jazzy (new Gazebo): which nodes need profiles; build the policy with
+    `ros2 security generate_policy` from the running graph and compare with the Classic profiles.
+11. Security course examples (keystore, three enclaves, teleop, `cmd_listener`) on Ubuntu 22.04 + Humble.
 
 ## Sources
 [rep2000]: https://www.ros.org/reps/rep-2000.html
@@ -303,3 +366,38 @@
 [create-h]: https://github.com/ros2/ros2cli/blob/humble/ros2pkg/ros2pkg/verb/create.py
 [include-h]: https://github.com/ros2/launch/blob/humble/launch/launch/actions/include_launch_description.py
 [colcon-sel]: https://github.com/colcon/colcon-package-selection/blob/master/colcon_package_selection/package_selection/select_skip.py
+[sros2-util-h]: https://github.com/ros2/sros2/blob/humble/sros2/sros2/_utilities.py
+[sros2-util-l]: https://github.com/ros2/sros2/blob/lyrical/sros2/sros2/_utilities.py
+[sros2-ks-h]: https://github.com/ros2/sros2/blob/humble/sros2/sros2/keystore/_keystore.py
+[sros2-encl-h]: https://github.com/ros2/sros2/blob/humble/sros2/sros2/keystore/_enclave.py
+[sros2-perm-h]: https://github.com/ros2/sros2/blob/humble/sros2/sros2/keystore/_permission.py
+[sros2-gen-h]: https://github.com/ros2/sros2/blob/humble/sros2/sros2/api/_artifact_generation.py
+[sros2-verbs-h]: https://github.com/ros2/sros2/blob/humble/sros2/setup.py
+[sros2-verbs-k]: https://github.com/ros2/sros2/blob/kilted/sros2/setup.py
+[sros2-xsl-h]: https://github.com/ros2/sros2/blob/humble/sros2/sros2/policy/templates/dds/permissions.xsl
+[sros2-xsd-h]: https://github.com/ros2/sros2/blob/humble/sros2/sros2/policy/schemas/policy.xsd
+[sros2-gov-h]: https://github.com/ros2/sros2/blob/humble/sros2/sros2/policy/defaults/dds/governance.xml
+[sros2-types-j]: https://github.com/ros2/sros2/blob/jazzy/sros2/test/policies/common/node/types.xml
+[rcl-sec-h]: https://github.com/ros2/rcl/blob/humble/rcl/src/rcl/security.c
+[rcl-init-h]: https://github.com/ros2/rcl/blob/humble/rcl/src/rcl/init.c
+[rdc-sec-h]: https://github.com/ros2/rmw_dds_common/blob/humble/rmw_dds_common/src/security.cpp
+[rdc-sec-j]: https://github.com/ros2/rmw_dds_common/blob/jazzy/rmw_dds_common/src/security.cpp
+[rsc-sec-l]: https://github.com/ros2/rmw/blob/lyrical/rmw_security_common/src/security.cpp
+[fastrtps-part-h]: https://github.com/ros2/rmw_fastrtps/blob/humble/rmw_fastrtps_shared_cpp/src/participant.cpp
+[sec-about-h]: https://docs.ros.org/en/humble/Concepts/Intermediate/About-Security.html
+[sec-intro-h]: https://docs.ros.org/en/humble/Tutorials/Advanced/Security/Introducing-ros2-security.html
+[sec-intro-l]: https://docs.ros.org/en/lyrical/Developer-Tools/Introspection-and-analysis/Security/Introducing-ros2-security.html
+[sec-ks-h]: https://docs.ros.org/en/humble/Tutorials/Advanced/Security/The-Keystore.html
+[sec-ac-h]: https://docs.ros.org/en/humble/Tutorials/Advanced/Security/Access-Controls.html
+[sec-deploy-h]: https://docs.ros.org/en/humble/Tutorials/Advanced/Security/Deployment-Guidelines.html
+[design-sec]: https://design.ros2.org/articles/ros2_dds_security.html
+[design-encl]: https://design.ros2.org/articles/ros2_security_enclaves.html
+[design-names]: https://design.ros2.org/articles/topic_and_service_names.html
+[rep2001]: https://www.ros.org/reps/rep-2001.html
+[pubsub-py-h]: https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber.html
+[jazzy-cl]: https://docs.ros.org/en/rolling/Releases/Jazzy-Jalisco-Complete-Changelog.html
+[rosdistro-j]: https://github.com/ros/rosdistro/blob/master/jazzy/distribution.yaml
+[tb3-demo]: https://github.com/ros-swg/turtlebot3_demo/tree/master/policies
+[tb3-teleop-h]: https://github.com/ROBOTIS-GIT/turtlebot3/blob/humble/turtlebot3_teleop/turtlebot3_teleop/script/teleop_keyboard.py
+[tb3-teleop-j]: https://github.com/ROBOTIS-GIT/turtlebot3/blob/jazzy/turtlebot3_teleop/turtlebot3_teleop/script/teleop_keyboard.py
+[tb3-sim-j]: https://github.com/ROBOTIS-GIT/turtlebot3_simulations/blob/jazzy/turtlebot3_gazebo/launch/turtlebot3_world.launch.py
