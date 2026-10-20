@@ -46,9 +46,9 @@ A certificate **contains** a public key plus the subject name, signed by a CA. S
 - the **governance** document says how the whole domain is secured ([[core-sros2-governance]]);
 - the **permissions** document says what one participant may do, bound to its certificate name ([[core-sros2-permissions]]).
 
-Separate concerns: give each identity only the domain and topics it needs, so that a compromised part cannot affect the rest of the system.
-
 Both are signed by a CA the plugin trusts (the **Permissions CA**). It may be the same CA as the Identity CA, but that is not required (sros2 uses one CA for both).
+
+Separate concerns: give each identity only the domain and topics it needs, so that a compromised part cannot affect the rest of the system.
 
 **Cryptography** cost: in complex systems, encrypting and decrypting can affect a real-time control loop unless there is dedicated hardware (the course's warning; it gives no measurement).
 
