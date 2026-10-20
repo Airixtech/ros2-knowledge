@@ -161,7 +161,7 @@
 | V63 | D3, D2 | `mock_components/GenericSystem` | ✓ | ✓ | ✓ | keep | [ros2_control migration][rc-mig-j] | High |
 | V64 | D4 | Gazebo "Modern (Fortress/Harmonic)" with ros_gz | Official: Fortress (packages.ros.org). Harmonic with Humble = packages.osrfoundation.org, "use with caution" | Harmonic (+ `gz_*_vendor` packages) | Jetty (Kilted: Ionic) | annotate | [REP 2000][rep2000], [ros_gz README][rosgz-h], [Jazzy notes][jazzy], [Lyrical platforms][lyr-plat] | High |
 | V65 | D4 | Gazebo Classic 11 "EOL" | EOL **2025-01-31** | Not supported | Not supported | annotate (add date) | [Gazebo Classic EOL][gz-classic-eol] | High |
-| V66 | D4 | Bridge YAML `gz_type_name: "gz.msgs.Twist"` | Fortress tables use `ignition.msgs.*`. The Humble bridge generates both `ignition.msgs.*` and `gz.msgs.*` names `[verify]` | `gz.msgs.*` | `gz.msgs.*` | annotate | [bridge README (humble)][rosgz-bridge-h], [mappings (humble)][rosgz-gen-h] | Medium |
+| V66 | D4 | Bridge YAML `gz_type_name: "gz.msgs.Twist"` | Fortress tables use `ignition.msgs.*`. The Humble bridge accepts both `ignition.msgs.*` and `gz.msgs.*` names (confirmed 2026-10-20 in `resource/get_mappings.cpp.em`, see GZ-V26 in version_audit_gazebo.md) | `gz.msgs.*` | `gz.msgs.*` | annotate | [bridge README (humble)][rosgz-bridge-h], [mappings (humble)][rosgz-gen-h] | High |
 | V58 | D4 | Fast DDS UDP-only profile XML | ✗ incomplete (see fix table); env `FASTRTPS_DEFAULT_PROFILES_FILE` | same | env `FASTDDS_DEFAULT_PROFILES_FILE` (Fast DDS 3, Kilted rename) | **fix** | [Isaac Sim ROS 2 install][isaac-ros2], [FastDDS config (humble)][fdds-h], [(rolling)][fdds-r], [Kilted notes][kilted] | High |
 | V67 | D4, A1 | Isaac Sim + Humble: "source /opt/ros/humble before isaac-sim.sh"; Cyclone "recommended" | Current Isaac Sim (Python 3.11/3.12) cannot load system Humble rclpy (Python 3.10) and uses its **internal** ROS libraries. Docs default to Fast DDS. "Never put internal libs in .bashrc" ✓ `[verify per Isaac Sim version]` | System Jazzy libs compatible on 24.04 | — | annotate | [Isaac Sim ROS 2 install][isaac-ros2] | Medium |
 | V68 | D4 | Isaac ROS NITROS GEMs | Isaac ROS 3.2 = Humble (Jetson Orin) | Isaac ROS 4.x = Jazzy | — | annotate | [NVIDIA forum][isaac-ros-forum] | Medium |
@@ -241,8 +241,8 @@
 ## Open `[verify]` items (for Phase 5 / Docker)
 1. V10: `target_link_libraries(tgt PUBLIC rclcpp::rclcpp ${std_msgs_TARGETS})` builds on `ros:humble`.
 2. V11: CMake warning level for `cmake_minimum_required(VERSION 3.8)` on Lyrical.
-3. V66: the Humble bridge accepts `gz.msgs.Twist` with Fortress.
-4. V67/V68: Isaac Sim / Isaac ROS version matrix (outside core; move to the future simulation skill).
+3. V66: resolved 2026-10-20 (the Humble bridge accepts both names, GZ-V26).
+4. V67/V68: Isaac Sim / Isaac ROS version matrix (outside core; Isaac Sim is not part of ros2-gazebo, still open).
 5. V61: Fast DDS 3 discovery CLI on Lyrical. V71: Cyclone 11 XML. V72/V73/V52: Lyrical API checks.
 6. V80: is tracing enabled in the course platform Humble image?
 7. V90: RTI Connext package version on Jazzy/Lyrical. V93: is Cyclone still advised for Nav2 on Humble? Compare both RMWs
