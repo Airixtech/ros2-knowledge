@@ -18,6 +18,8 @@ Errors (exit 1):
     broken or cross-skill wikilinks
   - a link with credentials or a signed token (AWSAccessKeyId=, X-Amz-Signature=, Signature=, token=) or a
     Windows user path (C:\\Users\\...) in a note or SKILL.md
+  - a PEM private key with its body (-----BEGIN ... PRIVATE KEY----- followed by base64 lines) in any file of
+    the repo (a course's demo key, a committed keystore key.pem); the header alone, without a body, is allowed
   - an ID of a "## Real ... (fix)" section of reports/version_audit*.md that no note cites (the fix never
     reached the notes); a report without that section is a WARNING (its fixes are not checked)
 Warnings: > MAX_TOKENS (≈ chars/4 without the knowledge-base fields), summary > 20 words, audience not dev|students,
@@ -73,6 +75,7 @@ LOOKS_LIKE_CODE_RE = re.compile(r'^\s*(?:import \w|from [\w.]+ import |def \w+\(
                                 r'|^\s*<\?xml|^\s*<(?:launch|root|package|library|BehaviorTree)\b', re.M)
 SECRET_RE = re.compile(r'AWSAccessKeyId=|X-Amz-(?:Signature|Credential)=|[?&](?:Signature|token)=|'
                        r'\b[A-Za-z]:\\+Users\\+', re.I)
+PRIVATE_KEY_RE = re.compile(r'-----BEGIN (?:[A-Z0-9]+ )*PRIVATE KEY-----[ \t]*\r?\n[ \t>]*[A-Za-z0-9+/]{16,}')
 TEXT_SUFFIXES = {'.md', '.yaml', '.yml', '.txt'}
 SKIP_DIRS = {'.git', 'dist', '.venv', '__pycache__', '.obsidian', '.trash'}
 FIX_SECTION_RE = re.compile(r'^## Real .*\(fix\)\s*$(.*?)(?=^## |\Z)', re.S | re.M)
@@ -379,6 +382,13 @@ def main(argv):
             if not re.search(rf'(?<![\w-]){re.escape(aid)}(?!\d)', cited):
                 errors.append(f'{where}: fix {aid} is cited by no note (add it to the version_notes of the '
                               f'note that carries the correction)')
+
+    for path in sorted(ROOT.rglob('*')):               # private keys: every file of the repo, any suffix
+        rel = path.relative_to(ROOT)
+        if any(p in SKIP_DIRS for p in rel.parts) or not path.is_file() or path.stat().st_size > 2_000_000:
+            continue
+        if PRIVATE_KEY_RE.search(path.read_text(encoding='utf-8', errors='replace')):
+            errors.append(f'{rel.as_posix()}: contains a private key (PEM block with its body): remove it')
 
     if forbidden:                                      # every text file of the repo, not only the notes
         for path in sorted(ROOT.rglob('*')):
