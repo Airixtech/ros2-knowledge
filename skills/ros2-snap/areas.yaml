@@ -1,0 +1,6 @@
+# Area descriptions for tools/build_index.py (display order = file order). Not packaged.
+basics: "what snaps are, snapd/snapcraft/LXD install, snapcraft.yaml (name, base, confinement, parts, apps), build/install/run, ROS 2 extensions and bases, distros without an extension"
+runtime: "confinement and interfaces (plugs, slots, shared memory), daemons and services, robot app design, command-chain, $SNAP and data directories, snap set/get and hooks, debugging builds and installed snaps"
+deployment: "Snap Store (login, register, upload, release), channels and updates, GitHub Actions CI, monolithic vs multi-snap, content sharing, Ubuntu Core images"
+learn: "snaps workshop for students (talker-listener snap, ros2topic exercise); open only for course questions"
+migration: "Humble (core22) → Jazzy (core24) → Lyrical (core26) snap changes; open for other distros or porting"
