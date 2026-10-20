@@ -2,8 +2,8 @@
 id: core-ros-args
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-20
+review_by: 2027-04-18
 source: manual
 confidentiality: internal
 title: "--ros-args (remap, namespace, params) & node CLI"
@@ -31,6 +31,7 @@ version_notes: []
 | `-p <param>:=<val>` | set parameter | `-p max_speed:=1.0` |
 | `--params-file <yaml>` | load params | `--params-file cfg.yaml` |
 | `--log-level <lvl>` | log level | `--log-level debug` |
+| `-e <path>` / `--enclave <path>` | SROS2 security enclave of the process | `--enclave /teleop` ([[core-sros2-env-vars]]) |
 ```bash
 ros2 run my_pkg my_node --ros-args -r __node:=robot1 -r cmd_vel:=/robot1/cmd_vel -p max_speed:=1.0
 ros2 run demo_nodes_cpp talker --ros-args -r __ns:=/robot1     # two instances: different ns

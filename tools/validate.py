@@ -66,6 +66,8 @@ FENCE_RE = re.compile(r'^\s*```', re.M)
 PY_BLOCK_RE = re.compile(r'^\s*```(?:python|py)\s*\n(.*?)^\s*```', re.S | re.M | re.I)
 YAML_BLOCK_RE = re.compile(r'^\s*```ya?ml\s*\n(.*?)^\s*```', re.S | re.M | re.I)
 XML_BLOCK_RE = re.compile(r'^\s*```xml\s*\n(.*?)^\s*```', re.S | re.M | re.I)
+XML_PREFIX_RE = re.compile(r'</?([A-Za-z_][\w.-]*):[A-Za-z_]|\s([A-Za-z_][\w.-]*):[A-Za-z_][\w.-]*\s*=')
+XML_DECLARED_RE = re.compile(r'xmlns:([A-Za-z_][\w.-]*)\s*=')
 OPEN_FENCE_RE = re.compile(r'^\s*```(.*)$')
 LOOKS_LIKE_CODE_RE = re.compile(r'^\s*(?:import \w|from [\w.]+ import |def \w+\(|class \w+[(:])|ros__parameters:'
                                 r'|^\s*<\?xml|^\s*<(?:launch|root|package|library|BehaviorTree)\b', re.M)
@@ -287,8 +289,14 @@ def main(argv):
             try:
                 ElementTree.fromstring(code)
             except ElementTree.ParseError as e:
-                try:                                  # fragment of sibling elements (e.g. package.xml lines)
-                    ElementTree.fromstring(f'<fragment>{code}</fragment>')
+                # fragment of sibling elements (e.g. package.xml lines); a fragment may use prefixes its
+                # parent file declares (xi: in an SROS2 policy), a full document (<?xml …>) may not
+                prefixes = set() if code.startswith('<?xml') else (
+                    {p for pair in XML_PREFIX_RE.findall(code) for p in pair if p} - set(XML_DECLARED_RE.findall(code))
+                    - {'xml', 'xmlns'})
+                decl = ''.join(f' xmlns:{p}="urn:fragment:{p}"' for p in sorted(prefixes))
+                try:
+                    ElementTree.fromstring(f'<fragment{decl}>{code}</fragment>')
                 except ElementTree.ParseError:
                     errors.append(f'{where}: XML block is not well-formed ({e})')
 

@@ -2,8 +2,8 @@
 id: core-jazzy-to-lyrical
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-20
+review_by: 2027-04-18
 source: manual
 confidentiality: internal
 title: "Jazzy → Lyrical changes (core, incl. Kilted)"
@@ -29,6 +29,7 @@ version_notes:
 | Gazebo | Harmonic | K: Ionic · Lyrical: **Jetty** | V64 |
 | Middleware | Fast DDS 2.14, Cyclone 0.10 | Fast DDS 3.6, Cyclone 11; K: fastrtps→fastdds rename (`FASTDDS_DEFAULT_PROFILES_FILE`), Zenoh Tier 1 | V03, V58 |
 | Discovery | `ROS_LOCALHOST_ONLY` deprecated | K: **removed** (no effect) | V01 |
+| Security (sros2) | `create_key`, `list_keys` deprecated | K: **removed** (use `create_enclave`, `list_enclaves`); certificates valid from creation time; Windows: hard links instead of symlinks | V118, V119, V122 |
 | CMake | `ament_target_dependencies` | K: deprecated (warning) → Lyrical: **removed** → `target_link_libraries(t PUBLIC rclcpp::rclcpp ${msg_pkg_TARGETS})`; new `ament_cmake_ros_core::ament_ros_defaults` | V09 |
 | rclpy | `warn()` deprecated | **removed** → `warning()`; K: EventsExecutor (exp.); `AsyncNode` (asyncio) | V22, V33 |
 | rclpy API | `rclpy.qos_event` deprecated alias; name-only `declare_parameter('x')` warns | `rclpy.qos_event` **removed** (use `rclpy.event_handler`); name-only declaration raises **TypeError** (give a default, a type or `dynamic_typing=True`) | V84, V86 |

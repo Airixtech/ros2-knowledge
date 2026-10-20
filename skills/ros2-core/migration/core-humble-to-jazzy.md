@@ -2,8 +2,8 @@
 id: core-humble-to-jazzy
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-20
+review_by: 2027-04-18
 source: manual
 confidentiality: internal
 title: "Humble → Jazzy changes (core)"
@@ -35,6 +35,7 @@ version_notes:
 | rclpy QoS events | `from rclpy.qos_event import PublisherEventCallbacks` | `rclpy.event_handler` (Iron); `qos_event` still imports with a deprecation warning | V86 |
 | rclpy executor threads | `MultiThreadedExecutor()` = `multiprocessing.cpu_count()` threads | CPUs available to the process (`os.sched_getaffinity`); warns with 1 thread | V85 |
 | Middleware | Fast DDS 2.6; `rmw_zenoh_cpp` binary 0.1.x | Fast DDS 2.14; `rmw_zenoh_cpp` binary 0.2.x | V03, V92 |
+| Security (sros2) | enclave keys and certificates only as `.pem` files | + PKCS#11 URIs (`key.p11`, `cert.p11`…); node policy profiles also need `~/get_type_description` | V125, V133 |
 | rclcpp callbacks | `shared_ptr<MsgT>` (non-const) deprecated | **removed** → `ConstSharedPtr` | V27 |
 | rclcpp executors | — | WaitSet-based; callback order not consistent; `rclcpp/qos_event.hpp` removed; EventsExecutor (exp.) | V30, V33 |
 | launch | `PushRosNamespace`, `LaunchConfigurationEquals` | `PushROSNamespace` (alias kept); `Equals`/`NotEquals` substitutions; `LifecycleTransition` action | V15 |

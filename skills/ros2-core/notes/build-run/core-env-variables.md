@@ -2,8 +2,8 @@
 id: core-env-variables
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-20
+review_by: 2027-04-18
 source: manual
 confidentiality: internal
 title: "ROS environment variables (domain, discovery, RMW, logging)"
@@ -36,6 +36,7 @@ version_notes:
 | `RCUTILS_COLORIZED_OUTPUT=1` | colored console logs | |
 | `RCUTILS_CONSOLE_OUTPUT_FORMAT` | log line format | e.g. `"[{severity} {time}] [{name}]: {message}"` |
 | `ROS_DISCOVERY_SERVER` | FastDDS discovery server | see [[core-multi-pc-dds]] |
+| `ROS_SECURITY_KEYSTORE`, `ROS_SECURITY_ENABLE`, `ROS_SECURITY_STRATEGY`, `ROS_SECURITY_ENCLAVE_OVERRIDE` | SROS2 security | `true` and `Enforce` are case-sensitive; see [[core-sros2-env-vars]] |
 
 ## Discovery range [≥Jazzy] (introduced in Iron)
 ```bash

@@ -7,7 +7,7 @@
 > Extended 2026-10-13 with the **intermediate ROS 2 course** (Python build system, launch formats, parameters,
 > executors, QoS, DDS, managed nodes): IDs V81–V105, sections `Pnn` = page of that course export (not published).
 > Extended 2026-10-19 with the **ROS 2 security course** (SROS2: keystore, enclaves, governance, permissions,
-> `ROS_SECURITY_*`): IDs V106–V137, sections `sec Pnn` = page of that course export (not published).
+> `ROS_SECURITY_*`): IDs V106–V139, sections `sec Pnn` = page of that course export (not published).
 > The "Lyrical" column includes changes that first appeared in **Kilted** (May 2025, non-LTS), marked "(Kilted)".
 
 ## Method
@@ -16,7 +16,7 @@
   rclcpp, rcl, rmw, launch_ros, geometry2, rosbag2, ros2_tracing, ament_cmake, rosidl, message_filters,
   ros2_control, navigation2, docs.nav2.org, moveit2, ros_gz, example_interfaces, demos), the rosdistro
   `humble/distribution.yaml` and the packages.ros.org apt index for Jammy.
-- Security course (V106–V137): `ros2/sros2`, `ros2/rcl` (`security.c`, `init.c`), `ros2/rmw_dds_common`
+- Security course (V106–V139): `ros2/sros2`, `ros2/rcl` (`security.c`, `init.c`), `ros2/rmw_dds_common`
   (`security.cpp`) and `ros2/rmw_fastrtps` on the humble, jazzy, kilted and lyrical branches; the official
   security tutorials and concept page (humble, lyrical); the design articles "ROS 2 DDS-Security integration",
   "ROS 2 Security Enclaves" and "Topic and Service name mapping"; the `ros-swg/turtlebot3_demo` policies;
@@ -92,6 +92,8 @@
 | V114 | sec P13 | course contradiction (its own `ros2 pkg create` output) | "Go to `~/ros2_ws/src/unit2_pkg/unit2_pkg/setup.py`" (same for `package.xml`) | Both files are in the package root `~/ros2_ws/src/unit2_pkg/`; the inner `unit2_pkg/` folder holds the Python module. Template: [ament_python][tpl-dir-h] |
 | V115 | sec P13 | course mistake | `package.xml` with only `<exec_depend>geometry_msgs</exec_depend>` for a node that imports `rclpy` | Add `<exec_depend>rclpy</exec_depend>`: the course package runs only because rclpy is already installed, and rosdep would not install it. Docs: [Python pub/sub tutorial][pubsub-py-h] |
 | V116 | sec P02 | course claim, imprecise | "SROS2 … is contained within the ROS Client Library (RCL)" | The `ros2 security` tools are the **`sros2`** package (a ros2cli extension in the `ros_core` variant, [REP 2001][rep2001]); rcl only reads the `ROS_SECURITY_*` variables and finds the enclave directory, and the RMW loads the DDS-Security plugins. Code: [sros2 verbs][sros2-verbs-h], [rcl security.c][rcl-sec-h] |
+| V138 | sec P13 | course mistake | `package.xml` with `<exec_depend>geometry_msgs</exec_depend>` placed after `</export>` | Package format 3 requires every dependency **before** `<export>`, which is the last element ([package_format3.xsd][pkg-xsd3]). colcon still builds it, but the file is not schema-valid: move the `exec_depend` lines above `<export>`. |
+| V139 | sec P07 | course mistake (terminology) | "Use a _governance_file.xml_ called _turtlebot3_gazebo_policy.xml_ to create the overall enclaves" | That file is an **SROS2 policy** (`<policy version="0.2.0">`, enclaves and profiles). The DDS **governance** document is a different file, `enclaves/governance.xml`, written by `create_keystore`. Code: [policy.xsd][sros2-xsd-h], [`_create_governance_file`][sros2-ks-h] |
 
 ## Full table
 | # | Sheet | Statement | Humble | Jazzy | Lyrical | Action | Source | Confidence |
@@ -233,6 +235,8 @@
 | V135 | sec P13 | `cmd_vel_subscriber` subscribes `geometry_msgs/Twist` | ✓ Humble teleop publishes `Twist` | ✗ teleop publishes `TwistStamped` (types differ, no data) | same | annotate | [teleop (jazzy)][tb3-teleop-j] | High |
 | V136 | sec P07 | policy files from a course repository | the profiles match the public `ros-swg/turtlebot3_demo` `policies/` (Apache-2.0; its `tb3_gazebo_policy.xml` adds Nav2 enclaves) | ✓ | ✓ | keep (public source) | [turtlebot3_demo policies][tb3-demo] | High |
 | V137 | sec P12 | "node directories are no longer relevant" | ✓ since Foxy one participant per context; the enclave path is independent of node names | ✓ | ✓ | keep | [enclaves design][design-encl] | High |
+| V138 | sec P13 | `<exec_depend>` after `</export>` in `package.xml` | ✗ format 3 order: dependencies before `<export>` | same | same | **fix** | [package_format3.xsd][pkg-xsd3] | High |
+| V139 | sec P07 | the policy file called a "governance file" | ✗ it is an SROS2 policy; the governance is `enclaves/governance.xml` | same | same | **fix** | [policy.xsd][sros2-xsd-h], [_keystore.py][sros2-ks-h] | High |
 
 ## Open `[verify]` items (for Phase 5 / Docker)
 1. V10: `target_link_libraries(tgt PUBLIC rclcpp::rclcpp ${std_msgs_TARGETS})` builds on `ros:humble`.
@@ -401,3 +405,4 @@
 [tb3-teleop-h]: https://github.com/ROBOTIS-GIT/turtlebot3/blob/humble/turtlebot3_teleop/turtlebot3_teleop/script/teleop_keyboard.py
 [tb3-teleop-j]: https://github.com/ROBOTIS-GIT/turtlebot3/blob/jazzy/turtlebot3_teleop/turtlebot3_teleop/script/teleop_keyboard.py
 [tb3-sim-j]: https://github.com/ROBOTIS-GIT/turtlebot3_simulations/blob/jazzy/turtlebot3_gazebo/launch/turtlebot3_world.launch.py
+[pkg-xsd3]: https://github.com/ros-infrastructure/rep/blob/master/xsd/package_format3.xsd
