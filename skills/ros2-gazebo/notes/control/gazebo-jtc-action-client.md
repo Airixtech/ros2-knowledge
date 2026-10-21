@@ -81,14 +81,14 @@ class SteeringActionClient(Node):
         rclpy.shutdown()
 
     def feedback_callback(self, feedback_msg):
-        feedback = feedback_msg.feedback
+        pass  # feedback_msg.feedback holds desired, actual and error of the trajectory (unused here)
 
 
 def main(args=None):
     rclpy.init()
     action_client = SteeringActionClient()
     position_value = float(sys.argv[1])
-    future = action_client.send_goal(position_value)
+    action_client.send_goal(position_value)
     rclpy.spin(action_client)
 
 
@@ -96,7 +96,7 @@ if __name__ == '__main__':
     main()
 ```
 - One joint, one point; add more points (each with a later `time_from_start`) for a path. `goal_time_tolerance`: how late the joint may reach the end.
-- `send_goal` returns nothing; the `future` variable stays `None` (harmless).
+- `send_goal` returns nothing: the course stores its result in an unused `future` variable (always `None`), and its feedback callback keeps an unused `feedback` variable; both are left out here.
 
 ## Install and run (ament_cmake package)
 ```cmake
