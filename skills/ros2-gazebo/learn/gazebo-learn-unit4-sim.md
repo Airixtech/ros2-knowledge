@@ -12,7 +12,7 @@ area: learn
 distro: jazzy
 tested: false
 audience: students
-summary: "Unit 4: my_box_bot_gazebo package, empty world and box_room, collisions and inertias per link, smaller casters, spawn launch files, wheel friction blocks."
+summary: "Unit 4: my_box_bot_gazebo package, empty world and box_room, collisions and inertias per link, smaller casters, spawn files, wheel friction blocks."
 tags: [course, unit 4, my_box_bot_gazebo, box_bot_empty.world, box_bot_meshes_collisions_inertias.urdf, box_bot_physical_properties.urdf, spawn_robot_ros2.launch.xml, inertia, friction]
 see: ["[[gazebo-learn-start-here]]", "[[urdf-learn-unit3-box-bot]]", "[[gazebo-start-sim]]", "[[gazebo-world-sdf]]", "[[gazebo-spawn-urdf]]", "[[gazebo-urdf-sim-tags]]", "[[urdf-inertia]]"]
 requires: [ros2-core, ros2-urdf]

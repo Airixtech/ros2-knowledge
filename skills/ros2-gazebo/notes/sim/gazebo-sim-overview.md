@@ -12,7 +12,7 @@ area: sim
 distro: jazzy
 tested: false
 audience: dev
-summary: "Gazebo Sim (Harmonic) with ROS 2: ros_gz_sim, ros_gz_bridge, gz_ros2_control; what a URDF needs; systems + bridge vs ros2_control; Humble Fortress sources."
+summary: "Gazebo Sim (Harmonic): ros_gz_sim, ros_gz_bridge, gz_ros2_control; what a URDF needs; systems + bridge vs ros2_control; Humble Fortress sources."
 tags: [gazebo sim, harmonic, fortress, jetty, ros_gz, ros_gz_sim, ros_gz_bridge, gz_ros2_control, gazebo transport, systems, ros-jazzy-ros-gz]
 see: ["[[core-gazebo-bridge]]", "[[gazebo-start-sim]]", "[[gazebo-spawn-urdf]]", "[[gazebo-joint-state-diffdrive]]", "[[gazebo-ros2-control-urdf]]", "[[gazebo-migration-fortress]]"]
 requires: [ros2-core, ros2-urdf]

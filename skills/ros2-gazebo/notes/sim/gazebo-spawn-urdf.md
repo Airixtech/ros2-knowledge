@@ -12,7 +12,7 @@ area: sim
 distro: jazzy
 tested: false
 audience: dev
-summary: "ros_gz_sim create -topic robot_description -name -allow_renaming -x -y -z -Y; spawn launch file; URDF to SDF: massless links, fixed-joint lumping, preserveFixedJoint."
+summary: "ros_gz_sim create -topic robot_description -name -allow_renaming -x -y -z -Y; spawn file; URDF to SDF: massless links, fixed-joint lumping, preserveFixedJoint."
 tags: [ros_gz_sim, create, spawn, robot_description, -topic, -file, -string, -param, -allow_renaming, urdf2sdf, fixed joint lumping, preserveFixedJoint, inertial]
 see: ["[[gazebo-start-sim]]", "[[gazebo-urdf-sim-tags]]", "[[gazebo-ros-gz-bridge]]", "[[urdf-description-package]]", "[[urdf-inertia]]"]
 requires: [ros2-core, ros2-urdf]
