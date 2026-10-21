@@ -2,8 +2,8 @@
 id: gazebo-migration-jetty
 type: reference
 owner: equipo-ros2
-updated: 2026-10-20
-review_by: 2027-04-18
+updated: 2026-10-21
+review_by: 2027-04-19
 source: manual
 confidentiality: internal
 title: "Harmonic to Jetty (Lyrical) changes"
@@ -17,9 +17,9 @@ tags: [lyrical, jetty, kilted, ionic, migration, ros_gz lyrical, gz-sim10, gz_ro
 see: ["[[gazebo-migration-fortress]]", "[[gazebo-sim-overview]]", "[[urdf-migration]]"]
 requires: [ros2-core, ros2-urdf]
 version_notes:
-  - "lyrical: Jetty from packages.ros.org (ros_gz lyrical branch); Harmonic and Ionic only from source — https://github.com/gazebosim/ros_gz/blob/lyrical/README.md (GZ-V44)"
-  - "lyrical: DiffDrive and JointStatePublisher elements, default world systems and the DART default are unchanged from Harmonic — https://github.com/gazebosim/gz-sim/blob/gz-sim10/Migration.md (GZ-V44)"
-  - "lyrical: gz_ros2_control exports only gz_ros2_control/GazeboSimSystem (no ign_ros2_control alias) — https://github.com/ros-controls/gz_ros2_control/blob/lyrical/gz_ros2_control/src/gz_system.cpp (GZ-V28)"
+  - "lyrical/jetty: Jetty from packages.ros.org (ros_gz lyrical branch); Harmonic and Ionic only from source — https://github.com/gazebosim/ros_gz/blob/lyrical/README.md (GZ-V44)"
+  - "lyrical/jetty: DiffDrive and JointStatePublisher elements, default world systems and the DART default are unchanged from Harmonic — https://github.com/gazebosim/gz-sim/blob/gz-sim10/Migration.md (GZ-V44)"
+  - "lyrical/jetty: gz_ros2_control exports only gz_ros2_control/GazeboSimSystem (no ign_ros2_control alias) — https://github.com/ros-controls/gz_ros2_control/blob/lyrical/gz_ros2_control/src/gz_system.cpp (GZ-V28)"
 ---
 # Harmonic to Jetty (Lyrical) changes
 

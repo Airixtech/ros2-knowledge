@@ -2,8 +2,8 @@
 id: gazebo-sensors-depth-wideangle
 type: reference
 owner: equipo-ros2
-updated: 2026-10-20
-review_by: 2027-04-18
+updated: 2026-10-21
+review_by: 2027-04-19
 source: manual
 confidentiality: internal
 title: "Point cloud from a 2-D gpu_lidar, wide-angle camera, bridging and RViz QoS"
@@ -17,9 +17,9 @@ tags: [gpu_lidar, vertical, point cloud, points, PointCloudPacked, PointCloud2, 
 see: ["[[gazebo-sensors-lidar]]", "[[gazebo-sensors-camera]]", "[[gazebo-ros-gz-bridge]]", "[[gazebo-learn-unit6-sensors]]", "[[core-perception-basics]]"]
 requires: [ros2-core, ros2-urdf]
 version_notes:
-  - "jazzy: a gpu_lidar publishes LaserScan on <topic> and PointCloudPacked on <topic>/points (same in Fortress) — https://github.com/gazebosim/gz-sensors/blob/gz-sensors8/src/GpuLidarSensor.cc (GZ-V38)"
-  - "jazzy: camera_info goes to the parent of the image topic + /camera_info — https://github.com/gazebosim/gz-sensors/blob/gz-sensors8/src/CameraSensor.cc (GZ-V05)"
-  - "jazzy: wideanglecamera and its <lens> elements — https://github.com/gazebosim/gz-sensors/blob/gz-sensors8/src/WideAngleCameraSensor.cc (GZ-V39)"
+  - "jazzy/harmonic: a gpu_lidar publishes LaserScan on <topic> and PointCloudPacked on <topic>/points (same in Fortress) — https://github.com/gazebosim/gz-sensors/blob/gz-sensors8/src/GpuLidarSensor.cc (GZ-V38)"
+  - "jazzy/harmonic: camera_info goes to the parent of the image topic + /camera_info — https://github.com/gazebosim/gz-sensors/blob/gz-sensors8/src/CameraSensor.cc (GZ-V05)"
+  - "jazzy/harmonic: wideanglecamera and its <lens> elements — https://github.com/gazebosim/gz-sensors/blob/gz-sensors8/src/WideAngleCameraSensor.cc (GZ-V39)"
 ---
 # Point cloud from a 2-D gpu_lidar, wide-angle camera, bridging and RViz QoS
 

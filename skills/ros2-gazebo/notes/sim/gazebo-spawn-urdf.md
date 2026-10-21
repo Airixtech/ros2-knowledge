@@ -2,8 +2,8 @@
 id: gazebo-spawn-urdf
 type: reference
 owner: equipo-ros2
-updated: 2026-10-20
-review_by: 2027-04-18
+updated: 2026-10-21
+review_by: 2027-04-19
 source: manual
 confidentiality: internal
 title: "Spawn a URDF with ros_gz_sim create; URDF to SDF conversion rules"
@@ -17,9 +17,9 @@ tags: [ros_gz_sim, create, spawn, robot_description, -topic, -file, -string, -pa
 see: ["[[gazebo-start-sim]]", "[[gazebo-resource-paths]]", "[[gazebo-urdf-sim-tags]]", "[[gazebo-ros-gz-bridge]]", "[[urdf-description-package]]", "[[urdf-inertia]]"]
 requires: [ros2-core, ros2-urdf]
 version_notes:
-  - "jazzy: create flags -world -file -param -string -topic -name -allow_renaming -x -y -z -R -P -Y (same in humble and lyrical) — https://github.com/gazebosim/ros_gz/blob/jazzy/ros_gz_sim/src/create.cpp (GZ-V09, GZ-V18)"
-  - "jazzy: a massless link (no <inertial>) is an urdf2sdf error unless its fixed parent joint is lumped; fixed joints are lumped unless <preserveFixedJoint> — https://github.com/gazebosim/sdformat/blob/sdf14/src/parser_urdf.cc (GZ-V19, GZ-V46)"
-  - "jazzy: the Gazebo Classic spawner spawn_entity.py does not apply to Gazebo Sim (GZ-V09)"
+  - "jazzy/harmonic: create flags -world -file -param -string -topic -name -allow_renaming -x -y -z -R -P -Y (same in humble and lyrical) — https://github.com/gazebosim/ros_gz/blob/jazzy/ros_gz_sim/src/create.cpp (GZ-V09, GZ-V18)"
+  - "jazzy/harmonic: a massless link (no <inertial>) is an urdf2sdf error unless its fixed parent joint is lumped; fixed joints are lumped unless <preserveFixedJoint> — https://github.com/gazebosim/sdformat/blob/sdf14/src/parser_urdf.cc (GZ-V19, GZ-V46)"
+  - "jazzy/harmonic: spawn_entity.py is not a ros_gz tool; Gazebo Sim spawns with ros_gz_sim create (GZ-V09)"
 ---
 # Spawn a URDF with ros_gz_sim create; URDF to SDF conversion rules
 

@@ -2,8 +2,8 @@
 id: gazebo-learn-unit6-sensors
 type: reference
 owner: equipo-ros2
-updated: 2026-10-20
-review_by: 2027-04-18
+updated: 2026-10-21
+review_by: 2027-04-19
 source: manual
 confidentiality: internal
 title: "Unit 6: lidar, point cloud and wide-angle camera on box_bot (exercise 6.1.1)"
@@ -17,7 +17,7 @@ tags: [course, unit 6, box_bot_control_complete_sensor.urdf, box_bot_final.urdf,
 see: ["[[gazebo-learn-start-here]]", "[[gazebo-learn-unit5-moving]]", "[[gazebo-sensors-lidar]]", "[[gazebo-sensors-depth-wideangle]]", "[[gazebo-sensors-camera]]", "[[gazebo-sensors-imu]]", "[[gazebo-ros-gz-bridge]]"]
 requires: [ros2-core, ros2-urdf]
 version_notes:
-  - "jazzy: the laser's up/down motion is on laser_scan_link_joint, not on the fixed laser_scan_frame_joint (GZ-V54)"
+  - "jazzy/harmonic: the laser's up/down motion is on laser_scan_link_joint, not on the fixed laser_scan_frame_joint (GZ-V54)"
 ---
 # Unit 6: lidar, point cloud and wide-angle camera on box_bot (exercise 6.1.1)
 

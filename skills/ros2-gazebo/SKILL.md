@@ -10,9 +10,9 @@ Atomic notes for running robots in Gazebo Sim from ROS 2. **Jazzy + Gazebo Harmo
 1. Check the user's distro first. On **Humble** read [[gazebo-migration-fortress]]: current Fortress accepts most names of this skill, but gz_ros2_control reads the description from the node `robot_state_publisher` (`<robot_param_node>` when it is renamed).
 2. Gazebo systems talk Gazebo Transport, not ROS: bridge every topic a ROS node needs with `ros_gz_bridge` (`@` both ways, `[` Gazebo → ROS, `]` ROS → Gazebo), always `/clock` plus `use_sim_time` ([[gazebo-ros-gz-bridge]]).
 3. Start Gazebo with `ros_gz_sim`'s `gz_sim.launch.py` (`gz_args: -r <world>`); meshes and `model://` folders are found only through `GZ_SIM_RESOURCE_PATH`, set before the start (package.xml export or environment hook) ([[gazebo-start-sim]], [[gazebo-resource-paths]]).
-4. Spawn with `ros2 run ros_gz_sim create -topic robot_description` (`spawn_entity.py` is Gazebo Classic); a link on a movable joint needs `<inertial>` with mass > 0, fixed joints are merged into their parent ([[gazebo-spawn-urdf]]).
+4. Spawn with `ros2 run ros_gz_sim create -topic robot_description` (not `spawn_entity.py`, which is not part of ros_gz); a link on a movable joint needs `<inertial>` with mass > 0, fixed joints are merged into their parent ([[gazebo-spawn-urdf]]).
 5. Friction and contact go in `<gazebo reference="<link>">`: `mu`/`mu2` are two friction directions, `kp` contact stiffness, `kd` contact damping ([[gazebo-urdf-sim-tags]]).
-6. DiffDrive reads only gz-sim elements (no Classic `publish_*` options) and publishes `odom → base_link`; JointStatePublisher is a model plugin; the joint_state_publisher ROS node does not read simulated joints ([[gazebo-joint-state-diffdrive]]).
+6. DiffDrive reads only gz-sim elements (`publish_*` options are not among them) and publishes `odom → base_link`; JointStatePublisher is a model plugin; the joint_state_publisher ROS node does not read simulated joints ([[gazebo-joint-state-diffdrive]]).
 7. gz_ros2_control: `<ros2_control>` with `gz_ros2_control/GazeboSimSystem` and only `position`/`velocity`/`effort` interfaces, the `gz_ros2_control-system` plugin with `<parameters>` YAML, controllers started by spawners; JTC has no `interface_name` ([[gazebo-ros2-control-urdf]], [[gazebo-ros2-control-controllers]]).
 8. Rendering sensors need the Sensors system once (best in the world SDF); set `gz_frame_id`; a lidar's point cloud is on `<topic>/points`, a camera's `camera_info` on the parent of its image topic ([[gazebo-sensors-lidar]], [[gazebo-sensors-camera]]).
 9. An IMU needs the Imu system; a GPS needs the NavSat system and `<spherical_coordinates>` in the world ([[gazebo-sensors-imu]]).
@@ -29,7 +29,7 @@ Atomic notes for running robots in Gazebo Sim from ROS 2. **Jazzy + Gazebo Harmo
 If the notes do not cover the question, read the official source for the user's version (below) or say that you answer from standard knowledge. Never invent elements, plugin names or parameters.
 
 ## Version marks and official sources
-`[Humble]` Humble + Fortress · `[≥Jazzy]` Jazzy (Harmonic) and later · `[Lyrical]` Lyrical (Jetty) · `[changed in Lyrical: …]` · `[verify]` not confirmed by a source or a build: tell the user. Each note's `version_notes` holds the source URL of every difference.
+Marks name the ROS 2 distro and its Gazebo, like the distro marks of the other skills: `[Humble + Fortress]` · `[Jazzy + Harmonic]` (canonical, usually unmarked) · `[Lyrical + Jetty]` · `[changed in Lyrical + Jetty: …]` · `[verify]` not confirmed by a source or a build: tell the user. `version_notes` start with the pair (`humble/fortress:`, `jazzy/harmonic:`, `lyrical/jetty:`) and hold the source URL of every difference. Only modern Gazebo (Gazebo Sim) is covered.
 
 | Version | Read first |
 |---|---|

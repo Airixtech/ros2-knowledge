@@ -2,8 +2,8 @@
 id: gazebo-ros-gz-bridge
 type: reference
 owner: equipo-ros2
-updated: 2026-10-20
-review_by: 2027-04-18
+updated: 2026-10-21
+review_by: 2027-04-19
 source: manual
 confidentiality: internal
 title: "ros_gz_bridge parameter_bridge syntax (@ [ ]), type pairs, /clock and sim time"
@@ -17,8 +17,8 @@ tags: [ros_gz_bridge, parameter_bridge, bridge, gz.msgs, ignition.msgs, clock, u
 see: ["[[core-gazebo-bridge]]", "[[gazebo-joint-state-diffdrive]]", "[[gazebo-sensors-lidar]]", "[[gazebo-multi-robot]]", "[[core-time-timers]]"]
 requires: [ros2-core, ros2-urdf]
 version_notes:
-  - "jazzy: direction characters and the message pairs below — https://github.com/gazebosim/ros_gz/blob/jazzy/ros_gz_bridge/README.md (GZ-V26)"
-  - "humble: the bridge accepts gz.msgs.* and ignition.msgs.* type names, so the same arguments work with Fortress — https://github.com/gazebosim/ros_gz/blob/humble/ros_gz_bridge/resource/get_mappings.cpp.em (GZ-V26, V66)"
+  - "jazzy/harmonic: direction characters and the message pairs below — https://github.com/gazebosim/ros_gz/blob/jazzy/ros_gz_bridge/README.md (GZ-V26)"
+  - "humble/fortress: the bridge accepts gz.msgs.* and ignition.msgs.* type names, so the same arguments work with Fortress — https://github.com/gazebosim/ros_gz/blob/humble/ros_gz_bridge/resource/get_mappings.cpp.em (GZ-V26, V66)"
 ---
 # ros_gz_bridge parameter_bridge syntax (@ [ ]), type pairs, /clock and sim time
 
@@ -68,6 +68,6 @@ Full list: the bridge README. A YAML config file instead of arguments: [[core-ga
 - `SetParameter(name="use_sim_time", value=True)` sets it for the ROS nodes started after it in the same launch file; Gazebo is not affected ([[core-time-timers]]).
 
 ## Pitfalls
-- A sensor topic visible with `gz topic -l` ([Humble] Fortress: `ign topic -l`) but not in `ros2 topic list` → not bridged, or the topic name differs (lidar point clouds end in `/points`).
+- A sensor topic visible with `gz topic -l` ([Humble + Fortress] Fortress: `ign topic -l`) but not in `ros2 topic list` → not bridged, or the topic name differs (lidar point clouds end in `/points`).
 - `/cmd_vel` bridged with `[` (Gazebo → ROS only) → teleop commands never reach Gazebo.
 - Two robots on the same topics → namespace them ([[gazebo-multi-robot]]).

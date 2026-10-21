@@ -2,8 +2,8 @@
 id: gazebo-ros2-control-controllers
 type: reference
 owner: equipo-ros2
-updated: 2026-10-20
-review_by: 2027-04-18
+updated: 2026-10-21
+review_by: 2027-04-19
 source: manual
 confidentiality: internal
 title: "Controller YAML (JTC, JointGroupVelocity, broadcaster) and spawners in launch"
@@ -17,10 +17,10 @@ tags: [controller_manager, update_rate, joint_trajectory_controller, JointTrajec
 see: ["[[gazebo-ros2-control-urdf]]", "[[core-ros2-control-overview]]", "[[gazebo-jtc-action-client]]", "[[gazebo-velocity-control]]", "[[core-pkg-dependencies]]"]
 requires: [ros2-core, ros2-urdf]
 version_notes:
-  - "humble: interface_name is not a JointTrajectoryController parameter (ignored); JTC uses joints, command_interfaces, state_interfaces — https://github.com/ros-controls/ros2_controllers/blob/humble/joint_trajectory_controller/src/joint_trajectory_controller_parameters.yaml (GZ-V06)"
-  - "humble: JointGroupVelocityController takes joints only (interface_name is set to velocity by the controller) — https://github.com/ros-controls/ros2_controllers/blob/jazzy/forward_command_controller/src/forward_command_controller_parameters.yaml (GZ-V07)"
-  - "jazzy: controllers are run-time dependencies: <exec_depend> in package.xml, not CMake (GZ-V08)"
-  - "jazzy: spawner takes several controller names, -c, -p/--param-file, --inactive (GZ-V32) — https://github.com/ros-controls/ros2_control/blob/jazzy/controller_manager/controller_manager/spawner.py"
+  - "humble/fortress: interface_name is not a JointTrajectoryController parameter (ignored); JTC uses joints, command_interfaces, state_interfaces — https://github.com/ros-controls/ros2_controllers/blob/humble/joint_trajectory_controller/src/joint_trajectory_controller_parameters.yaml (GZ-V06)"
+  - "humble/fortress: JointGroupVelocityController takes joints only (interface_name is set to velocity by the controller) — https://github.com/ros-controls/ros2_controllers/blob/jazzy/forward_command_controller/src/forward_command_controller_parameters.yaml (GZ-V07)"
+  - "jazzy/harmonic: controllers are run-time dependencies: <exec_depend> in package.xml, not CMake (GZ-V08)"
+  - "jazzy/harmonic: spawner takes several controller names, -c, -p/--param-file, --inactive (GZ-V32) — https://github.com/ros-controls/ros2_control/blob/jazzy/controller_manager/controller_manager/spawner.py"
 ---
 # Controller YAML (JTC, JointGroupVelocity, broadcaster) and spawners in launch
 

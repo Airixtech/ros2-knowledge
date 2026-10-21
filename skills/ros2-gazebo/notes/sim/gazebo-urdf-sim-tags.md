@@ -2,8 +2,8 @@
 id: gazebo-urdf-sim-tags
 type: reference
 owner: equipo-ros2
-updated: 2026-10-20
-review_by: 2027-04-18
+updated: 2026-10-21
+review_by: 2027-04-19
 source: manual
 confidentiality: internal
 title: "<gazebo reference> tags: friction mu/mu2, contact kp/kd, Gazebo materials"
@@ -17,10 +17,10 @@ tags: [gazebo reference, surface, friction, mu, mu2, mu1, fdir1, contact, kp, kd
 see: ["[[gazebo-spawn-urdf]]", "[[gazebo-sim-overview]]", "[[urdf-links]]", "[[gazebo-learn-unit4-sim]]"]
 requires: [ros2-core, ros2-urdf]
 version_notes:
-  - "jazzy: mu and mu2 are Coulomb friction coefficients in the two friction-pyramid directions (fdir1 and its perpendicular), not static and dynamic friction — https://github.com/gazebosim/sdformat/blob/sdf14/sdf/1.11/surface.sdf (GZ-V01)"
-  - "jazzy: kp = contact stiffness, kd = contact damping; SDF defaults kp 1e12, kd 1, mu 1 — https://github.com/gazebosim/sdformat/blob/sdf14/sdf/1.11/surface.sdf (GZ-V02)"
-  - "jazzy: collision and visual blocks inside <gazebo reference> are added to every collision/visual of that link; short tags mu1, mu2, fdir1, kp, kd, maxVel, minDepth, selfCollide, turnGravityOff — https://github.com/gazebosim/sdformat/blob/sdf14/src/parser_urdf.cc (GZ-V16)"
-  - "jazzy: the course's wheel kd = 1e7 is far above the default 1; effect not measured [verify] (GZ-V17)"
+  - "jazzy/harmonic: mu and mu2 are Coulomb friction coefficients in the two friction-pyramid directions (fdir1 and its perpendicular), not static and dynamic friction — https://github.com/gazebosim/sdformat/blob/sdf14/sdf/1.11/surface.sdf (GZ-V01)"
+  - "jazzy/harmonic: kp = contact stiffness, kd = contact damping; SDF defaults kp 1e12, kd 1, mu 1 — https://github.com/gazebosim/sdformat/blob/sdf14/sdf/1.11/surface.sdf (GZ-V02)"
+  - "jazzy/harmonic: collision and visual blocks inside <gazebo reference> are added to every collision/visual of that link; short tags mu1, mu2, fdir1, kp, kd, maxVel, minDepth, selfCollide, turnGravityOff — https://github.com/gazebosim/sdformat/blob/sdf14/src/parser_urdf.cc (GZ-V16)"
+  - "jazzy/harmonic: the course's wheel kd = 1e7 is far above the default 1; effect not measured [verify] (GZ-V17)"
 ---
 # <gazebo reference> tags: friction mu/mu2, contact kp/kd, Gazebo materials
 

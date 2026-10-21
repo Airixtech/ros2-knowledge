@@ -2,8 +2,8 @@
 id: gazebo-start-sim
 type: reference
 owner: equipo-ros2
-updated: 2026-10-20
-review_by: 2027-04-18
+updated: 2026-10-21
+review_by: 2027-04-19
 source: manual
 confidentiality: internal
 title: "Start Gazebo from launch: gz_sim.launch.py gz_args, world, sim time"
@@ -17,9 +17,9 @@ tags: [gz_sim.launch.py, gz_args, ros_gz_sim, start_world, IncludeLaunchDescript
 see: ["[[gazebo-resource-paths]]", "[[gazebo-world-sdf]]", "[[gazebo-spawn-urdf]]", "[[gazebo-sim-overview]]", "[[core-launch-args-include]]", "[[core-time-timers]]"]
 requires: [ros2-core, ros2-urdf]
 version_notes:
-  - "humble: the same gz_sim.launch.py runs 'ign gazebo' for Fortress — https://github.com/gazebosim/ros_gz/blob/humble/ros_gz_sim/launch/gz_sim.launch.py.in (GZ-V10)"
-  - "jazzy: gz_sim.launch.py arguments gz_args, gz_version, on_exit_shutdown, debugger — https://github.com/gazebosim/ros_gz/blob/jazzy/ros_gz_sim/launch/gz_sim.launch.py.in (GZ-V10)"
-  - "jazzy: SetParameter(use_sim_time) applies to the ROS nodes started after it, not to Gazebo; bridge /clock (GZ-V27)"
+  - "humble/fortress: the same gz_sim.launch.py runs 'ign gazebo' for Fortress — https://github.com/gazebosim/ros_gz/blob/humble/ros_gz_sim/launch/gz_sim.launch.py.in (GZ-V10)"
+  - "jazzy/harmonic: gz_sim.launch.py arguments gz_args, gz_version, on_exit_shutdown, debugger — https://github.com/gazebosim/ros_gz/blob/jazzy/ros_gz_sim/launch/gz_sim.launch.py.in (GZ-V10)"
+  - "jazzy/harmonic: SetParameter(use_sim_time) applies to the ROS nodes started after it, not to Gazebo; bridge /clock (GZ-V27)"
 ---
 # Start Gazebo from launch: gz_sim.launch.py gz_args, world, sim time
 
@@ -87,4 +87,4 @@ def generate_launch_description():
 ## Pitfalls
 - `-r` missing → Gazebo starts paused; press play or nothing moves.
 - ROS nodes on wall time while Gazebo runs → `use_sim_time` not set, or `/clock` not bridged ([[gazebo-ros-gz-bridge]]).
-- [Humble] Fortress is started as `ign gazebo`; this launch file picks it, a hard-coded `gz sim` command does not.
+- [Humble + Fortress] Fortress is started as `ign gazebo`; this launch file picks it, a hard-coded `gz sim` command does not.

@@ -2,8 +2,8 @@
 id: gazebo-sim-overview
 type: reference
 owner: equipo-ros2
-updated: 2026-10-20
-review_by: 2027-04-18
+updated: 2026-10-21
+review_by: 2027-04-19
 source: manual
 confidentiality: internal
 title: "Gazebo Sim with ROS 2: packages, what a robot needs, plugin vs ros2_control approaches"
@@ -17,10 +17,10 @@ tags: [gazebo sim, harmonic, fortress, jetty, ros_gz, ros_gz_sim, ros_gz_bridge,
 see: ["[[core-gazebo-bridge]]", "[[gazebo-start-sim]]", "[[gazebo-spawn-urdf]]", "[[gazebo-joint-state-diffdrive]]", "[[gazebo-ros2-control-urdf]]", "[[gazebo-migration-fortress]]"]
 requires: [ros2-core, ros2-urdf]
 version_notes:
-  - "humble: official pairing Fortress (binaries on packages.ros.org, ros-humble-ros-gz); Harmonic only from packages.osrfoundation.org (ros-humble-ros-gzharmonic, 'use with caution') — https://github.com/gazebosim/ros_gz/blob/humble/README.md (GZ-V45)"
-  - "humble: Fortress EOL May 2027 (same as Humble); Harmonic May 2029; Jetty May 2031 — https://gazebosim.org/docs/latest/releases/"
-  - "lyrical: official pairing Jetty, ros_gz branch lyrical — https://github.com/gazebosim/ros_gz/blob/lyrical/README.md (GZ-V44)"
-  - "jazzy: systems DiffDrive, MecanumDrive, JointPositionController, JointTrajectoryController, JointStatePublisher — https://github.com/gazebosim/gz-sim/tree/gz-sim8/src/systems (GZ-V22)"
+  - "humble/fortress: official pairing Fortress (binaries on packages.ros.org, ros-humble-ros-gz); Harmonic only from packages.osrfoundation.org (ros-humble-ros-gzharmonic, 'use with caution') — https://github.com/gazebosim/ros_gz/blob/humble/README.md (GZ-V45)"
+  - "humble/fortress: Fortress EOL May 2027 (same as Humble); Harmonic May 2029; Jetty May 2031 — https://gazebosim.org/docs/latest/releases/"
+  - "lyrical/jetty: official pairing Jetty, ros_gz branch lyrical — https://github.com/gazebosim/ros_gz/blob/lyrical/README.md (GZ-V44)"
+  - "jazzy/harmonic: systems DiffDrive, MecanumDrive, JointPositionController, JointTrajectoryController, JointStatePublisher — https://github.com/gazebosim/gz-sim/tree/gz-sim8/src/systems (GZ-V22)"
 ---
 # Gazebo Sim with ROS 2: packages, what a robot needs, plugin vs ros2_control approaches
 
@@ -31,7 +31,7 @@ version_notes:
 sudo apt install ros-jazzy-ros-gz            # ros_gz_sim, ros_gz_bridge, … + Harmonic
 sudo apt install ros-jazzy-gz-ros2-control   # only for the ros2_control approach
 ```
-[Humble] `sudo apt install ros-humble-ros-gz` installs Fortress, the official pairing; the same packages and launch files exist (ros_gz `humble` branch). Names, versions and where to read the Humble/Fortress docs: [[gazebo-migration-fortress]]. Versions per distro and Classic vs Sim: [[core-gazebo-bridge]].
+[Humble + Fortress] `sudo apt install ros-humble-ros-gz` installs Fortress, the official pairing; the same packages and launch files exist (ros_gz `humble` branch). Names, versions and where to read the Humble/Fortress docs: [[gazebo-migration-fortress]]. Gazebo version per ROS 2 distro: [[core-gazebo-bridge]].
 
 ## What the robot model needs
 | For | Add to the URDF | Note |

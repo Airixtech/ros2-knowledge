@@ -2,8 +2,8 @@
 id: gazebo-joint-state-diffdrive
 type: reference
 owner: equipo-ros2
-updated: 2026-10-20
-review_by: 2027-04-18
+updated: 2026-10-21
+review_by: 2027-04-19
 source: manual
 confidentiality: internal
 title: "JointStatePublisher and DiffDrive systems: elements, odom and TF output"
@@ -17,11 +17,11 @@ tags: [JointStatePublisher, gz-sim-joint-state-publisher-system, DiffDrive, gz-s
 see: ["[[gazebo-ros-gz-bridge]]", "[[gazebo-sim-overview]]", "[[urdf-joint-state-publisher]]", "[[core-tf-basics]]", "[[gazebo-multi-robot]]"]
 requires: [ros2-core, ros2-urdf]
 version_notes:
-  - "jazzy: DiffDrive reads no publish_odom, publish_odom_tf or publish_wheel_tf (Gazebo Classic options); it always publishes odometry and the odom→child transform; wheel TFs come from JointStatePublisher + robot_state_publisher (same in Fortress and Jetty) — https://github.com/gazebosim/gz-sim/blob/gz-sim8/src/systems/diff_drive/DiffDrive.cc (GZ-V03)"
-  - "jazzy: the joint_state_publisher ROS node does not read simulated joints (GZ-V04)"
-  - "jazzy: JointStatePublisher elements topic, update_rate, joint_name (GZ-V23)"
-  - "jazzy: JointStatePublisher works only as a model plugin, not in <world> — https://github.com/gazebosim/gz-sim/blob/gz-sim8/src/systems/joint_state_publisher/JointStatePublisher.cc (GZ-V57)"
-  - "humble: same file names and gz::sim::systems names work with current Fortress — https://github.com/gazebosim/gz-sim/blob/ign-gazebo6/src/SystemLoader.cc (GZ-V12)"
+  - "jazzy/harmonic: DiffDrive reads no publish_odom, publish_odom_tf or publish_wheel_tf (not gz-sim DiffDrive elements); it always publishes odometry and the odom→child transform; wheel TFs come from JointStatePublisher + robot_state_publisher (same in Fortress and Jetty) — https://github.com/gazebosim/gz-sim/blob/gz-sim8/src/systems/diff_drive/DiffDrive.cc (GZ-V03)"
+  - "jazzy/harmonic: the joint_state_publisher ROS node does not read simulated joints (GZ-V04)"
+  - "jazzy/harmonic: JointStatePublisher elements topic, update_rate, joint_name (GZ-V23)"
+  - "jazzy/harmonic: JointStatePublisher works only as a model plugin, not in <world> — https://github.com/gazebosim/gz-sim/blob/gz-sim8/src/systems/joint_state_publisher/JointStatePublisher.cc (GZ-V57)"
+  - "humble/fortress: same file names and gz::sim::systems names work with current Fortress — https://github.com/gazebosim/gz-sim/blob/ign-gazebo6/src/SystemLoader.cc (GZ-V12)"
 ---
 # JointStatePublisher and DiffDrive systems: elements, odom and TF output
 
@@ -61,7 +61,7 @@ version_notes:
   </plugin>
 </gazebo>
 ```
-The course block also has `<publish_odom>`, `<publish_odom_tf>` and `<publish_wheel_tf>`: options of the Gazebo Classic plugin, ignored here and left out.
+The course block also has `<publish_odom>`, `<publish_odom_tf>` and `<publish_wheel_tf>`: not elements of this system, so it ignores them; they are left out.
 
 ## JointStatePublisher
 | Element | Meaning |

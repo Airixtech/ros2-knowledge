@@ -2,8 +2,8 @@
 id: gazebo-sensors-camera
 type: reference
 owner: equipo-ros2
-updated: 2026-10-20
-review_by: 2027-04-18
+updated: 2026-10-21
+review_by: 2027-04-19
 source: manual
 confidentiality: internal
 title: "Camera sensor: image and camera_info topics, FOV, clip, distortion, bridge"
@@ -17,8 +17,8 @@ tags: [camera, camera_info, camera_info_topic, horizontal_fov, image, clip, dist
 see: ["[[gazebo-sensors-lidar]]", "[[gazebo-sensors-depth-wideangle]]", "[[gazebo-ros-gz-bridge]]", "[[core-perception-basics]]"]
 requires: [ros2-core, ros2-urdf]
 version_notes:
-  - "jazzy: the image is published on <topic>, camera_info on the parent of <topic> + /camera_info (robot1/camera1 → /robot1/camera_info) — https://github.com/gazebosim/gz-sensors/blob/gz-sensors8/src/CameraSensor.cc (GZ-V05)"
-  - "humble: Fortress uses the same topic rule — https://github.com/gazebosim/gz-sensors/blob/ign-sensors6/src/CameraSensor.cc (GZ-V05)"
+  - "jazzy/harmonic: the image is published on <topic>, camera_info on the parent of <topic> + /camera_info (robot1/camera1 → /robot1/camera_info) — https://github.com/gazebosim/gz-sensors/blob/gz-sensors8/src/CameraSensor.cc (GZ-V05)"
+  - "humble/fortress: Fortress uses the same topic rule — https://github.com/gazebosim/gz-sensors/blob/ign-sensors6/src/CameraSensor.cc (GZ-V05)"
 ---
 # Camera sensor: image and camera_info topics, FOV, clip, distortion, bridge
 

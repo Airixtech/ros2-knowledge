@@ -2,8 +2,8 @@
 id: gazebo-multi-robot
 type: reference
 owner: equipo-ros2
-updated: 2026-10-20
-review_by: 2027-04-18
+updated: 2026-10-21
+review_by: 2027-04-19
 source: manual
 confidentiality: internal
 title: "Several robots in one world: per-robot spawn, plugin topics/frames via xacro, bridge"
@@ -17,9 +17,9 @@ tags: [multi-robot, namespace, frame_prefix, robot_name, xacro arg, ros_gz_sim c
 see: ["[[core-multi-robot-namespacing]]", "[[gazebo-joint-state-diffdrive]]", "[[gazebo-ros-gz-bridge]]", "[[gazebo-spawn-urdf]]", "[[urdf-xacro-macros]]", "[[gazebo-learn-unit7-xacro]]"]
 requires: [ros2-core, ros2-urdf]
 version_notes:
-  - "jazzy: two create nodes named my_robot_spawn in the same namespace are duplicate node names; give each its own name (GZ-V42)"
-  - "humble: $(arg robot_name) without <xacro:arg> fails when the arg is not passed (URDF-V11)"
-  - "jazzy: per-robot topics and frames through a xacro parameter, RSP frame_prefix, one bridge (GZ-V43) — https://github.com/ros/robot_state_publisher/blob/jazzy/src/robot_state_publisher.cpp"
+  - "jazzy/harmonic: two create nodes named my_robot_spawn in the same namespace are duplicate node names; give each its own name (GZ-V42)"
+  - "humble/fortress: $(arg robot_name) without <xacro:arg> fails when the arg is not passed (URDF-V11)"
+  - "jazzy/harmonic: per-robot topics and frames through a xacro parameter, RSP frame_prefix, one bridge (GZ-V43) — https://github.com/ros/robot_state_publisher/blob/jazzy/src/robot_state_publisher.cpp"
 ---
 # Several robots in one world: per-robot spawn, plugin topics/frames via xacro, bridge
 

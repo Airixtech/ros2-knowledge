@@ -2,8 +2,8 @@
 id: gazebo-learn-unit5-moving
 type: reference
 owner: equipo-ros2
-updated: 2026-10-20
-review_by: 2027-04-18
+updated: 2026-10-21
+review_by: 2027-04-19
 source: manual
 confidentiality: internal
 title: "Unit 5: plugins, laser prismatic + rotating model, launch chain, final URDF"
@@ -17,8 +17,8 @@ tags: [course, unit 5, box_bot_physcal_control.urdf, box_bot_control_complete.ur
 see: ["[[gazebo-learn-start-here]]", "[[gazebo-learn-unit4-sim]]", "[[gazebo-joint-state-diffdrive]]", "[[gazebo-ros-gz-bridge]]", "[[gazebo-ros2-control-urdf]]", "[[gazebo-ros2-control-controllers]]", "[[gazebo-jtc-action-client]]", "[[gazebo-velocity-control]]"]
 requires: [ros2-core, ros2-urdf]
 version_notes:
-  - "jazzy: DiffDrive publish_odom/publish_odom_tf/publish_wheel_tf are ignored (GZ-V03); controller YAML keys interface_name, command_interfaces under the velocity controller are ignored (GZ-V06, GZ-V07)"
-  - "humble: with gz_ros2_control on Humble add <robot_param_node>robot_state_publisher_node</robot_param_node> (GZ-V29)"
+  - "jazzy/harmonic: DiffDrive publish_odom/publish_odom_tf/publish_wheel_tf are ignored (GZ-V03); controller YAML keys interface_name, command_interfaces under the velocity controller are ignored (GZ-V06, GZ-V07)"
+  - "humble/fortress: with gz_ros2_control on Humble add <robot_param_node>robot_state_publisher_node</robot_param_node> (GZ-V29)"
 ---
 # Unit 5: plugins, laser prismatic + rotating model, launch chain, final URDF
 

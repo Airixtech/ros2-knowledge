@@ -2,8 +2,8 @@
 id: gazebo-velocity-control
 type: reference
 owner: equipo-ros2
-updated: 2026-10-20
-review_by: 2027-04-18
+updated: 2026-10-21
+review_by: 2027-04-19
 source: manual
 confidentiality: internal
 title: "Velocity commands on /<controller>/commands; a visual-only rotating link"
@@ -17,9 +17,9 @@ tags: [JointGroupVelocityController, velocity_controller, commands, Float64Multi
 see: ["[[gazebo-ros2-control-controllers]]", "[[gazebo-ros2-control-urdf]]", "[[gazebo-sensors-lidar]]", "[[core-topic-cli]]"]
 requires: [ros2-core, ros2-urdf]
 version_notes:
-  - "jazzy: GazeboSimSystem knows only the interface names position, velocity, effort (GZ-V50) — https://github.com/ros-controls/gz_ros2_control/blob/jazzy/gz_ros2_control/src/gz_system.cpp"
-  - "jazzy: the controller does not clamp; whether Gazebo applies the URDF velocity limit to 20 rad/s commands [verify] (GZ-V34)"
-  - "jazzy: the course reuses the large box's inertia for the smaller box and the cylinder (GZ-V52)"
+  - "jazzy/harmonic: GazeboSimSystem knows only the interface names position, velocity, effort (GZ-V50) — https://github.com/ros-controls/gz_ros2_control/blob/jazzy/gz_ros2_control/src/gz_system.cpp"
+  - "jazzy/harmonic: the controller does not clamp; whether Gazebo applies the URDF velocity limit to 20 rad/s commands [verify] (GZ-V34)"
+  - "jazzy/harmonic: the course reuses the large box's inertia for the smaller box and the cylinder (GZ-V52)"
 ---
 # Velocity commands on /<controller>/commands; a visual-only rotating link
 

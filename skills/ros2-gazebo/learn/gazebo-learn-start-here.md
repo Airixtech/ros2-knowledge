@@ -2,8 +2,8 @@
 id: gazebo-learn-start-here
 type: reference
 owner: equipo-ros2
-updated: 2026-10-20
-review_by: 2027-04-18
+updated: 2026-10-21
+review_by: 2027-04-19
 source: manual
 confidentiality: internal
 title: "Course map: all units, packages, reading order (units 2, 3, 8 in ros2-urdf)"
@@ -18,7 +18,7 @@ tags: [course, urdf course, box_bot, my_box_bot_description, my_box_bot_gazebo, 
 see: ["[[urdf-learn-start-here]]", "[[gazebo-learn-unit4-sim]]", "[[gazebo-learn-unit5-moving]]", "[[gazebo-learn-unit6-sensors]]", "[[gazebo-learn-unit7-xacro]]", "[[gazebo-migration-fortress]]"]
 requires: [ros2-core, ros2-urdf]
 version_notes:
-  - "jazzy: the course targets Jazzy + Gazebo Harmonic; on Humble use Fortress and the table of gazebo-migration-fortress (GZ-V45)"
+  - "jazzy/harmonic: the course targets Jazzy + Gazebo Harmonic; on Humble use Fortress and the table of gazebo-migration-fortress (GZ-V45)"
 ---
 # Course map: all units, packages, reading order (units 2, 3, 8 in ros2-urdf)
 

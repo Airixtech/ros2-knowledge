@@ -2,8 +2,8 @@
 id: gazebo-sensors-imu
 type: reference
 owner: equipo-ros2
-updated: 2026-10-20
-review_by: 2027-04-18
+updated: 2026-10-21
+review_by: 2027-04-19
 source: manual
 confidentiality: internal
 title: "IMU sensor with Gaussian noise and the Imu system; NavSat GPS"
@@ -17,9 +17,9 @@ tags: [imu, gz-sim-imu-system, noise, gaussian, stddev, angular_velocity, linear
 see: ["[[gazebo-sensors-camera]]", "[[gazebo-sensors-lidar]]", "[[gazebo-ros-gz-bridge]]", "[[urdf-xacro-macros]]", "[[core-perception-basics]]"]
 requires: [ros2-core, ros2-urdf]
 version_notes:
-  - "jazzy: IMU needs the Imu system, GPS the NavSat system; bridge sensor_msgs/msg/Imu ↔ gz.msgs.IMU, sensor_msgs/msg/NavSatFix ↔ gz.msgs.NavSat — https://github.com/gazebosim/ros_gz/blob/jazzy/ros_gz_bridge/README.md (GZ-V41, GZ-V56)"
-  - "jazzy: NavSat warns 'Spherical coordinates not set.' and publishes nothing without <spherical_coordinates> — https://github.com/gazebosim/gz-sim/blob/gz-sim8/src/systems/navsat/NavSat.cc (GZ-V41)"
-  - "humble: the NavSat gz::sim alias needs Fortress ≥ 6.18.0 [verify installed version] — https://github.com/gazebosim/gz-sim/pull/3369 (GZ-V12)"
+  - "jazzy/harmonic: IMU needs the Imu system, GPS the NavSat system; bridge sensor_msgs/msg/Imu ↔ gz.msgs.IMU, sensor_msgs/msg/NavSatFix ↔ gz.msgs.NavSat — https://github.com/gazebosim/ros_gz/blob/jazzy/ros_gz_bridge/README.md (GZ-V41, GZ-V56)"
+  - "jazzy/harmonic: NavSat warns 'Spherical coordinates not set.' and publishes nothing without <spherical_coordinates> — https://github.com/gazebosim/gz-sim/blob/gz-sim8/src/systems/navsat/NavSat.cc (GZ-V41)"
+  - "humble/fortress: the NavSat gz::sim alias needs Fortress ≥ 6.18.0 [verify installed version] — https://github.com/gazebosim/gz-sim/pull/3369 (GZ-V12)"
 ---
 # IMU sensor with Gaussian noise and the Imu system; NavSat GPS
 

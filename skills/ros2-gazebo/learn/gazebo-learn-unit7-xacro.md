@@ -2,8 +2,8 @@
 id: gazebo-learn-unit7-xacro
 type: reference
 owner: equipo-ros2
-updated: 2026-10-20
-review_by: 2027-04-18
+updated: 2026-10-21
+review_by: 2027-04-19
 source: manual
 confidentiality: internal
 title: "Unit 7: box_bot.xacro step by step, gazebo macro file, two robots"
@@ -17,9 +17,9 @@ tags: [course, unit 7, xacro, box_bot.xacro, box_bot.gazebo.xacro, box_bot_xacro
 see: ["[[gazebo-learn-start-here]]", "[[urdf-xacro-workflow]]", "[[urdf-xacro-macros]]", "[[gazebo-multi-robot]]", "[[gazebo-urdf-sim-tags]]", "[[gazebo-joint-state-diffdrive]]"]
 requires: [ros2-core, ros2-urdf]
 version_notes:
-  - "humble: the macro call must match params (the course's first wheel example fails); args are read with $(arg) (URDF-V09, URDF-V10)"
-  - "jazzy: the prose names the Classic spawner spawn_entity.py; the code uses ros_gz_sim create (GZ-V09)"
-  - "humble: the stray word 'Exercise' inside the course's box_bot.xacro is an export artefact (URDF-V44)"
+  - "humble/fortress: the macro call must match params (the course's first wheel example fails); args are read with $(arg) (URDF-V09, URDF-V10)"
+  - "jazzy/harmonic: the prose names spawn_entity.py, which is not a ros_gz tool; the code uses ros_gz_sim create (GZ-V09)"
+  - "humble/fortress: the stray word 'Exercise' inside the course's box_bot.xacro is an export artefact (URDF-V44)"
 ---
 # Unit 7: box_bot.xacro step by step, gazebo macro file, two robots
 

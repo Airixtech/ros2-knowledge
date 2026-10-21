@@ -2,8 +2,8 @@
 id: gazebo-world-sdf
 type: reference
 owner: equipo-ros2
-updated: 2026-10-20
-review_by: 2027-04-18
+updated: 2026-10-21
+review_by: 2027-04-19
 source: manual
 confidentiality: internal
 title: "SDF world file: physics, world systems, light, ground, model:// includes"
@@ -17,9 +17,9 @@ tags: [sdf, world, .world, .sdf, light, ground_plane, include, model://, pose, s
 see: ["[[gazebo-start-sim]]", "[[gazebo-resource-paths]]", "[[gazebo-spawn-urdf]]", "[[gazebo-sensors-lidar]]"]
 requires: [ros2-core, ros2-urdf]
 version_notes:
-  - "jazzy: a world without <plugin> elements loads the defaults of server.config (Physics, UserCommands, SceneBroadcaster); same in Jetty — https://github.com/gazebosim/gz-sim/blob/gz-sim8/include/gz/sim/server.config (GZ-V13)"
-  - "jazzy: the official template lists the world systems explicitly, Sensors included — https://github.com/gazebosim/ros_gz_project_template (GZ-V13, GZ-V35)"
-  - "humble: Fortress loads the same plugin file names (the gz-sim prefix is translated) — https://github.com/gazebosim/gz-sim/blob/ign-gazebo6/src/SystemLoader.cc (GZ-V12)"
+  - "jazzy/harmonic: a world without <plugin> elements loads the defaults of server.config (Physics, UserCommands, SceneBroadcaster); same in Jetty — https://github.com/gazebosim/gz-sim/blob/gz-sim8/include/gz/sim/server.config (GZ-V13)"
+  - "jazzy/harmonic: the official template lists the world systems explicitly, Sensors included — https://github.com/gazebosim/ros_gz_project_template (GZ-V13, GZ-V35)"
+  - "humble/fortress: Fortress loads the same plugin file names (the gz-sim prefix is translated) — https://github.com/gazebosim/gz-sim/blob/ign-gazebo6/src/SystemLoader.cc (GZ-V12)"
 ---
 # SDF world file: physics, world systems, light, ground, model:// includes
 

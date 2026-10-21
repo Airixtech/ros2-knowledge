@@ -2,8 +2,8 @@
 id: gazebo-jtc-action-client
 type: reference
 owner: equipo-ros2
-updated: 2026-10-20
-review_by: 2027-04-18
+updated: 2026-10-21
+review_by: 2027-04-19
 source: manual
 confidentiality: internal
 title: "Move a joint with a FollowJointTrajectory action client (Python)"
@@ -17,8 +17,8 @@ tags: [FollowJointTrajectory, control_msgs, ActionClient, joint_trajectory_contr
 see: ["[[gazebo-ros2-control-controllers]]", "[[gazebo-ros2-control-urdf]]", "[[core-action-client]]", "[[core-pkg-ament-cmake]]"]
 requires: [ros2-core, ros2-urdf]
 version_notes:
-  - "jazzy: same structure as the official action client tutorial (rclpy.shutdown() in the result callback, rclpy.spin in main) — https://docs.ros.org/en/jazzy/Tutorials/Intermediate/Writing-an-Action-Server-Client/Py.html (GZ-V33)"
-  - "jazzy: a rejected goal returns without shutdown, so the script keeps spinning (GZ-V51)"
+  - "jazzy/harmonic: same structure as the official action client tutorial (rclpy.shutdown() in the result callback, rclpy.spin in main) — https://docs.ros.org/en/jazzy/Tutorials/Intermediate/Writing-an-Action-Server-Client/Py.html (GZ-V33)"
+  - "jazzy/harmonic: a rejected goal returns without shutdown, so the script keeps spinning (GZ-V51)"
 ---
 # Move a joint with a FollowJointTrajectory action client (Python)
 

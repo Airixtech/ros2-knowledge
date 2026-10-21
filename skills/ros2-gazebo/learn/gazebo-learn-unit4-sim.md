@@ -2,8 +2,8 @@
 id: gazebo-learn-unit4-sim
 type: reference
 owner: equipo-ros2
-updated: 2026-10-20
-review_by: 2027-04-18
+updated: 2026-10-21
+review_by: 2027-04-19
 source: manual
 confidentiality: internal
 title: "Unit 4: box_bot_gazebo package, world, complete physical box_bot, spawn"
@@ -17,9 +17,9 @@ tags: [course, unit 4, my_box_bot_gazebo, box_bot_empty.world, box_bot_meshes_co
 see: ["[[gazebo-learn-start-here]]", "[[urdf-learn-unit3-box-bot]]", "[[gazebo-start-sim]]", "[[gazebo-world-sdf]]", "[[gazebo-spawn-urdf]]", "[[gazebo-urdf-sim-tags]]", "[[urdf-inertia]]"]
 requires: [ros2-core, ros2-urdf]
 version_notes:
-  - "humble: box izz = m(x²+y²)/12; the course's formula printed x²+z² (its values are right) (URDF-V01)"
-  - "humble: right_wheel uses material green, which the file never defines (URDF-V07)"
-  - "jazzy: mu/mu2 are two friction directions, kp stiffness, kd damping (GZ-V01, GZ-V02)"
+  - "humble/fortress: box izz = m(x²+y²)/12; the course's formula printed x²+z² (its values are right) (URDF-V01)"
+  - "humble/fortress: right_wheel uses material green, which the file never defines (URDF-V07)"
+  - "jazzy/harmonic: mu/mu2 are two friction directions, kp stiffness, kd damping (GZ-V01, GZ-V02)"
 ---
 # Unit 4: box_bot_gazebo package, world, complete physical box_bot, spawn
 
