@@ -49,6 +49,8 @@
 | GZ-V09 | 7.4, 7.9 | Gazebo Classic name | "`spawn_entity.py` can use this information to create a robot model instance in Gazebo"; "two calls to the `spawn_entity.py` script" | `spawn_entity.py` is the spawner of Gazebo Classic. With Gazebo Sim the course's own code uses `ros2 run ros_gz_sim create` (`-topic`, `-file`, `-string` or `-param`), same flags in Humble, Jazzy and Lyrical. Code: [create.cpp][create-j]. |
 | GZ-V50 | 5.8 | course mistake | "the interface's name is velocity, but the name could be anything here. Be sure to name it the same way in the YAML file" | GazeboSimSystem exports only interfaces named `position`, `velocity` and `effort`; any other name gives the controller nothing to claim. Code: [gz_system.cpp][gzr2c-sys-j]. |
 | GZ-V53 | 5.6 | course contradiction | "For collision, add a cylinder shape that fits best the 3D mesh" | The file (and its inertia values) uses a box `0.074986 0.074935 0.0408` for `laser_scan_link`; the cylinder (`radius 0.037493`) appears only in the explanation snippet and later on `laser_scan_model_link`. The notes follow the file. |
+| GZ-V54 | 6.2 | course mistake | "If your physical mount can move the LiDAR up/down but not rotate (a prismatic joint along Z), that constraint should be defined in … (`laser_scan_frame_joint`) connecting `laser_scan_frame` to `laser_scan_link`" | `laser_scan_frame_joint` is fixed; the prismatic joint is `laser_scan_link_joint` (chassis → laser_scan_link), as in the course's own file. |
+| GZ-V56 | 6.5 | course claim | "The IMU sensor … will publish data to the specified ROS topics" | It publishes on the Gazebo topic `imu`; ROS nodes see it only after bridging `sensor_msgs/msg/Imu` ↔ `gz.msgs.IMU`. Source: [bridge README][bridge-j]. |
 
 ## Full table
 | # | Section | Statement | Humble (Fortress) | Jazzy (Harmonic) | Lyrical (Jetty) | Action | Source | Confidence |
@@ -106,6 +108,9 @@
 | GZ-V51 | 5.7 | Action client: rejected goal | the script returns without `rclpy.shutdown()` and keeps spinning (same in the official tutorial client); JTC rejects joints it does not handle ("Incoming joint … doesn't match the controller's joints.") | same | same | annotate | [docs-action-j], [jtc-j] | High |
 | GZ-V52 | 5.8 | Inertia of `laser_scan_link` (0.02 m box) and `laser_scan_model_link` (cylinder) | both reuse the values of the 0.075 m box of 5.6: recompute for each shape | same | same | annotate | — | High |
 | GZ-V53 | 5.6 | Laser collision "cylinder" vs the box in the file | ✗ the file uses a box | ✗ same | ✗ same | **fix** | — | High |
+| GZ-V54 | 6.2 | Prismatic constraint on `laser_scan_frame_joint` | ✗ that joint is fixed | ✗ | ✗ | **fix** | — | High |
+| GZ-V55 | 6.2 | `<resolution>` "can densify beams"; `<ray>` element | resolution multiplies samples and interpolates the data (no extra real beams); gpu_lidar reads `<lidar>` or, if absent, `<ray>` | same | same | annotate | [lidar-sdf-14], [sensor-sdf-14] | High |
+| GZ-V56 | 6.5 | IMU "publishes to ROS topics" | ✗ Gazebo topic, bridge needed | ✗ | ✗ | **fix** | [bridge-j] | High |
 
 ## Open `[verify]` (Phase 5 or a real machine)
 - GZ-V12: installed Fortress version on the Humble machine (`ign gazebo --versions`) for the `gz-sim` names and the NavSat alias.
@@ -143,6 +148,8 @@
 [migration-10]: https://github.com/gazebosim/gz-sim/blob/gz-sim10/Migration.md
 [surface-sdf]: https://github.com/gazebosim/sdformat/blob/sdf14/sdf/1.11/surface.sdf
 [parser-urdf-14]: https://github.com/gazebosim/sdformat/blob/sdf14/src/parser_urdf.cc
+[lidar-sdf-14]: https://github.com/gazebosim/sdformat/blob/sdf14/sdf/1.11/lidar.sdf
+[sensor-sdf-14]: https://github.com/gazebosim/sdformat/blob/sdf14/src/Sensor.cc
 [sensor-8]: https://github.com/gazebosim/gz-sensors/blob/gz-sensors8/src/Sensor.cc
 [sensor-6]: https://github.com/gazebosim/gz-sensors/blob/ign-sensors6/src/Sensor.cc
 [camera-8]: https://github.com/gazebosim/gz-sensors/blob/gz-sensors8/src/CameraSensor.cc
