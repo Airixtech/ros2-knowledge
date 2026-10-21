@@ -2,8 +2,8 @@
 id: urdf-xacro-workflow
 type: reference
 owner: equipo-ros2
-updated: 2026-10-20
-review_by: 2027-04-18
+updated: 2026-10-21
+review_by: 2027-04-19
 source: manual
 confidentiality: internal
 title: "Xacro files: header, properties and math, xacro CLI, processing in launch"
@@ -32,6 +32,8 @@ version_notes:
   <xacro:property name="body_width" value="0.1"/>
   <xacro:property name="body_lenght" value="0.1"/>   <!-- spelled like this in the course files -->
   <xacro:property name="body_height" value="0.1"/>
+  <xacro:property name="wheel_width" value="0.001"/>   <!-- used by the wheel macro -->
+  <xacro:property name="wheel_radius" value="0.035"/>
 
   <link name="base_link"></link>
   <joint name="base_link_joint" type="fixed">

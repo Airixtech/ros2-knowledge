@@ -2,8 +2,8 @@
 id: urdf-xacro-macros
 type: reference
 owner: equipo-ros2
-updated: 2026-10-20
-review_by: 2027-04-18
+updated: 2026-10-21
+review_by: 2027-04-19
 source: manual
 confidentiality: internal
 title: "Xacro macros with params and defaults, if/unless, include and file splitting"
@@ -52,7 +52,7 @@ version_notes:
 <!-- Wheel Right -->
 <xacro:wheel wheel_name="right_wheel"/>
 ```
-- Unique `name`; no parameters → `<xacro:caster_wheel/>`. Parameters are space-separated (`params="name y mass"`), defaults `name:=value`. Properties used inside (`wheel_width`, `wheel_radius`) come from the enclosing file; inertia macros: [[urdf-inertia]].
+- Unique `name`; no parameters → `<xacro:caster_wheel/>`. Parameters are space-separated (`params="name y mass"`), defaults `name:=value`. Properties used inside (`wheel_width`, `wheel_radius`) come from the enclosing file ([[urdf-xacro-workflow]]); inertia macros: [[urdf-inertia]].
 - Call with exactly the `params` names. The course's first example (`wheel_link_name=` for `params="wheel_name"`, undefined `${wheel_length}`) stops xacro with `Invalid parameter`, `Undefined parameters [wheel_name]` and `name 'wheel_length' is not defined`; the macro above is its exercise solution.
 
 ## Conditions

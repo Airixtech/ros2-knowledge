@@ -114,6 +114,7 @@
 | GZ-V55 | 6.2 | `<resolution>` "can densify beams"; `<ray>` element | resolution multiplies samples and interpolates the data (no extra real beams); gpu_lidar reads `<lidar>` or, if absent, `<ray>` | same | same | annotate | [lidar-sdf-14], [sensor-sdf-14] | High |
 | GZ-V56 | 6.5 | IMU "publishes to ROS topics" | ✗ Gazebo topic, bridge needed | ✗ | ✗ | **fix** | [bridge-j] | High |
 | GZ-V57 | 5.3 | JointStatePublisher "inside your model or <world>" | ✗ model only | ✗ | ✗ | **fix** | [jsp-sys-8] | High |
+| GZ-V58 | 5.6–7.9 | `<axis xyz="0 0 0"/>` in the fixed `laser_scan_frame_joint` | ignored: urdfdom reads `<axis>` only for non-fixed, non-floating joints; left out of the notes | same | same | **fix** | [urdfdom-joint-h], [urdfdom-joint-j] | High |
 
 ## Open `[verify]` (Phase 5 or a real machine)
 - GZ-V12: installed Fortress version on the Humble machine (`ign gazebo --versions`) for the `gz-sim` names and the NavSat alias.
@@ -140,6 +141,8 @@
 [diffdrive-8]: https://github.com/gazebosim/gz-sim/blob/gz-sim8/src/systems/diff_drive/DiffDrive.cc
 [diffdrive-6]: https://github.com/gazebosim/gz-sim/blob/ign-gazebo6/src/systems/diff_drive/DiffDrive.cc
 [jsp-sys-8]: https://github.com/gazebosim/gz-sim/blob/gz-sim8/src/systems/joint_state_publisher/JointStatePublisher.cc
+[urdfdom-joint-h]: https://github.com/ros/urdfdom/blob/humble/urdf_parser/src/joint.cpp
+[urdfdom-joint-j]: https://github.com/ros/urdfdom/blob/jazzy/urdf_parser/src/joint.cpp
 [sensors-8]: https://github.com/gazebosim/gz-sim/blob/gz-sim8/src/systems/sensors/Sensors.cc
 [gz-systems-8]: https://github.com/gazebosim/gz-sim/tree/gz-sim8/src/systems
 [server-config-8]: https://github.com/gazebosim/gz-sim/blob/gz-sim8/include/gz/sim/server.config

@@ -371,4 +371,4 @@ Notes: 325 · skills: 6 · linked pairs: 1762
 | [[urdf-onshape-export]] | 3 | 3 | [[urdf-inertia]] (body/see) · [[urdf-learn-unit8-quadruped]] (body/see) · [[urdf-migration]] (body/see) |
 | [[urdf-overview]] | 3 | 9 | [[gazebo-learn-start-here]] (body) · [[urdf-learn-start-here]] (body/see) · [[urdf-learn-unit2-urdfbot]] (body) |
 | [[urdf-xacro-macros]] | 5 | 4 | [[gazebo-learn-unit7-xacro]] (body/see) · [[gazebo-multi-robot]] (see) · [[gazebo-sensors-imu]] (body/see) · [[urdf-inertia]] (body/see) · [[urdf-xacro-workflow]] (body/see) |
-| [[urdf-xacro-workflow]] | 4 | 4 | [[gazebo-learn-unit7-xacro]] (body/see) · [[urdf-description-package]] (see) · [[urdf-overview]] (body) · [[urdf-xacro-macros]] (see) |
+| [[urdf-xacro-workflow]] | 4 | 4 | [[gazebo-learn-unit7-xacro]] (body/see) · [[urdf-description-package]] (see) · [[urdf-overview]] (body) · [[urdf-xacro-macros]] (body/see) |

@@ -19,6 +19,7 @@ requires: [ros2-core, ros2-urdf]
 version_notes:
   - "jazzy/harmonic: DiffDrive publish_odom/publish_odom_tf/publish_wheel_tf are ignored (GZ-V03); controller YAML keys interface_name, command_interfaces under the velocity controller are ignored (GZ-V06, GZ-V07)"
   - "humble/fortress: with gz_ros2_control on Humble add <robot_param_node>robot_state_publisher_node</robot_param_node> (GZ-V29)"
+  - "humble/fortress: the course's <axis xyz=\"0 0 0\"/> in the fixed laser_scan_frame_joint is ignored by urdfdom and left out (same in Jazzy) — https://github.com/ros/urdfdom/blob/humble/urdf_parser/src/joint.cpp (GZ-V58)"
 ---
 # Unit 5: plugins, laser prismatic + rotating model, launch chain, final URDF
 
