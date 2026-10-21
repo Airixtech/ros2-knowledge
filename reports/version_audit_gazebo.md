@@ -96,6 +96,10 @@
 | GZ-V43 | 7.9 | Per-robot plugin topics and frames through a xacro `robot_name` parameter; RSP `frame_prefix`; one bridge with per-robot topics | ✓ | ✓ | ✓ | keep | [diffdrive-8], [rsp-j] | High |
 | GZ-V44 | — | Harmonic → Jetty for this material | no change in the systems and elements the course uses (DiffDrive, JointStatePublisher, default systems, DART default); Ionic changed only the C++ system API (velocity commands deleted after each step) | — | ✓ | annotate | [migration-10] | High |
 | GZ-V45 | — | Humble with Harmonic | ros_gz `humble` branch against Harmonic, binaries from packages.osrfoundation.org (`ros-humble-ros-gzharmonic`), "use with caution"; do not mix with `ros-humble-ros-gz` | — | — | annotate | [rosgz-readme] | High |
+| GZ-V46 | 4.4 | (own addition, checked) A link without `<inertial>` | an urdf2sdf error ("link[…] has no <inertial> block defined") drops its joint unless its fixed parent joint is lumped; empty frame links on fixed joints are fine | same | same | annotate | [parser-urdf-14] | High |
+| GZ-V47 | 4.7, 7.8 | (own addition, checked) Colors and per-link extension tags | URDF `<material><color>` becomes the SDF visual color unless a `<gazebo reference><visual><material>` block sets it; per-link tags are `selfCollide` and `turnGravityOff` (written as `self_collide`, `gravity`) | same | same | annotate | [parser-urdf-14] | High |
+| GZ-V48 | 4.3 | (own addition, checked) When the default world systems load | only when the world has no system at all: "No systems loaded from SDF, loading defaults"; model plugins do not count | same | same | annotate | [simrunner-8] | High |
+| GZ-V49 | 4.6 | (own addition, checked) `create` start-up | asks the server for the world list ("Requesting list of world names.") until Gazebo answers, then waits for the description on a Transient Local subscription ("Waiting messages on topic [...]") | same | same | annotate | [create-j] | High |
 
 ## Open `[verify]` (Phase 5 or a real machine)
 - GZ-V12: installed Fortress version on the Humble machine (`ign gazebo --versions`) for the `gz-sim` names and the NavSat alias.
@@ -125,6 +129,7 @@
 [sensors-8]: https://github.com/gazebosim/gz-sim/blob/gz-sim8/src/systems/sensors/Sensors.cc
 [gz-systems-8]: https://github.com/gazebosim/gz-sim/tree/gz-sim8/src/systems
 [server-config-8]: https://github.com/gazebosim/gz-sim/blob/gz-sim8/include/gz/sim/server.config
+[simrunner-8]: https://github.com/gazebosim/gz-sim/blob/gz-sim8/src/SimulationRunner.cc
 [sysloader-6]: https://github.com/gazebosim/gz-sim/blob/ign-gazebo6/src/SystemLoader.cc
 [util-6]: https://github.com/gazebosim/gz-sim/blob/ign-gazebo6/include/gz/sim/Util.hh
 [gzsim6-changelog]: https://github.com/gazebosim/gz-sim/blob/ign-gazebo6/Changelog.md
