@@ -66,7 +66,7 @@ The link frame is set by its joint ([[urdf-joints]]); `visual`, `collision` and 
 
 ## Collision
 ```xml
-<collision name="chassis_collision">           <!-- name optional; some plugins need it -->
+<collision name="chassis_collision">           <!-- optional; without it the SDF converter names it <link>_collision -->
   <geometry><box size="0.1 0.1 0.1"/></geometry>  <!-- bounding box of the 1 m mesh scaled by 0.1 -->
 </collision>
 ```

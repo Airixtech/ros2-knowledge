@@ -57,7 +57,7 @@ version_notes:
 
 Neither `mu` nor `mu2` is "static" or "dynamic" friction: they are two directions. Values are tuned until the robot behaves well, rarely measured. Short form, also accepted by the converter: `<gazebo reference="left_wheel"><mu1>10.0</mu1><mu2>10.0</mu2><kp>1e7</kp><kd>1.0</kd></gazebo>`.
 
-box_bot (course): `left_wheel`, `right_wheel` mu = mu2 = 10; `front_pitch_link`, `back_pitch_link` (caster spheres) mu = mu2 = 0.5; all four kp = 1e7 and kd = 1e7. The section introducing the tags uses kd = 1.0, the course files 1e7 [verify].
+The course introduces the tags with `mu` 5.0 along `fdir1` = `1 0 0` and `mu2` 0.5 (grip forward, slide sideways), kp 1e7, kd 1.0. box_bot (course): `left_wheel`, `right_wheel` mu = mu2 = 10; `front_pitch_link`, `back_pitch_link` (caster spheres) mu = mu2 = 0.5; all four kp = 1e7 and kd = 1e7. The section introducing the tags uses kd = 1.0, the course files 1e7 [verify].
 
 ## Gazebo colors
 ```xml

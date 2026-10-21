@@ -31,7 +31,7 @@ version_notes:
 - `ros2 launch my_box_bot_gazebo start_world.launch.py` (stop it with Ctrl+C before the next run).
 
 ## 2. Collisions and inertias (exercise 4.2)
-Copy the mesh URDF to `box_bot_meshes_collisions_inertias.urdf` and give every link a `<collision>` and an `<inertial>` ([[urdf-inertia]]). The chassis collision is the bounding box of the mesh (1 m modelled × scale 0.1 = 0.1 m). One block per link type:
+Copy the mesh URDF to `box_bot_meshes_collisions_inertias.urdf` and give every link a `<collision>` and an `<inertial>` ([[urdf-inertia]]). The chassis collision is the bounding box of the mesh (read its dimensions in a 3D tool such as Blender: 1 m modelled × scale 0.1 = 0.1 m). One block per link type:
 ```xml
 <!-- chassis (add after the mesh visual) -->
 <collision><geometry><box size="0.1 0.1 0.1"/></geometry></collision>
@@ -78,4 +78,4 @@ ros2 launch my_box_bot_gazebo spawn_robot_ros2.launch.xml
 In RViz2 the links behind non-fixed joints have no TF yet: in simulation the joint states come from the simulator, added in unit 5.
 
 ## 4. Physical properties
-`box_bot_physical_properties.urdf` = the previous file plus one `<gazebo reference>` friction block per contact link ([[gazebo-urdf-sim-tags]]): `left_wheel` and `right_wheel` mu = mu2 = 10, `front_pitch_link` and `back_pitch_link` mu = mu2 = 0.5, all with kp = kd = 1e7. Wheel colors from now on: left `red`, right `yellow` (with `yellow` defined). Launch with `spawn_robot_ros2_physical.launch.xml` and `urdf_visualize_physical.launch.py`, the same two-include pattern. The robot looks the same; the friction matters once it moves.
+`box_bot_physical_properties.urdf` = the previous file plus one `<gazebo reference>` friction block per contact link ([[gazebo-urdf-sim-tags]]): `left_wheel` and `right_wheel` mu = mu2 = 10, `front_pitch_link` and `back_pitch_link` mu = mu2 = 0.5, all with kp = kd = 1e7. Wheel colors from now on: left `red`, right `yellow`, defined as `<material name="yellow"><color rgba="1.0 1.0 0.0 1"/></material>`. Launch with `spawn_robot_ros2_physical.launch.xml` and `urdf_visualize_physical.launch.py`, the same two-include pattern. The robot looks the same; the friction matters once it moves.

@@ -20,6 +20,7 @@ version_notes:
   - "jazzy: DiffDrive reads no publish_odom, publish_odom_tf or publish_wheel_tf (Gazebo Classic options); it always publishes odometry and the odom→child transform; wheel TFs come from JointStatePublisher + robot_state_publisher (same in Fortress and Jetty) — https://github.com/gazebosim/gz-sim/blob/gz-sim8/src/systems/diff_drive/DiffDrive.cc (GZ-V03)"
   - "jazzy: the joint_state_publisher ROS node does not read simulated joints (GZ-V04)"
   - "jazzy: JointStatePublisher elements topic, update_rate, joint_name (GZ-V23)"
+  - "jazzy: JointStatePublisher works only as a model plugin, not in <world> — https://github.com/gazebosim/gz-sim/blob/gz-sim8/src/systems/joint_state_publisher/JointStatePublisher.cc (GZ-V57)"
   - "humble: same file names and gz::sim::systems names work with current Fortress — https://github.com/gazebosim/gz-sim/blob/ign-gazebo6/src/SystemLoader.cc (GZ-V12)"
 ---
 # JointStatePublisher and DiffDrive systems: elements, odom and TF output
@@ -69,7 +70,7 @@ The course block also has `<publish_odom>`, `<publish_odom_tf>` and `<publish_wh
 | `<update_rate>` | Hz (30 here) |
 | `<joint_name>` | one per joint; list also passive joints (casters) so they get TF. Without any, all joints of the model are published |
 
-It does not move anything. Same role as joint_state_publisher on a desk ([[urdf-joint-state-publisher]]), but with the simulated values.
+It must be a model plugin: in the `<world>` it fails ("The JointStatePublisher system should be attached to a model entity"). It does not move anything. Same role as joint_state_publisher on a desk ([[urdf-joint-state-publisher]]), but with the simulated values.
 
 ## DiffDrive
 | Element | Meaning |

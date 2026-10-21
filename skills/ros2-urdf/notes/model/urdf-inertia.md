@@ -34,7 +34,7 @@ version_notes:
 </inertial>
 ```
 - `<origin>`: the center of mass and the orientation of the frame in which the tensor is written. A wheel cylinder rotated by `rpy="0 1.5707 1.5707"` uses the same rotation here, so `izz` stays the cylinder's own axis. A lower center of mass makes a robot more stable.
-- `ixx`, `iyy`, `izz` (kg·m²): resistance to rotation about x, y, z. `ixy`, `ixz`, `iyz`: cross terms, needed only for an exact model of real parts (a CAD export gives them, [[urdf-onshape-export]]).
+- `ixx`, `iyy`, `izz` (kg·m²): resistance to rotation about x, y, z, i.e. the torque the simulator needs for a given angular acceleration about each axis. `ixy`, `ixz`, `iyz`: cross terms, needed only for an exact model of real parts (a CAD export gives them, [[urdf-onshape-export]]).
 
 ## Formulas (solid, uniform mass)
 | Shape | `ixx` | `iyy` | `izz` |

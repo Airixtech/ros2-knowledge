@@ -51,6 +51,7 @@
 | GZ-V53 | 5.6 | course contradiction | "For collision, add a cylinder shape that fits best the 3D mesh" | The file (and its inertia values) uses a box `0.074986 0.074935 0.0408` for `laser_scan_link`; the cylinder (`radius 0.037493`) appears only in the explanation snippet and later on `laser_scan_model_link`. The notes follow the file. |
 | GZ-V54 | 6.2 | course mistake | "If your physical mount can move the LiDAR up/down but not rotate (a prismatic joint along Z), that constraint should be defined in … (`laser_scan_frame_joint`) connecting `laser_scan_frame` to `laser_scan_link`" | `laser_scan_frame_joint` is fixed; the prismatic joint is `laser_scan_link_joint` (chassis → laser_scan_link), as in the course's own file. |
 | GZ-V56 | 6.5 | course claim | "The IMU sensor … will publish data to the specified ROS topics" | It publishes on the Gazebo topic `imu`; ROS nodes see it only after bridging `sensor_msgs/msg/Imu` ↔ `gz.msgs.IMU`. Source: [bridge README][bridge-j]. |
+| GZ-V57 | 5.3 | course mistake | JointStatePublisher snippet comment "Inside your model or <world>" | It must be a model plugin; in the world it logs "The JointStatePublisher system should be attached to a model entity. Failed to initialize." Code: [JointStatePublisher.cc][jsp-sys-8]. |
 
 ## Full table
 | # | Section | Statement | Humble (Fortress) | Jazzy (Harmonic) | Lyrical (Jetty) | Action | Source | Confidence |
@@ -111,6 +112,7 @@
 | GZ-V54 | 6.2 | Prismatic constraint on `laser_scan_frame_joint` | ✗ that joint is fixed | ✗ | ✗ | **fix** | — | High |
 | GZ-V55 | 6.2 | `<resolution>` "can densify beams"; `<ray>` element | resolution multiplies samples and interpolates the data (no extra real beams); gpu_lidar reads `<lidar>` or, if absent, `<ray>` | same | same | annotate | [lidar-sdf-14], [sensor-sdf-14] | High |
 | GZ-V56 | 6.5 | IMU "publishes to ROS topics" | ✗ Gazebo topic, bridge needed | ✗ | ✗ | **fix** | [bridge-j] | High |
+| GZ-V57 | 5.3 | JointStatePublisher "inside your model or <world>" | ✗ model only | ✗ | ✗ | **fix** | [jsp-sys-8] | High |
 
 ## Open `[verify]` (Phase 5 or a real machine)
 - GZ-V12: installed Fortress version on the Humble machine (`ign gazebo --versions`) for the `gz-sim` names and the NavSat alias.

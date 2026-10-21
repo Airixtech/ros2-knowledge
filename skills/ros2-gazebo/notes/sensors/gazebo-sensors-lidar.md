@@ -24,7 +24,7 @@ version_notes:
 ---
 # Sensors system and gpu_lidar: frame id, topic, scan/range, RViz LaserScan
 
-**TL;DR** Rendering sensors (lidar, cameras) need the **Sensors** system once, with a render engine. Each sensor is a `<sensor>` inside `<gazebo reference="<link>">`; it publishes on a Gazebo topic that you bridge to ROS. A `gpu_lidar` with one horizontal row gives a `sensor_msgs/msg/LaserScan`.
+**TL;DR** Rendering sensors (lidar, cameras) need the **Sensors** system once, with a render engine. Each sensor is a `<sensor>` inside `<gazebo reference="<link>">`; it publishes on a Gazebo topic that you bridge to ROS. A `gpu_lidar` (ray casting on the GPU) with one horizontal row gives a `sensor_msgs/msg/LaserScan`.
 
 ## URDF blocks
 ```xml

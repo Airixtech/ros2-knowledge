@@ -33,13 +33,13 @@ version_notes:
      <child link="head_link"/>
    </joint>
    ```
-   Two red boxes and two frames; `ros2 run rqt_tf_tree rqt_tf_tree` shows the tree.
+   Two red boxes and two frames (the launch log prints "got segment base_link" and "got segment head_link"); `ros2 run rqt_tf_tree rqt_tf_tree` shows the tree.
 3. **Visual offset**: `<origin rpy="0 0 0" xyz="0 0 0.1"/>` inside the head's `<visual>`: the box moves, the frame does not.
 4. **Joint types** (exercise 2.7.1): make the joint `continuous` with `<axis xyz="0 0 1"/>` (then try `1 0 0`: it turns about the head's x), then `revolute` ±1.57 rad and `prismatic` ±0.1 m; the solution lines are the revolute and prismatic rows of [[urdf-joints]]. Keep the revolute version.
 5. **Materials**: `white` body, `blue` head, defined as in [[urdf-links]].
 6. **Meshes**: copy your meshes to `meshes/` and add `meshes` to the install rule. The body and head visuals become meshes, the head offset goes back to `0 0 0` (the head mesh has its own offset) and the joint moves down to `xyz="0 0 0.07"`; the materials are dropped so the meshes keep their colors.
 7. **Right arm**: `upper_arm_r_link` (joint `rpy="-1.57 0 0"`, axis z of the arm), `lower_arm_r_link` (axis x) and two claws. In RViz2 set TF Marker Scale to 0.3.
-8. **mimic**: claw B follows claw A with one slider. Try `offset="-0.8"` and `multiplier="0.1"`; remove the follower's `<limit>` and `check_urdf` fails ([[urdf-joint-extras]]).
+8. **mimic**: before it, both claws have their own slider and the same `lower="-0.7" upper="0.7"` limits. With `<mimic>` claw B follows claw A with one slider, and the course sets B's now unused limits to `0.0`. Try `offset="-0.8"` and `multiplier="0.1"`; remove the follower's `<limit>` and `check_urdf` fails ([[urdf-joint-extras]]).
 
 ## Final urdfbot_simple.urdf
 ```xml

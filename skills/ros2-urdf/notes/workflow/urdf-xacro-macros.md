@@ -68,6 +68,7 @@ version_notes:
   <gazebo><plugin filename="gz-sim-navsat-system" name="gz::sim::systems::NavSat"></plugin></gazebo>
 </xacro:unless>
 ```
+- Same pattern for parts of the robot: `<xacro:if value="$(arg include_laser)">` around the laser joint and link adds the sensor only when asked.
 - `xacro:if` keeps the block when `value` is true (or 1), `xacro:unless` when it is false. Set the arg from outside: `xacro robot.xacro indoor_robot:=false`.
 - `$(arg indoor_robot)` reads an **arg**; `${indoor_robot}` reads a **property**. The course writes `${indoor_robot}` right after declaring the arg: that fails unless a property of that name exists.
 

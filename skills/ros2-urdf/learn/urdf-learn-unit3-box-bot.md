@@ -22,7 +22,7 @@ version_notes:
 ---
 # Unit 3 micro-project: box_bot geometric and mesh versions
 
-**TL;DR** Build `box_bot`: a 0.1 m cube on an empty `base_link`, two motor wheels on continuous joints, and two caster wheels made of three continuous joints each (yaw → roll → pitch), because URDF has no spherical joint. Then replace the cube's visual with a mesh. This file is the base of units 4–7.
+**TL;DR** Build `box_bot`: a 0.1 m cube on an empty `base_link`, two motor wheels on continuous joints, and two free caster wheels that keep the body off the ground, each made of three continuous joints (yaw → roll → pitch), because URDF has no spherical joint (SDF has one). Wheels and casters must turn more than 360°, hence continuous joints. Then replace the cube's visual with a mesh. This file is the base of units 4–7.
 
 ## Files
 Package `my_box_bot_description` (ament_cmake, `urdf` + `xacro`, folders `launch rviz urdf meshes`, install rule with `meshes`; [[urdf-description-package]]). Copy `urdf_vis.rviz` from unit 2. Launch files `urdf_visualize_geometric.launch.py` and `urdf_visualize_meshes.launch.py` are the RViz launch file of [[urdf-description-package]] with `urdf_file = 'box_bot_geometric.urdf'` / `'box_bot_geometric_meshes.urdf'` and `package_description = "my_box_bot_description"`.
