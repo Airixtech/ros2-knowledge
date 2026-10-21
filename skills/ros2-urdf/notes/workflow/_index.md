@@ -7,5 +7,6 @@
 |---|---|---|
 | [[urdf-description-package]] | Create <robot>_description (ament_cmake, urdf + xacro deps), install urdf/meshes/rviz/launch, launch robot_state_publisher with xacro Command and RViz2 -d config. | notes/workflow/urdf-description-package.md |
 | [[urdf-joint-state-publisher]] | robot_state_publisher vs joint_state_publisher; joint_state_publisher_gui sliders, /joint_states, parameters rate/source_list/zeros/use_mimic_tags, who else publishes joint states. | notes/workflow/urdf-joint-state-publisher.md |
+| [[urdf-onshape-export]] | Export an Onshape assembly to URDF with onshape-to-robot: pipx/venv install, ONSHAPE_* API keys, config.json url/output_format/package_name, mesh paths, inertia. | notes/workflow/urdf-onshape-export.md |
 | [[urdf-xacro-macros]] | xacro:macro with params and name:=default, calls with matching attributes, xacro:if/unless, $(arg) vs ${property}, xacro:include and sim-only files, macros plus conditions. | notes/workflow/urdf-xacro-macros.md |
 | [[urdf-xacro-workflow]] | Xacro header, extensions, properties defined before use, ${} math, xacro CLI and banner, launch: Command with args vs Python API. | notes/workflow/urdf-xacro-workflow.md |

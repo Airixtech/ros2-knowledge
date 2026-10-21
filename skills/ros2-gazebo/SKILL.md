@@ -15,5 +15,6 @@ Full text in Phase 4.
 | plugins | 3 | `notes/plugins/_index.md` | Gazebo systems JointStatePublisher and DiffDrive, ros_gz_bridge syntax and type pairs, /clock and sim time, several robots in one world |
 | control | 4 | `notes/control/_index.md` | gz_ros2_control (<ros2_control> tag, GazeboSimSystem, system plugin), controller YAML, spawners, FollowJointTrajectory client, velocity commands |
 | sensors | 3 | `notes/sensors/_index.md` | Sensors system, gpu_lidar laser and point cloud, cameras (camera_info, wide angle), IMU and NavSat with noise, bridging and RViz QoS |
-| learn | 4 | `learn/_index.md` | URDF course units 4–7 for students (box_bot in Gazebo, moving, sensors, xacro, two robots) and the course map; open only for course questions |
+| learn | 5 | `learn/_index.md` | URDF course units 4–7 for students (box_bot in Gazebo, moving, sensors, xacro, two robots) and the course map; open only for course questions |
+| migration | 2 | `migration/_index.md` | Humble + Fortress names and official Humble sources, Harmonic → Jetty (Lyrical); open for other distros or porting |
 <!-- INDEX:END -->

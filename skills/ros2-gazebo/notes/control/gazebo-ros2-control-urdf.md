@@ -20,6 +20,7 @@ version_notes:
   - "jazzy: GazeboSimSystem exports only the interfaces named position, velocity and effort; other names are not exported — https://github.com/ros-controls/gz_ros2_control/blob/jazzy/gz_ros2_control/src/gz_system.cpp (GZ-V50)"
   - "jazzy: the controller manager receives the description from the /robot_description topic; humble: from the parameter robot_description of node robot_state_publisher (<robot_param_node>, <robot_param>) — https://github.com/ros-controls/gz_ros2_control/blob/humble/doc/index.rst (GZ-V29)"
   - "humble: gz_ros2_control 0.7.21 uses the same names (plus ign_ros2_control aliases); lyrical drops ign_ros2_control::IgnitionSystem — https://github.com/ros/rosdistro/blob/master/humble/distribution.yaml (GZ-V28)"
+  - "jazzy: the course text calls the laser collision a cylinder; its file and inertia use the box shown here (GZ-V53)"
   - "jazzy: $(find pkg) in <parameters> works because the launch file runs the .urdf through xacro (GZ-V30)"
   - "jazzy: command interface min/max are metadata; whether anything clamps to them [verify] (GZ-V31)"
 ---

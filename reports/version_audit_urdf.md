@@ -104,15 +104,15 @@
 | URDF-V44 | 7.8 | Stray text "Exercise" inside the solution XML | export artefact: removed | — | — | annotate | — | High |
 | URDF-V45 | 8.5 | Onshape API keys as `ONSHAPE_API`, `ONSHAPE_ACCESS_KEY`, `ONSHAPE_SECRET_KEY` (keys page) | ✓ (also a `.env` file, or OAuth2) | ✓ | ✓ | keep | [o2r-start] | High |
 | URDF-V46 | 8.6, 8.8 | `config.json` keys `documentId`, `outputFormat`, `assemblyName`, `packageName`, `robotName` | onshape-to-robot ≥ 1.0 (current 1.8.3) uses snake_case (`url` required, `output_format`, `assembly_name`, `package_name`, `robot_name`); camelCase is still accepted | same | same | annotate | [o2r-config] | High |
-| URDF-V47 | 8.8 | "Add the format shebang `<?xml version="1.0"?>`" | wording: it is the XML declaration; check whether the current exporter already writes it [verify] | — | — | annotate | [o2r-repo] | Medium |
+| URDF-V47 | 8.8 | "Add the format shebang `<?xml version="1.0"?>`" | not needed: it is the XML declaration and onshape-to-robot 1.8.3 writes it (plus a "Generated using onshape-to-robot" comment); mesh paths are `package://<package_name>/<assets>/<file>` | — | — | annotate | [o2r-exporter] | High |
 | URDF-V48 | 8.8 | Inertia exported from the CAD materials | ✓ | ✓ | ✓ | keep | [o2r-repo] | Medium |
 | URDF-V49 | 2.5–8.9 | `use_sim_time: True` in RViz/RSP launch files without a simulator | only meaningful when a simulator publishes `/clock`; for RViz-only work keep the default `false` (time stays 0 without `/clock`) [verify] | same | same | annotate | ros2-core note `core-time-timers` | Medium |
 | URDF-V50 | 2.12 | Calibration: "falling=-1.5: when the joint moves to -1.5 a previously activated switch is deactivated" (with a text diagram) | annotate: both attributes are positions met while the joint moves in the **positive** direction (`rising` = edge off→on, `falling` = edge on→off); the diagram is dropped | same | same | annotate | [urdfdom-joint-h] | Medium |
 | URDF-V51 | 2.5 | `chmod +x urdf_visualize.launch.py` | not needed: `ros2 launch` loads the file, it does not execute it | same | same | annotate | — | High |
+| URDF-V52 | — | (own addition, checked) `<robot version="1.1">` for the capsule | the parser rejects the whole file ("Invalid 'version' specified; only version 1.0 is currently supported") | same | capsule parsed; version 1.0 skips it with a warning | annotate | [urdfdom-model-h], [urdfdom-link-l] | High |
 
 ## Open `[verify]` (Phase 5 or a real machine)
 - URDF-V11: tf2 rejecting frame ids that start with `/` when `robot_name` is empty.
-- URDF-V47: whether onshape-to-robot 1.8.3 writes the XML declaration itself.
 - URDF-V49: RViz and RSP behaviour with `use_sim_time: True` and no `/clock`.
 
 ## Sources
@@ -135,6 +135,7 @@
 [docs-phys-h]: https://docs.ros.org/en/humble/Tutorials/Intermediate/URDF/Adding-Physical-and-Collision-Properties-to-a-URDF-Model.html
 [docs-xacro-h]: https://docs.ros.org/en/humble/Tutorials/Intermediate/URDF/Using-Xacro-to-Clean-Up-a-URDF-File.html
 [o2r-repo]: https://github.com/Rhoban/onshape-to-robot
+[o2r-exporter]: https://github.com/Rhoban/onshape-to-robot/blob/master/onshape_to_robot/exporter_urdf.py
 [o2r-start]: https://onshape-to-robot.readthedocs.io/en/latest/getting_started.html
 [o2r-config]: https://onshape-to-robot.readthedocs.io/en/latest/config.html
 [o2r-scad]: https://onshape-to-robot.readthedocs.io/en/latest/processor_scad.html

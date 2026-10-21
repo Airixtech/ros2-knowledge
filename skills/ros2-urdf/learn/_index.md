@@ -8,3 +8,4 @@ URDF course units 2, 3 and 8 for students (urdfbot, box_bot, quadruped); open on
 | [[urdf-learn-start-here]] | URDF course map: three robots (urdfbot, box_bot, quadruped), packages, prerequisites, reading order; units 4–7 (Gazebo, xacro) in the ros2-gazebo skill. | learn/urdf-learn-start-here.md |
 | [[urdf-learn-unit2-urdfbot]] | Unit 2 on urdfbot: link, head joint, visual offset, joint types, materials, meshes, arm with mimic claws; final urdfbot_simple.urdf. | learn/urdf-learn-unit2-urdfbot.md |
 | [[urdf-learn-unit3-box-bot]] | Micro-project box_bot: empty base_link, chassis, two continuous wheels, yaw-roll-pitch caster chains; box_bot_geometric.urdf and the mesh version. | learn/urdf-learn-unit3-box-bot.md |
+| [[urdf-learn-unit8-quadruped]] | Unit 8: quadruped_description package, onshape-to-robot export of a 4-leg assembly, mesh path fix, quadruped.launch.py, start_rviz.launch.py, joint sliders. | learn/urdf-learn-unit8-quadruped.md |

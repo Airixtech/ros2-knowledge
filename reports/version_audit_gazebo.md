@@ -33,7 +33,7 @@
 | ros_gz branch | `humble` | `jazzy` | `kilted` | `lyrical` |
 | gz_ros2_control | 0.7.21 (repo `ign_ros2_control`, releases `gz_ros2_control` + `ign_ros2_control`) | 1.2.x | — | lyrical branch |
 | Physics default | DART | DART | DART | DART |
-| Official docs | [Fortress ROS 2 integration][gz-fortress-ros], [ROS 2 Humble: Using a URDF in Gazebo][docs-gz-urdf-h] | [Harmonic ROS 2 integration][gz-harmonic-ros], [ROS 2 Jazzy: Gazebo][docs-gz-j] | — | [Jetty docs][gz-jetty] |
+| Official docs | [Fortress ROS 2 integration][gz-fortress-ros], [ROS 2 Humble: Setting up a robot simulation (Gazebo)][docs-gz-h] (Fortress, `ign` commands; the Humble page "Using a URDF in Gazebo" is for Gazebo Classic) | [Harmonic ROS 2 integration][gz-harmonic-ros], [ROS 2 Jazzy: Gazebo][docs-gz-j] | — | [Jetty docs][gz-jetty] |
 
 ## Real Jazzy errors (fix)
 | ID | Section | Origin | Error | Correct statement |
@@ -124,7 +124,7 @@
 [gz-fortress-ros]: https://gazebosim.org/docs/fortress/ros2_integration/
 [gz-harmonic-ros]: https://gazebosim.org/docs/harmonic/ros2_integration/
 [gz-jetty]: https://gazebosim.org/docs/jetty/
-[docs-gz-urdf-h]: https://docs.ros.org/en/humble/Tutorials/Intermediate/URDF/Using-a-URDF-in-Gazebo.html
+[docs-gz-h]: https://docs.ros.org/en/humble/Tutorials/Advanced/Simulators/Gazebo/Gazebo.html
 [docs-gz-j]: https://docs.ros.org/en/jazzy/Tutorials/Advanced/Simulators/Gazebo/Gazebo.html
 [docs-phys-j]: https://docs.ros.org/en/jazzy/Tutorials/Intermediate/URDF/Adding-Physical-and-Collision-Properties-to-a-URDF-Model.html
 [docs-action-j]: https://docs.ros.org/en/jazzy/Tutorials/Intermediate/Writing-an-Action-Server-Client/Py.html
