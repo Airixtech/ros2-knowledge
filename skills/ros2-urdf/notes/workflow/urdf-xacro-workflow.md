@@ -12,7 +12,7 @@ area: workflow
 distro: humble
 tested: false
 audience: dev
-summary: "Xacro header xmlns:xacro, .xacro/.urdf.xacro, properties ${} defined before use, math, xacro CLI and output header, launch: Command with args vs xacro Python API."
+summary: "Xacro header, extensions, properties defined before use, ${} math, xacro CLI and banner, launch: Command with args vs Python API."
 tags: [xacro, xmlns:xacro, property, "${}", math, pi, xacro CLI, xacro -o, Command, ParameterValue, xacro.process_file, xacro.parse, process_doc, robot_description]
 see: ["[[core-xacro]]", "[[urdf-xacro-macros]]", "[[urdf-description-package]]", "[[core-robot-state-publisher]]"]
 requires: [ros2-core]
