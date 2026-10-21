@@ -14,7 +14,7 @@ tested: false
 audience: students
 summary: "Unit 6: Sensors system and 360° lidar on box_bot, LaserScan in RViz2, exercise 6.1.1 point cloud and wide-angle camera."
 tags: [course, unit 6, box_bot_control_complete_sensor.urdf, box_bot_final.urdf, spawn_robot_ros2_sensor.launch.xml, spawn_robot_ros2_final.launch.xml, lidar, point cloud, wide-angle camera, exercise 6.1.1]
-see: ["[[gazebo-learn-start-here]]", "[[gazebo-learn-unit5-moving]]", "[[gazebo-sensors-lidar]]", "[[gazebo-sensors-depth-wideangle]]", "[[gazebo-sensors-camera-imu]]", "[[gazebo-ros-gz-bridge]]"]
+see: ["[[gazebo-learn-start-here]]", "[[gazebo-learn-unit5-moving]]", "[[gazebo-sensors-lidar]]", "[[gazebo-sensors-depth-wideangle]]", "[[gazebo-sensors-camera]]", "[[gazebo-sensors-imu]]", "[[gazebo-ros-gz-bridge]]"]
 requires: [ros2-core, ros2-urdf]
 version_notes:
   - "jazzy: the laser's up/down motion is on laser_scan_link_joint, not on the fixed laser_scan_frame_joint (GZ-V54)"
@@ -43,4 +43,4 @@ In Gazebo enable "Visualize Lidar" and drop a few shapes near the robot; in RViz
 - Extra: a world with the `box_room` model, spawning box_bot inside ([[gazebo-world-sdf]]).
 
 ## 3. Other sensors (6.4–6.5)
-A plain camera and an IMU with noise follow the same pattern; the IMU also needs the Imu system ([[gazebo-sensors-camera-imu]]).
+A plain camera ([[gazebo-sensors-camera]]) and an IMU with noise ([[gazebo-sensors-imu]]) follow the same pattern; the IMU also needs the Imu system.

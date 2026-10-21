@@ -14,7 +14,7 @@ tested: false
 audience: dev
 summary: "gpu_lidar with vertical samples publishing <topic>/points as PointCloud2; wideanglecamera lens and 2π FOV; camera_info; RViz2 QoS."
 tags: [gpu_lidar, vertical, point cloud, points, PointCloudPacked, PointCloud2, wideanglecamera, lens, custom_function, horizontal_fov, camera_info, Image, rviz2, qos]
-see: ["[[gazebo-sensors-lidar]]", "[[gazebo-sensors-camera-imu]]", "[[gazebo-ros-gz-bridge]]", "[[gazebo-learn-unit6-sensors]]", "[[core-perception-basics]]"]
+see: ["[[gazebo-sensors-lidar]]", "[[gazebo-sensors-camera]]", "[[gazebo-ros-gz-bridge]]", "[[gazebo-learn-unit6-sensors]]", "[[core-perception-basics]]"]
 requires: [ros2-core, ros2-urdf]
 version_notes:
   - "jazzy: a gpu_lidar publishes LaserScan on <topic> and PointCloudPacked on <topic>/points (same in Fortress) — https://github.com/gazebosim/gz-sensors/blob/gz-sensors8/src/GpuLidarSensor.cc (GZ-V38)"
@@ -97,5 +97,5 @@ Add PointCloud2 (`/pointcloud/points`) and Image (`/rgb_camera`). Set each displ
 
 ## Pitfalls
 - Point cloud missing in ROS → you bridged `/pointcloud` instead of `/pointcloud/points`.
-- Image dark or cut → `cutoff_angle` or `scale_to_hfov` settings; try a normal `camera` first ([[gazebo-sensors-camera-imu]]).
+- Image dark or cut → `cutoff_angle` or `scale_to_hfov` settings; try a normal `camera` first ([[gazebo-sensors-camera]]).
 - Each extra rendering sensor costs GPU: lower `update_rate` and resolution when the simulation slows down.

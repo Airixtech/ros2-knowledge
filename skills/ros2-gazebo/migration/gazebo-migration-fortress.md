@@ -14,7 +14,7 @@ tested: false
 audience: dev
 summary: "Humble with Gazebo Fortress: ign commands, env var, plugin and message names, robot_param_node, install, official Humble sources."
 tags: [humble, fortress, ignition, ign gazebo, ign topic, IGN_GAZEBO_RESOURCE_PATH, ignition-gazebo, ignition.msgs, ignition_frame_id, ros-humble-ros-gz, gz_ros2_control humble, robot_param_node, ros-humble-ros-gzharmonic]
-see: ["[[gazebo-sim-overview]]", "[[core-gazebo-bridge]]", "[[gazebo-ros2-control-urdf]]", "[[gazebo-migration-jetty]]"]
+see: ["[[gazebo-sim-overview]]", "[[gazebo-resource-paths]]", "[[core-gazebo-bridge]]", "[[gazebo-ros2-control-urdf]]", "[[gazebo-migration-jetty]]"]
 requires: [ros2-core, ros2-urdf]
 version_notes:
   - "humble: Fortress is the official pairing (packages.ros.org), EOL May 2027 — https://github.com/gazebosim/ros_gz/blob/humble/README.md , https://gazebosim.org/docs/latest/releases/ (GZ-V45)"

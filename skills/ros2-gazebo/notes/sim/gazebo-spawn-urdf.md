@@ -14,7 +14,7 @@ tested: false
 audience: dev
 summary: "ros_gz_sim create -topic robot_description -name -allow_renaming -x -y -z -Y; spawn file; URDF to SDF: massless links, fixed-joint lumping, preserveFixedJoint."
 tags: [ros_gz_sim, create, spawn, robot_description, -topic, -file, -string, -param, -allow_renaming, urdf2sdf, fixed joint lumping, preserveFixedJoint, inertial]
-see: ["[[gazebo-start-sim]]", "[[gazebo-urdf-sim-tags]]", "[[gazebo-ros-gz-bridge]]", "[[urdf-description-package]]", "[[urdf-inertia]]"]
+see: ["[[gazebo-start-sim]]", "[[gazebo-resource-paths]]", "[[gazebo-urdf-sim-tags]]", "[[gazebo-ros-gz-bridge]]", "[[urdf-description-package]]", "[[urdf-inertia]]"]
 requires: [ros2-core, ros2-urdf]
 version_notes:
   - "jazzy: create flags -world -file -param -string -topic -name -allow_renaming -x -y -z -R -P -Y (same in humble and lyrical) — https://github.com/gazebosim/ros_gz/blob/jazzy/ros_gz_sim/src/create.cpp (GZ-V09, GZ-V18)"
@@ -93,7 +93,7 @@ The first include is the RViz launch file of [[urdf-description-package]] with t
 - Links joined by **fixed** joints are merged into their parent link (lumping), with mass and inertia combined; an empty frame link (`laser_scan_frame`) is fine there. Keep one as a separate link with `<gazebo reference="joint_name"><preserveFixedJoint>true</preserveFixedJoint></gazebo>`.
 - A link on a **movable** joint needs `<inertial>` with mass > 0, else "urdf2sdf: link[…] has no <inertial> block defined" and its joint is dropped.
 - URDF material colors become SDF visual colors unless a `<gazebo reference>` block sets them ([[gazebo-urdf-sim-tags]]).
-- Meshes must be on `GZ_SIM_RESOURCE_PATH` ([[gazebo-start-sim]]).
+- Meshes must be on `GZ_SIM_RESOURCE_PATH` ([[gazebo-resource-paths]]).
 
 ## Pitfalls
 - RViz shows no TF for the wheels after spawning → expected: no joint states yet (no GUI in simulation; the simulator publishes them once a plugin is added).

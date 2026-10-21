@@ -14,7 +14,7 @@ tested: false
 audience: dev
 summary: "SDF world for Gazebo Sim: <world>, sun light, ground plane, <include> model:// with pose, default systems Physics/UserCommands/SceneBroadcaster, explicit Sensors."
 tags: [sdf, world, .world, .sdf, light, ground_plane, include, model://, pose, server.config, physics system, scene broadcaster, user commands, sensors system]
-see: ["[[gazebo-start-sim]]", "[[gazebo-spawn-urdf]]", "[[gazebo-sensors-lidar]]"]
+see: ["[[gazebo-start-sim]]", "[[gazebo-resource-paths]]", "[[gazebo-spawn-urdf]]", "[[gazebo-sensors-lidar]]"]
 requires: [ros2-core, ros2-urdf]
 version_notes:
   - "jazzy: a world without <plugin> elements loads the defaults of server.config (Physics, UserCommands, SceneBroadcaster); same in Jetty — https://github.com/gazebosim/gz-sim/blob/gz-sim8/include/gz/sim/server.config (GZ-V13)"
@@ -71,7 +71,7 @@ Before `</world>`:
   <pose>0 0 -0.095708 0 0 0</pose>
 </include>
 ```
-`model://box_room` is a folder `box_room/` (with `model.config` and `model.sdf`) inside a directory listed in `GZ_SIM_RESOURCE_PATH`; installing `models/` and adding it to the path is what makes it work ([[gazebo-start-sim]]).
+`model://box_room` is a folder `box_room/` (with `model.config` and `model.sdf`) inside a directory listed in `GZ_SIM_RESOURCE_PATH`; installing `models/` and adding it to the path is what makes it work ([[gazebo-resource-paths]]).
 
 ## Explicit world systems
 ```xml

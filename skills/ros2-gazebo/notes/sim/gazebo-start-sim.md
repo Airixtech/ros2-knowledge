@@ -6,24 +6,24 @@ updated: 2026-10-20
 review_by: 2027-04-18
 source: manual
 confidentiality: internal
-title: "Start Gazebo from launch: gz_sim.launch.py gz_args, resource path variable"
+title: "Start Gazebo from launch: gz_sim.launch.py gz_args, world, sim time"
 domain: gazebo
 area: sim
 distro: jazzy
 tested: false
 audience: dev
-summary: "Gazebo package layout, start_world.launch.py including ros_gz_sim gz_sim.launch.py with gz_args -r and a world, GZ_SIM_RESOURCE_PATH, package.xml export, env hook."
-tags: [gz_sim.launch.py, gz_args, ros_gz_sim, start_world, GZ_SIM_RESOURCE_PATH, IGN_GAZEBO_RESOURCE_PATH, gazebo_model_path, ament_environment_hooks, model://, SetParameter, use_sim_time]
-see: ["[[gazebo-world-sdf]]", "[[gazebo-spawn-urdf]]", "[[gazebo-sim-overview]]", "[[core-launch-args-include]]", "[[core-time-timers]]"]
+summary: "Gazebo package layout and start_world.launch.py: include ros_gz_sim gz_sim.launch.py with gz_args -r and a world, SetParameter use_sim_time, launch arguments."
+tags: [gz_sim.launch.py, gz_args, ros_gz_sim, start_world, IncludeLaunchDescription, SetParameter, use_sim_time, on_exit_shutdown, gz_version, ign gazebo]
+see: ["[[gazebo-resource-paths]]", "[[gazebo-world-sdf]]", "[[gazebo-spawn-urdf]]", "[[gazebo-sim-overview]]", "[[core-launch-args-include]]", "[[core-time-timers]]"]
 requires: [ros2-core, ros2-urdf]
 version_notes:
-  - "humble: the same gz_sim.launch.py runs 'ign gazebo' for Fortress; current Fortress reads IGN_GAZEBO_RESOURCE_PATH and also GZ_SIM_RESOURCE_PATH — https://github.com/gazebosim/ros_gz/blob/humble/ros_gz_sim/launch/gz_sim.launch.py.in , https://github.com/gazebosim/gz-sim/blob/ign-gazebo6/include/gz/sim/Util.hh (GZ-V10, GZ-V11)"
-  - "jazzy: gz_sim.launch.py adds the <gazebo_ros gazebo_model_path> exports of all packages to GZ_SIM_RESOURCE_PATH — https://github.com/gazebosim/ros_gz/blob/jazzy/ros_gz_sim/launch/gz_sim.launch.py.in (GZ-V11)"
+  - "humble: the same gz_sim.launch.py runs 'ign gazebo' for Fortress — https://github.com/gazebosim/ros_gz/blob/humble/ros_gz_sim/launch/gz_sim.launch.py.in (GZ-V10)"
+  - "jazzy: gz_sim.launch.py arguments gz_args, gz_version, on_exit_shutdown, debugger — https://github.com/gazebosim/ros_gz/blob/jazzy/ros_gz_sim/launch/gz_sim.launch.py.in (GZ-V10)"
   - "jazzy: SetParameter(use_sim_time) applies to the ROS nodes started after it, not to Gazebo; bridge /clock (GZ-V27)"
 ---
-# Start Gazebo from launch: gz_sim.launch.py gz_args, resource path variable
+# Start Gazebo from launch: gz_sim.launch.py gz_args, world, sim time
 
-**TL;DR** Keep simulation files in their own package (`<robot>_gazebo` with `launch/`, `worlds/`, `models/`). Start Gazebo by including `ros_gz_sim`'s `gz_sim.launch.py` with `gz_args` = `-r` (run, not paused) + the world file. Gazebo finds meshes and `model://` folders only through `GZ_SIM_RESOURCE_PATH`.
+**TL;DR** Keep simulation files in their own package (`<robot>_gazebo` with `launch/`, `worlds/`, `models/`). Start Gazebo by including `ros_gz_sim`'s `gz_sim.launch.py` with `gz_args` = `-r` (run, not paused) + the world file. Before that, put your meshes and models on the resource path ([[gazebo-resource-paths]]).
 
 ## Package
 ```bash
@@ -80,22 +80,11 @@ def generate_launch_description():
         gz_sim,
     ])
 ```
-- `<pkg>/share` (the install prefix's `share`) lets `package://my_box_bot_description/meshes/…` resolve; `models/` lets the world use `model://box_room`.
-- First version of this file (before a robot is spawned) needs only the two `my_box_bot_gazebo` paths.
+- The `os.environ` block is the course's way to set the resource path; what each path is for and the official alternatives: [[gazebo-resource-paths]]. The first version of this file (before a robot is spawned) has only the two `my_box_bot_gazebo` paths.
 - Run: `colcon build && source install/setup.bash && ros2 launch my_box_bot_gazebo start_world.launch.py`.
 - Other arguments of `gz_sim.launch.py`: `gz_version`, `on_exit_shutdown` (stop the launch when Gazebo closes), `debugger`.
 
-## Official alternatives to editing os.environ
-- **package.xml export**, read by `gz_sim.launch.py` (Humble and Jazzy):
-  ```xml
-  <export>
-    <build_type>ament_cmake</build_type>
-    <gazebo_ros gazebo_model_path="${prefix}/../"/>   <!-- ${prefix} = the package's share directory -->
-  </export>
-  ```
-- **Environment hook** (ros_gz_project_template): a file `hooks/<pkg>.dsv.in` with `prepend-non-duplicate;GZ_SIM_RESOURCE_PATH;share;@CMAKE_INSTALL_PREFIX@/share` and `ament_environment_hooks("${CMAKE_CURRENT_SOURCE_DIR}/hooks/${PROJECT_NAME}.dsv.in")` in `CMakeLists.txt`; sourcing the workspace then sets the variable.
-
 ## Pitfalls
-- Meshes white or missing, "Unable to find uri[model://…]" → the folder is not in `GZ_SIM_RESOURCE_PATH` (set it before Gazebo starts).
 - `-r` missing → Gazebo starts paused; press play or nothing moves.
-- [Humble] the variable name in old Fortress tutorials is `IGN_GAZEBO_RESOURCE_PATH`; a current Fortress reads both.
+- ROS nodes on wall time while Gazebo runs → `use_sim_time` not set, or `/clock` not bridged ([[gazebo-ros-gz-bridge]]).
+- [Humble] Fortress is started as `ign gazebo`; this launch file picks it, a hard-coded `gz sim` command does not.

@@ -14,7 +14,7 @@ tested: false
 audience: dev
 summary: "Sensors system (render_engine ogre2) and 360° gpu_lidar: gz_frame_id, topic, update_rate, samples, angles, range; LaserScan bridge and RViz2."
 tags: [sensors system, gz-sim-sensors-system, render_engine, ogre2, gpu_lidar, lidar, ray, gz_frame_id, laser_scan, samples, min_angle, range, LaserScan, rviz2]
-see: ["[[gazebo-sensors-depth-wideangle]]", "[[gazebo-sensors-camera-imu]]", "[[gazebo-ros-gz-bridge]]", "[[gazebo-world-sdf]]", "[[core-perception-basics]]"]
+see: ["[[gazebo-sensors-depth-wideangle]]", "[[gazebo-sensors-camera]]", "[[gazebo-sensors-imu]]", "[[gazebo-ros-gz-bridge]]", "[[gazebo-world-sdf]]", "[[core-perception-basics]]"]
 requires: [ros2-core, ros2-urdf]
 version_notes:
   - "jazzy: gz_frame_id sets header.frame_id (default: the sensor's name); humble: Fortress reads ignition_frame_id and also gz_frame_id — https://github.com/gazebosim/gz-sensors/blob/gz-sensors8/src/Sensor.cc , https://github.com/gazebosim/gz-sensors/blob/ign-sensors6/src/Sensor.cc (GZ-V36)"

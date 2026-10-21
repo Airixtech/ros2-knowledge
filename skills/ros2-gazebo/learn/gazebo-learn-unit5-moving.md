@@ -37,7 +37,39 @@ RViz2: Fixed Frame `odom`; all TFs and joint states arrive.
 
 ## 2. Laser up and down by position (5.6–5.7)
 - New files: `my_box_bot_gazebo/launch/control.launch.py`, `my_box_bot_gazebo/launch/spawn_robot_ros2_control_complete.launch.xml`, `my_box_bot_description/config/controller_position.yaml`, `my_box_bot_description/launch/urdf_visualize_control_complete.launch.py`, `my_box_bot_description/urdf/box_bot_control_complete.urdf` (copy of the step-1 URDF).
-- URDF: `laser_scan_link` on the prismatic `laser_scan_link_joint`, the empty `laser_scan_frame`, the `<ros2_control>` block and the `gz_ros2_control-system` plugin ([[gazebo-ros2-control-urdf]]). Copy your lidar mesh to `meshes/sensors/rplidar.dae`.
+- URDF: add before `</robot>` the laser links below, then the `<ros2_control>` block and the `gz_ros2_control-system` plugin ([[gazebo-ros2-control-urdf]]). Copy your lidar mesh to `meshes/sensors/rplidar.dae`.
+  ```xml
+  <!-- Laser Position Control -->
+  <link name="laser_scan_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry><mesh filename="package://my_box_bot_description/meshes/sensors/rplidar.dae" scale="1.0 1.0 1.0"/></geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.0204"/>
+      <geometry><box size="0.074986 0.074935 0.0408"/></geometry>   <!-- simple shape that fits the mesh -->
+    </collision>
+    <inertial>
+      <mass value="0.01"/>
+      <origin rpy="0 0 0" xyz="0 0 0.0204"/>
+      <inertia ixx="6.066578520833334e-06" ixy="0" ixz="0" iyy="6.072950163333333e-06" iyz="0" izz="9.365128684166666e-06"/>
+    </inertial>
+  </link>
+  <joint name="laser_scan_link_joint" type="prismatic">
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.05"/>
+    <parent link="chassis"/>
+    <child link="laser_scan_link"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.1" upper="0.0" effort="20.0" velocity="2.0"/>   <!-- effort/velocity found by trying -->
+    <dynamics damping="0.1" friction="1.0"/>                          <!-- keeps the joint from running wild -->
+  </joint>
+  <link name="laser_scan_frame"></link>   <!-- where the sensor's center is -->
+  <joint name="laser_scan_frame_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 0.03"/>
+    <parent link="laser_scan_link"/>
+    <child link="laser_scan_frame"/>
+  </joint>
+  ```
 - YAML and spawners: [[gazebo-ros2-control-controllers]] (position-only file and `control.launch.py`). Add `config` to the install rule of `my_box_bot_description`: `install(DIRECTORY urdf rviz launch meshes config DESTINATION share/${PROJECT_NAME}/)`.
 - Script `my_box_bot_gazebo/scripts/move_laser.py` ([[gazebo-jtc-action-client]]). `my_box_bot_gazebo/CMakeLists.txt` then reads:
 ```cmake

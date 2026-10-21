@@ -52,10 +52,8 @@ version_notes:
 <!-- Wheel Right -->
 <xacro:wheel wheel_name="right_wheel"/>
 ```
-- `name` must be unique. A macro without parameters is called as `<xacro:caster_wheel/>`.
-- Several parameters are separated by spaces: `params="name y mass"`. Defaults: `params="indoor_robot:=true"`.
-- The call must use the same attribute names as `params`. The course's first example calls `<xacro:wheel wheel_link_name="right_wheel"/>` for `params="wheel_name"` and uses an undefined `${wheel_length}`: xacro stops with `Invalid parameter "wheel_link_name"`, `Undefined parameters [wheel_name]` and `name 'wheel_length' is not defined`. The macro above is the corrected one (the course's exercise solution).
-- Properties used inside (`wheel_width`, `wheel_radius`) come from the enclosing file. Inertia macros: [[urdf-inertia]].
+- Unique `name`; no parameters → `<xacro:caster_wheel/>`. Parameters are space-separated (`params="name y mass"`), defaults `name:=value`. Properties used inside (`wheel_width`, `wheel_radius`) come from the enclosing file; inertia macros: [[urdf-inertia]].
+- Call with exactly the `params` names. The course's first example (`wheel_link_name=` for `params="wheel_name"`, undefined `${wheel_length}`) stops xacro with `Invalid parameter`, `Undefined parameters [wheel_name]` and `name 'wheel_length' is not defined`; the macro above is its exercise solution.
 
 ## Conditions
 ```xml
@@ -85,17 +83,13 @@ Macros with conditions: give the macro a parameter with a default and test it in
 
 ## Includes and file splitting
 ```xml
-<!-- Include Gazebo specific tags -->
-<xacro:include filename="$(find my_box_bot_description)/urdf/box_bot.gazebo.xacro"/>
-
 <xacro:arg name="use_sim" default="true"/>
-<!-- if we use Gazebo -->
+<!-- Include Gazebo specific tags (without the if: always) -->
 <xacro:if value="$(arg use_sim)">
   <xacro:include filename="$(find my_box_bot_description)/urdf/box_bot.gazebo.xacro"/>
 </xacro:if>
 ```
-- The included file is a complete xacro document: `<?xml version="1.0"?>` and `<robot xmlns:xacro="http://www.ros.org/wiki/xacro">…</robot>`; its contents are pasted in place of the include. Wrap them in a macro (e.g. `gazebo_elements`) to choose where they land with one call.
-- A common split: kinematics and visuals in the main file, simulator tags and plugins in `<robot>.gazebo.xacro`, included only when simulating.
+- The included file is a complete xacro document (`<?xml …?>`, `<robot xmlns:xacro=…>…</robot>`) whose contents are pasted in place of the include; wrap them in a macro (`gazebo_elements`) to place them with one call. Typical split: kinematics and visuals in the main file, simulator tags and plugins in `<robot>.gazebo.xacro`.
 
 ## Pitfalls
 - `$(find pkg)` fails → the package is not built and sourced, or its `urdf/` folder is not installed.

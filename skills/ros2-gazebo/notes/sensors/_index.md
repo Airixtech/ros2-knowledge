@@ -5,6 +5,7 @@ Sensors system, gpu_lidar laser and point cloud, cameras (camera_info, wide angl
 
 | id | summary | path |
 |---|---|---|
-| [[gazebo-sensors-camera-imu]] | Gazebo camera (FOV, distortion, camera_info naming) and IMU with Gaussian noise plus Imu system; NavSat GPS; bridge types. | notes/sensors/gazebo-sensors-camera-imu.md |
+| [[gazebo-sensors-camera]] | Gazebo camera sensor: FOV, image size, clip, distortion; image on <topic>, camera_info on its parent topic; Image/CameraInfo bridge. | notes/sensors/gazebo-sensors-camera.md |
 | [[gazebo-sensors-depth-wideangle]] | gpu_lidar with vertical samples publishing <topic>/points as PointCloud2; wideanglecamera lens and 2π FOV; camera_info; RViz2 QoS. | notes/sensors/gazebo-sensors-depth-wideangle.md |
+| [[gazebo-sensors-imu]] | Gazebo IMU: Imu system, update rate, Gaussian noise on angular velocity and acceleration, Imu bridge; NavSat GPS needs spherical coordinates. | notes/sensors/gazebo-sensors-imu.md |
 | [[gazebo-sensors-lidar]] | Sensors system (render_engine ogre2) and 360° gpu_lidar: gz_frame_id, topic, update_rate, samples, angles, range; LaserScan bridge and RViz2. | notes/sensors/gazebo-sensors-lidar.md |

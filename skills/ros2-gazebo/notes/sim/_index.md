@@ -5,8 +5,9 @@ Gazebo Sim with ROS 2: start a world from launch, resource paths, SDF worlds, sp
 
 | id | summary | path |
 |---|---|---|
+| [[gazebo-resource-paths]] | How Gazebo finds meshes and models: GZ_SIM_RESOURCE_PATH, package:// and model://, the course block, package.xml export, env hook. | notes/sim/gazebo-resource-paths.md |
 | [[gazebo-sim-overview]] | Gazebo Sim (Harmonic): ros_gz_sim, ros_gz_bridge, gz_ros2_control; what a URDF needs; systems + bridge vs ros2_control; Humble Fortress sources. | notes/sim/gazebo-sim-overview.md |
 | [[gazebo-spawn-urdf]] | ros_gz_sim create -topic robot_description -name -allow_renaming -x -y -z -Y; spawn file; URDF to SDF: massless links, fixed-joint lumping, preserveFixedJoint. | notes/sim/gazebo-spawn-urdf.md |
-| [[gazebo-start-sim]] | Gazebo package layout, start_world.launch.py including ros_gz_sim gz_sim.launch.py with gz_args -r and a world, GZ_SIM_RESOURCE_PATH, package.xml export, env hook. | notes/sim/gazebo-start-sim.md |
+| [[gazebo-start-sim]] | Gazebo package layout and start_world.launch.py: include ros_gz_sim gz_sim.launch.py with gz_args -r and a world, SetParameter use_sim_time, launch arguments. | notes/sim/gazebo-start-sim.md |
 | [[gazebo-urdf-sim-tags]] | URDF <gazebo reference=link>: collision surface friction mu/mu2/fdir1, contact kp (stiffness) and kd (damping), short tags mu1/mu2/kp/kd, visual materials, selfCollide. | notes/sim/gazebo-urdf-sim-tags.md |
 | [[gazebo-world-sdf]] | SDF world for Gazebo Sim: <world>, sun light, ground plane, <include> model:// with pose, default systems Physics/UserCommands/SceneBroadcaster, explicit Sensors. | notes/sim/gazebo-world-sdf.md |
