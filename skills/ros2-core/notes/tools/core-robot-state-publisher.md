@@ -2,8 +2,8 @@
 id: core-robot-state-publisher
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-20
+review_by: 2027-04-18
 source: manual
 confidentiality: internal
 title: "robot_state_publisher & xacro in launch"
@@ -53,7 +53,7 @@ def generate_launch_description():
     ])
 ```
 - Without `ParameterValue(..., value_type=str)`, launch tries to parse the URDF text as YAML and fails.
-- Install the `urdf/`, `meshes/` and `rviz/` dirs in share ([[core-pkg-ament-python]]). For a plain URDF file, put `open(path).read()` in the param instead of xacro.
+- Install the `urdf/`, `meshes/` and `rviz/` dirs in share ([[core-pkg-ament-python]]). For a plain URDF file, put `open(path).read()` in the param, or keep the same `Command(['xacro ', path])`: xacro passes a plain `.urdf` through, so one launch file serves both.
 - Other consumers: ros2_control reads `robot_description` as a parameter in Humble and from this topic in Jazzy+ ([[core-ros2-control-overview]]).
 
 ## Pitfalls

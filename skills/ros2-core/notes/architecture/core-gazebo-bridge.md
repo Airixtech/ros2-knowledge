@@ -2,8 +2,8 @@
 id: core-gazebo-bridge
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-20
+review_by: 2027-04-18
 source: manual
 confidentiality: internal
 title: "Gazebo with ROS 2: versions, ros_gz bridge, Gazebo vs Isaac"
@@ -18,6 +18,7 @@ see: ["[[core-isaac-sim-ros]]", "[[core-time-timers]]", "[[core-launch-basics]]"
 requires: []
 version_notes:
   - "humble: official Gazebo = Fortress ('ign gazebo'); Harmonic via packages.osrfoundation.org; jazzy Harmonic, kilted Ionic, lyrical Jetty — https://www.ros.org/reps/rep-2000.html (V64, V20)"
+  - "humble: ros_gz_bridge accepts ignition.msgs.* and gz.msgs.* type names — https://github.com/gazebosim/ros_gz/blob/humble/ros_gz_bridge/resource/get_mappings.cpp.em (V66)"
   - "all: Gazebo Classic 11 EOL 2025-01-31 — https://discourse.openrobotics.org/t/gazebo-classic-end-of-life/48748 (V65)"
 ---
 # Gazebo with ROS 2: versions, ros_gz bridge, Gazebo vs Isaac
@@ -44,7 +45,7 @@ version_notes:
   gz_type_name: "gz.msgs.Twist"
   direction: ROS_TO_GZ
 ```
-With Fortress the canonical type name is `ignition.msgs.Twist`. The Humble bridge also generates `gz.msgs.*` names [verify].
+With Fortress the canonical type name is `ignition.msgs.Twist`; the Humble bridge accepts both `ignition.msgs.*` and `gz.msgs.*` names.
 
 ## Gazebo vs Isaac Sim
 Gazebo: DART/ODE/Bullet, no GPU required, classic navigation, CI, large multi-robot setups. Isaac Sim: PhysX 5 GPU, RTX rendering, Replicator synthetic data, DNN perception + TensorRT, sim-to-real (Isaac Lab for RL) ([[core-isaac-sim-ros]]).

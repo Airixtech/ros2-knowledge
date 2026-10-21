@@ -1,0 +1,7 @@
+# Area descriptions for tools/build_index.py (display order = file order). Not packaged.
+sim: "Gazebo Sim with ROS 2: start a world from launch, resource paths, SDF worlds, spawn a URDF with ros_gz_sim create, URDF to SDF rules, <gazebo> tags for friction, contact and materials"
+plugins: "Gazebo systems JointStatePublisher and DiffDrive, ros_gz_bridge syntax and type pairs, /clock and sim time, several robots in one world"
+control: "gz_ros2_control (<ros2_control> tag, GazeboSimSystem, system plugin), controller YAML, spawners, FollowJointTrajectory client, velocity commands"
+sensors: "Sensors system, gpu_lidar laser and point cloud, cameras (camera_info, wide angle), IMU and NavSat with noise, bridging and RViz QoS"
+learn: "URDF course units 4–7 for students (box_bot in Gazebo, moving, sensors, xacro, two robots) and the course map; open only for course questions"
+migration: "Humble + Fortress names and official Humble sources, Harmonic → Jetty (Lyrical); open for other distros or porting"
