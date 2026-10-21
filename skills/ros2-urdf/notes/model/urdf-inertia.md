@@ -12,7 +12,7 @@ area: model
 distro: humble
 tested: false
 audience: dev
-summary: "URDF <inertial>: mass, origin = center of mass, inertia tensor; box, cylinder and sphere formulas (izz = m(x²+y²)/12), xacro macros, near-zero inertia, root link."
+summary: "URDF <inertial>: mass, origin as center of mass, inertia tensor; box, cylinder, sphere formulas; xacro macros; near-zero inertia; root link."
 tags: [inertial, inertia, mass, ixx, iyy, izz, moment of inertia, box inertia, cylinder inertia, sphere inertia, center of mass, xacro macro, kdl_parser]
 see: ["[[urdf-links]]", "[[urdf-xacro-macros]]", "[[urdf-onshape-export]]", "[[urdf-learn-unit3-box-bot]]"]
 requires: [ros2-core]

@@ -12,8 +12,8 @@ Full text in Phase 4.
 | Area | Notes | Open | Covers |
 |---|---|---|---|
 | sim | 5 | `notes/sim/_index.md` | Gazebo Sim with ROS 2: start a world from launch, resource paths, SDF worlds, spawn a URDF with ros_gz_sim create, URDF to SDF rules, <gazebo> tags for friction, contact and materials |
-| plugins | 2 | `notes/plugins/_index.md` | Gazebo systems JointStatePublisher and DiffDrive, ros_gz_bridge syntax and type pairs, /clock and sim time, several robots in one world |
+| plugins | 3 | `notes/plugins/_index.md` | Gazebo systems JointStatePublisher and DiffDrive, ros_gz_bridge syntax and type pairs, /clock and sim time, several robots in one world |
 | control | 4 | `notes/control/_index.md` | gz_ros2_control (<ros2_control> tag, GazeboSimSystem, system plugin), controller YAML, spawners, FollowJointTrajectory client, velocity commands |
 | sensors | 3 | `notes/sensors/_index.md` | Sensors system, gpu_lidar laser and point cloud, cameras (camera_info, wide angle), IMU and NavSat with noise, bridging and RViz QoS |
-| learn | 3 | `learn/_index.md` | URDF course units 4–7 for students (box_bot in Gazebo, moving, sensors, xacro, two robots) and the course map; open only for course questions |
+| learn | 4 | `learn/_index.md` | URDF course units 4–7 for students (box_bot in Gazebo, moving, sensors, xacro, two robots) and the course map; open only for course questions |
 <!-- INDEX:END -->

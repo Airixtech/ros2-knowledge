@@ -12,6 +12,6 @@ Full text in Phase 4.
 | Area | Notes | Open | Covers |
 |---|---|---|---|
 | model | 6 | `notes/model/_index.md` | URDF links (visual, collision, inertial, geometry, materials, meshes), joints and types, origin vs axis frames, limit, mimic, dynamics, safety_controller, calibration, inertia tensors, links as TF frames in RViz2 |
-| workflow | 2 | `notes/workflow/_index.md` | *_description package and launch files, robot_state_publisher and joint_state_publisher(_gui), xacro properties, macros, conditionals, includes and launch processing, CAD export with onshape-to-robot |
+| workflow | 4 | `notes/workflow/_index.md` | *_description package and launch files, robot_state_publisher and joint_state_publisher(_gui), xacro properties, macros, conditionals, includes and launch processing, CAD export with onshape-to-robot |
 | learn | 3 | `learn/_index.md` | URDF course units 2, 3 and 8 for students (urdfbot, box_bot, quadruped); open only for course questions |
 <!-- INDEX:END -->

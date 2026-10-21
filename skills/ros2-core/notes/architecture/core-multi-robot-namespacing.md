@@ -2,8 +2,8 @@
 id: core-multi-robot-namespacing
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-20
+review_by: 2027-04-18
 source: manual
 confidentiality: internal
 title: "Multi-robot namespacing & per-robot TF"
@@ -38,7 +38,7 @@ GroupAction([
 ])
 ```
 `PushRosNamespace` [changed in Jazzy: `PushROSNamespace`, old name kept as alias] ([[core-launch-args-include]]).
-- Frames: xacro `<xacro:arg name="ns" default=""/>` → `<link name="$(arg ns)/base_link"/>`, or the `frame_prefix` param of robot_state_publisher ([[core-xacro]]). Simulators: unique entity names per spawn.
+- Frames: xacro `<xacro:arg name="ns" default=""/>` → `<link name="$(arg ns)/base_link"/>`, or the `frame_prefix` param of robot_state_publisher ([[core-xacro]]); RSP prepends it as is, so end it with `/` (`'frame_prefix': 'robot1/'`), one RSP per namespace. Simulators: unique entity names per spawn.
 - TF options: (a) per-robot `/robotN/tf` (recommended, needs the remaps) (b) a shared `/tf` with prefixed frames.
 
 ## Anti-patterns

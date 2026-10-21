@@ -6,7 +6,7 @@ URDF links (visual, collision, inertial, geometry, materials, meshes), joints an
 | id | summary | path |
 |---|---|---|
 | [[urdf-frames-rviz]] | Links as TF frames: fixed joints on /tf_static, movable on /tf; RViz2 Fixed Frame, RobotModel description topic, rqt_tf_tree. | notes/model/urdf-frames-rviz.md |
-| [[urdf-inertia]] | URDF <inertial>: mass, origin = center of mass, inertia tensor; box, cylinder and sphere formulas (izz = m(x²+y²)/12), xacro macros, near-zero inertia, root link. | notes/model/urdf-inertia.md |
+| [[urdf-inertia]] | URDF <inertial>: mass, origin as center of mass, inertia tensor; box, cylinder, sphere formulas; xacro macros; near-zero inertia; root link. | notes/model/urdf-inertia.md |
 | [[urdf-joint-extras]] | Optional joint elements: <mimic> (multiplier, offset), <dynamics> damping/friction, <safety_controller> soft limits, <calibration> rising/falling, check_urdf errors. | notes/model/urdf-joint-extras.md |
 | [[urdf-joints]] | URDF joint: parent/child, origin in the parent frame, axis in the child frame, fixed/continuous/revolute/prismatic/floating/planar, <limit> lower/upper/effort/velocity. | notes/model/urdf-joints.md |
 | [[urdf-links]] | URDF link: visual/collision/inertial with own origin, box/cylinder/sphere/mesh geometry, package:// meshes and scale, named materials, RViz material override. | notes/model/urdf-links.md |

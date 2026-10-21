@@ -6,4 +6,5 @@ Gazebo systems JointStatePublisher and DiffDrive, ros_gz_bridge syntax and type 
 | id | summary | path |
 |---|---|---|
 | [[gazebo-joint-state-diffdrive]] | Gazebo JointStatePublisher (topic, update_rate, joint_name) and DiffDrive (wheels, separation, radius, cmd_vel, odom, tf, frames) systems; teleop after bridging. | notes/plugins/gazebo-joint-state-diffdrive.md |
+| [[gazebo-multi-robot]] | Two robots in Gazebo: namespaced robot_state_publisher with frame_prefix, xacro robot_name for plugin topics, create per robot, per-robot bridge. | notes/plugins/gazebo-multi-robot.md |
 | [[gazebo-ros-gz-bridge]] | ros_gz_bridge parameter_bridge topic@ros_type[gz_type, @ both ways, [ to ROS, ] to Gazebo; Clock, Twist, TFMessage-Pose_V, JointState-Model, LaserScan, PointCloud2, Image pairs. | notes/plugins/gazebo-ros-gz-bridge.md |
