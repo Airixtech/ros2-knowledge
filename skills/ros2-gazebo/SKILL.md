@@ -1,10 +1,43 @@
 ---
 name: ros2-gazebo
-description: "placeholder (Phase 4)"
+description: "Gazebo Sim with ROS 2 (Jazzy/Harmonic; Humble/Fortress noted): ros_gz_sim spawn, ros_gz_bridge, worlds, friction, DiffDrive, gz_ros2_control, lidar/camera/IMU, multi-robot."
 ---
-# ros2-gazebo
+# ros2-gazebo — simulate a URDF robot in Gazebo Sim
 
-Full text in Phase 4.
+Atomic notes for running robots in Gazebo Sim from ROS 2. **Jazzy + Gazebo Harmonic is canonical** for this skill; Humble + Fortress (the official Humble pairing) and Lyrical + Jetty are marked, never substituted, and every Humble difference names the official Humble/Fortress source. Paths are relative to this skill's folder. `[[note-id]]` means the file `<note-id>.md`; find it via the area index or a glob `**/<note-id>.md`.
+
+## Golden rules (always apply)
+1. Check the user's distro first. On **Humble** read [[gazebo-migration-fortress]]: current Fortress accepts most names of this skill, but gz_ros2_control reads the description from the node `robot_state_publisher` (`<robot_param_node>` when it is renamed).
+2. Gazebo systems talk Gazebo Transport, not ROS: bridge every topic a ROS node needs with `ros_gz_bridge` (`@` both ways, `[` Gazebo → ROS, `]` ROS → Gazebo), always `/clock` plus `use_sim_time` ([[gazebo-ros-gz-bridge]]).
+3. Start Gazebo with `ros_gz_sim`'s `gz_sim.launch.py` (`gz_args: -r <world>`); meshes and `model://` folders are found only through `GZ_SIM_RESOURCE_PATH`, set before the start (package.xml export or environment hook) ([[gazebo-start-sim]], [[gazebo-resource-paths]]).
+4. Spawn with `ros2 run ros_gz_sim create -topic robot_description` (`spawn_entity.py` is Gazebo Classic); a link on a movable joint needs `<inertial>` with mass > 0, fixed joints are merged into their parent ([[gazebo-spawn-urdf]]).
+5. Friction and contact go in `<gazebo reference="<link>">`: `mu`/`mu2` are two friction directions, `kp` contact stiffness, `kd` contact damping ([[gazebo-urdf-sim-tags]]).
+6. DiffDrive reads only gz-sim elements (no Classic `publish_*` options) and publishes `odom → base_link`; JointStatePublisher is a model plugin; the joint_state_publisher ROS node does not read simulated joints ([[gazebo-joint-state-diffdrive]]).
+7. gz_ros2_control: `<ros2_control>` with `gz_ros2_control/GazeboSimSystem` and only `position`/`velocity`/`effort` interfaces, the `gz_ros2_control-system` plugin with `<parameters>` YAML, controllers started by spawners; JTC has no `interface_name` ([[gazebo-ros2-control-urdf]], [[gazebo-ros2-control-controllers]]).
+8. Rendering sensors need the Sensors system once (best in the world SDF); set `gz_frame_id`; a lidar's point cloud is on `<topic>/points`, a camera's `camera_info` on the parent of its image topic ([[gazebo-sensors-lidar]], [[gazebo-sensors-camera]]).
+9. An IMU needs the Imu system; a GPS needs the NavSat system and `<spherical_coordinates>` in the world ([[gazebo-sensors-imu]]).
+10. Several robots: a xacro `robot_name` in plugin topics and odometry frames, robot_state_publisher per namespace with `frame_prefix: 'robotN/'`, unique entity and node names ([[gazebo-multi-robot]]).
+
+## Retrieval protocol
+1. Pick the area from the **Areas** table below (column "Covers").
+2. Open that area's `_index.md` and choose notes by their summary.
+3. Open 1–3 notes. Use their XML, launch and YAML as the template: keep the structure, adapt the names.
+4. No clear match → `grep -ril "<keyword>" notes/` (system, element and topic names work best: `DiffDrive`, `gz_frame_id`, `parameter_bridge`, `GazeboSimSystem`) and open the top hits.
+5. Follow a note's `see:` links **one hop** at most; URDF questions go to ros2-urdf.
+6. Do not open `learn/` unless the question is about the URDF course (box_bot units 4–7).
+7. Humble, Kilted, Lyrical or porting → open `migration/` and apply the version marks.
+If the notes do not cover the question, read the official source for the user's version (below) or say that you answer from standard knowledge. Never invent elements, plugin names or parameters.
+
+## Version marks and official sources
+`[Humble]` Humble + Fortress · `[≥Jazzy]` Jazzy (Harmonic) and later · `[Lyrical]` Lyrical (Jetty) · `[changed in Lyrical: …]` · `[verify]` not confirmed by a source or a build: tell the user. Each note's `version_notes` holds the source URL of every difference.
+
+| Version | Read first |
+|---|---|
+| Humble + Fortress | ros_gz `humble` README · gazebosim.org/docs/fortress (ROS 2 integration) · docs.ros.org/en/humble "Setting up a robot simulation (Gazebo)" · gz-sim `ign-gazebo6` · gz_ros2_control `humble` doc |
+| Jazzy + Harmonic | ros_gz `jazzy` README · gazebosim.org/docs/harmonic · docs.ros.org/en/jazzy Gazebo tutorial · gz-sim `gz-sim8` · gz_ros2_control `jazzy` |
+| Lyrical + Jetty | ros_gz `lyrical` README · gazebosim.org/docs/jetty · gz-sim `gz-sim10` (`Migration.md`) · gz_ros2_control `lyrical` |
+
+Full links: [[gazebo-migration-fortress]] and [[gazebo-migration-jetty]].
 
 ## Areas
 <!-- INDEX:START -->
@@ -18,3 +51,6 @@ Full text in Phase 4.
 | learn | 5 | `learn/_index.md` | URDF course units 4–7 for students (box_bot in Gazebo, moving, sensors, xacro, two robots) and the course map; open only for course questions |
 | migration | 2 | `migration/_index.md` | Humble + Fortress names and official Humble sources, Harmonic → Jetty (Lyrical); open for other distros or porting |
 <!-- INDEX:END -->
+
+## Related skills
+ros2-core (required): launch, sim time, TF, Gazebo pairing overview (`core-gazebo-bridge`), ros2_control overview, multi-robot namespacing. ros2-urdf (required): links, joints, inertia, xacro, robot_state_publisher. Install the three together: this skill's notes link into both.

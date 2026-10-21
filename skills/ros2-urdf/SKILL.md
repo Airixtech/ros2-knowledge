@@ -1,10 +1,35 @@
 ---
 name: ros2-urdf
-description: "placeholder (Phase 4)"
+description: "ROS 2 robot description (Humble): URDF links, joints, limits, mimic, inertia, materials, meshes, robot_state_publisher, joint_state_publisher, RViz2, xacro, onshape-to-robot."
 ---
-# ros2-urdf
+# ros2-urdf — describe a robot with URDF and xacro
 
-Full text in Phase 4.
+Atomic notes for writing robot descriptions and checking them in RViz2. **Humble is canonical**; Jazzy and Lyrical differences are marked, never substituted. Paths are relative to this skill's folder. `[[note-id]]` means the file `<note-id>.md`; find it via the area index or a glob `**/<note-id>.md`.
+
+## Golden rules (always apply)
+1. A URDF is one tree of links joined by joints: one root (an empty `base_link`), unique link and joint names; put the mass on the first real link (`chassis`), since kdl_parser warns about a root link with inertia ([[urdf-joints]], [[urdf-inertia]]).
+2. A joint's `<origin>` is in the **parent** frame, its `<axis>` in the **child** frame; `revolute` and `prismatic` need `<limit>` with `effort` and `velocity` (required, also without simulation) ([[urdf-joints]]).
+3. Write only real URDF elements: joint damping and friction go in `<dynamics>` (`<joint_properties>` is silently ignored), `<axis>` has only `xyz`; check every file with `check_urdf` ([[urdf-joints]], [[urdf-joint-extras]]).
+4. `visual`, `collision` and `inertial` each have their own `<origin>`; collisions use simple shapes; every simulated link needs mass and inertia (box `izz = m(x²+y²)/12`) ([[urdf-links]], [[urdf-inertia]]).
+5. Define named materials at robot level before using them; in RViz2 a `<material>` replaces a mesh's own colors, so leave it out on DAE/OBJ visuals; meshes use `package://` and an installed `meshes/` folder ([[urdf-links]], [[urdf-description-package]]).
+6. robot_state_publisher sends fixed joints once on `/tf_static` and movable joints on `/tf` from `/joint_states`; RViz2 RobotModel reads `/robot_description` with Transient Local ([[urdf-frames-rviz]]; launch pattern: `core-robot-state-publisher` in ros2-core).
+7. Something must publish `/joint_states`: `joint_state_publisher_gui` on a desk, a driver, `joint_state_broadcaster` or the simulator otherwise; never two sources for the same joint ([[urdf-joint-state-publisher]]).
+8. Feed robot_state_publisher with `ParameterValue(Command(['xacro ', path]), value_type=str)`: it expands `.xacro` and passes plain `.urdf` through ([[urdf-description-package]], [[urdf-xacro-workflow]]).
+9. Xacro: define properties before their first use; call macros with exactly their `params` names; read args with `$(arg x)` (declared with `<xacro:arg … default=…/>`) and properties with `${x}` ([[urdf-xacro-workflow]], [[urdf-xacro-macros]]).
+10. Keep models portable: no `capsule` or `<robot version="1.1">` for Humble/Jazzy users; install Python tools (onshape-to-robot) with pipx or a venv, never `sudo pip` ([[urdf-migration]], [[urdf-onshape-export]]).
+
+## Retrieval protocol
+1. Pick the area from the **Areas** table below (column "Covers").
+2. Open that area's `_index.md` and choose notes by their summary.
+3. Open 1–3 notes. Use their XML and launch code as the template: keep the structure, adapt the names.
+4. No clear match → `grep -ril "<keyword>" notes/` (element and tool names work best: `mimic`, `safety_controller`, `xacro:if`, `frame_prefix`) and open the top hits.
+5. Follow a note's `see:` links **one hop** at most.
+6. Do not open `learn/` unless the question is about the URDF course (urdfbot, box_bot, quadruped).
+7. Jazzy, Kilted, Lyrical or porting a model → open `migration/` and apply the version marks.
+If the notes do not cover the question, answer from standard URDF/xacro knowledge and say so. Never invent elements, attributes or parameters.
+
+## Version marks in notes
+`[Humble]` Humble-only · `[≥Jazzy]` added in Jazzy (or later) · `[Lyrical]` / `[≥Kilted]` added there · `[changed in Jazzy: …]` / `[changed in Lyrical: …]` what to use there instead · `[verify]` not confirmed by a source or a build: tell the user. Each note's frontmatter `version_notes` holds the source URL of every difference.
 
 ## Areas
 <!-- INDEX:START -->
@@ -16,3 +41,6 @@ Full text in Phase 4.
 | learn | 4 | `learn/_index.md` | URDF course units 2, 3 and 8 for students (urdfbot, box_bot, quadruped); open only for course questions |
 | migration | 1 | `migration/_index.md` | Humble → Jazzy → Lyrical changes (urdfdom versions, capsule, robot_state_publisher description topic); open for other distros or porting |
 <!-- INDEX:END -->
+
+## Related skills
+ros2-core (required): TF basics and broadcasters, launch, packages, colcon, ros2_control overview, multi-robot namespacing; this skill's notes link into it. ros2-gazebo builds on this skill: simulating these models in Gazebo Sim (spawn, friction, plugins, gz_ros2_control, sensors). Install ros2-core with this skill.
