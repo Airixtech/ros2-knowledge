@@ -6,3 +6,4 @@ URDF course units 4–7 for students (box_bot in Gazebo, moving, sensors, xacro,
 | id | summary | path |
 |---|---|---|
 | [[gazebo-learn-unit4-sim]] | Unit 4: my_box_bot_gazebo package, empty world and box_room, collisions and inertias per link, smaller casters, spawn files, wheel friction blocks. | learn/gazebo-learn-unit4-sim.md |
+| [[gazebo-learn-unit5-moving]] | Unit 5: JointStatePublisher and DiffDrive, bridge and teleop, prismatic laser via ros2_control, move_laser.py, lidar model spun by velocity. | learn/gazebo-learn-unit5-moving.md |
