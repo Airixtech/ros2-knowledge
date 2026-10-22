@@ -8,6 +8,7 @@
 > executors, QoS, DDS, managed nodes): IDs V81–V105, sections `Pnn` = page of that course export (not published).
 > Extended 2026-10-19 with the **ROS 2 security course** (SROS2: keystore, enclaves, governance, permissions,
 > `ROS_SECURITY_*`): IDs V106–V139, sections `sec Pnn` = page of that course export (not published).
+> Extended 2026-10-21: V140, the modern-Gazebo version of the security course's TurtleBot3 simulation.
 > The "Lyrical" column includes changes that first appeared in **Kilted** (May 2025, non-LTS), marked "(Kilted)".
 
 ## Method
@@ -237,6 +238,7 @@
 | V137 | sec P12 | "node directories are no longer relevant" | ✓ since Foxy one participant per context; the enclave path is independent of node names | ✓ | ✓ | keep | [enclaves design][design-encl] | High |
 | V138 | sec P13 | `<exec_depend>` after `</export>` in `package.xml` | ✗ format 3 order: dependencies before `<export>` | same | same | **fix** | [package_format3.xsd][pkg-xsd3] | High |
 | V139 | sec P07 | the policy file called a "governance file" | ✗ it is an SROS2 policy; the governance is `enclaves/governance.xml` | same | same | **fix** | [policy.xsd][sros2-xsd-h], [_keystore.py][sros2-ks-h] | High |
+| V140 | sec P08 (2026-10-21) | modern-Gazebo version of the course's TurtleBot3 simulation | none official: branch `humble` of `turtlebot3_simulations` depends on `gazebo_ros_pkgs` (`gzserver`, `gzclient`) | ✓ branch `jazzy`: same `turtlebot3_world.launch.py` with `ros_gz_sim` and `ros_gz_bridge` | no `lyrical` branch (branches `humble`, `jazzy`, `main`) [verify] | annotate (pointer in core-learn-sec-start-here) | [package.xml][tb3-sim-pkg-h], [launch][tb3-sim-world-h], [tb3-sim-j] | High |
 
 ## Open `[verify]` items (for Phase 5 / Docker)
 1. V10: `target_link_libraries(tgt PUBLIC rclcpp::rclcpp ${std_msgs_TARGETS})` builds on `ros:humble`.
@@ -405,4 +407,6 @@
 [tb3-teleop-h]: https://github.com/ROBOTIS-GIT/turtlebot3/blob/humble/turtlebot3_teleop/turtlebot3_teleop/script/teleop_keyboard.py
 [tb3-teleop-j]: https://github.com/ROBOTIS-GIT/turtlebot3/blob/jazzy/turtlebot3_teleop/turtlebot3_teleop/script/teleop_keyboard.py
 [tb3-sim-j]: https://github.com/ROBOTIS-GIT/turtlebot3_simulations/blob/jazzy/turtlebot3_gazebo/launch/turtlebot3_world.launch.py
+[tb3-sim-pkg-h]: https://github.com/ROBOTIS-GIT/turtlebot3_simulations/blob/humble/turtlebot3_gazebo/package.xml
+[tb3-sim-world-h]: https://github.com/ROBOTIS-GIT/turtlebot3_simulations/blob/humble/turtlebot3_gazebo/launch/turtlebot3_world.launch.py
 [pkg-xsd3]: https://github.com/ros-infrastructure/rep/blob/master/xsd/package_format3.xsd

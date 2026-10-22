@@ -2,8 +2,8 @@
 id: core-learn-sec-start-here
 type: reference
 owner: equipo-ros2
-updated: 2026-10-20
-review_by: 2027-04-18
+updated: 2026-10-21
+review_by: 2027-04-19
 source: manual
 confidentiality: internal
 title: "Security course: learning path and prerequisites"
@@ -17,7 +17,8 @@ summary: "Map of the ROS 2 security course (SROS2, TurtleBot3 simulation): units
 tags: [course, security, SROS2, TurtleBot3, learning path, students, keystore, enclave]
 see: ["[[core-sros2-overview]]", "[[core-learn-sec-unit2-tb3]]", "[[core-learn-sec-unit3-key-materials]]", "[[core-learn-sec-unit3-cmd-listener]]", "[[core-learn-start-here]]"]
 requires: []
-version_notes: []
+version_notes:
+  - "humble: turtlebot3_gazebo (branch humble) depends on gazebo_ros_pkgs; branch jazzy uses ros_gz_sim and ros_gz_bridge — https://github.com/ROBOTIS-GIT/turtlebot3_simulations/blob/humble/turtlebot3_gazebo/package.xml (V140)"
 ---
 # Security course: learning path and prerequisites
 
@@ -47,5 +48,5 @@ Prerequisite: ROS 2 basics (nodes, topics, packages, launch): [[core-learn-start
 Every shell that runs a secured node needs the security variables ([[core-sros2-env-vars]]). The course uses three shells: simulation, teleop, and a third one to inspect or run your node.
 
 ## Pitfalls
-- The course runs on Humble with Gazebo Classic 11. On Jazzy the TurtleBot3 simulation uses the new Gazebo and the teleop publishes `TwistStamped`: the policy and the listener need changes ([[core-learn-sec-unit2-tb3]]).
+- The course runs on Humble with Gazebo Classic 11. On Jazzy the TurtleBot3 simulation uses the new Gazebo and the teleop publishes `TwistStamped`: the policy and the listener need changes ([[core-learn-sec-unit2-tb3]]). On Humble the official TurtleBot3 simulation exists only for that older simulator (branch `humble` of `turtlebot3_simulations` depends on `gazebo_ros_pkgs`); its modern-Gazebo version starts with Jazzy, same `turtlebot3_world.launch.py` with `ros_gz_sim` and `ros_gz_bridge` (V140). Modern Gazebo for your own robot: ros2-gazebo skill.
 - Never commit or share the keystore's `private/` folder, even for a course ([[core-sros2-keystore]]).

@@ -26,6 +26,7 @@ Atomic notes for configuring, launching, debugging and extending Nav2 (Simple Co
 5. Follow a note's `see:` links **one hop** at most. Generic ROS 2 questions (QoS, TF, launch, actions) → the ros2-core skill.
 6. Do not open `learn/` unless the question is about a course: intro (TurtleBot3, Units 1–6, course project) or advanced (warehouse, MP-400, Units 1–4).
 7. Jazzy, Lyrical or porting a configuration → open `migration/` and apply the version marks.
+8. Simulation → answer with modern Gazebo (Gazebo Sim: `ros_gz_sim create` to spawn, `ros_gz_bridge`; details in the ros2-gazebo skill). Commands of the older simulator in the course notes (`gazebo_ros`, `spawn_entity.py`) are what those Humble courses run: give them only as course context, next to the modern equivalent the note names.
 If the notes do not cover the question, answer from standard Humble knowledge and say so. Never invent parameters, plugins or defaults.
 
 ## Version marks in notes
@@ -51,4 +52,5 @@ If the notes do not cover the question, answer from standard Humble knowledge an
 
 ## Related skills
 ros2-core (required): install it together with this skill; this skill links into it, never the other way round.
+ros2-gazebo (optional, needs ros2-urdf): modern Gazebo (Gazebo Sim) for simulation: worlds, spawning, `ros_gz_bridge`, sensors, gz_ros2_control. The simulation steps of the course notes name its equivalents in plain text.
 ros2-bt (required): generic behavior trees and the BehaviorTree.CPP v3 API (sequence types, ports and blackboard, SubTrees, writing a BT node with rclcpp, v3 → v4); the behavior-tree notes here link into it for those details. Install ros2-core, ros2-bt and ros2-nav2 together.

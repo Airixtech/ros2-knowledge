@@ -27,6 +27,7 @@ Atomic notes for writing correct ROS 2 code and debugging it. **Humble is canoni
 5. Follow a note's `see:` links **one hop** at most.
 6. Do not open `learn/`, `learn-intermediate/` or `learn-security/` unless the question is about a course (`learn/`: Leo rover, Units 2–8, quizzes; `learn-intermediate/`: MP-400 simulation, Units 2–9, final project; `learn-security/`: TurtleBot3 security course, Units 2–3). For a concept, prefer the note without `-demo`; open the `-demo` note when the user needs the test program.
 7. Jazzy, Lyrical or porting a project → open `migration/` and apply the version marks.
+8. Simulation → answer with modern Gazebo (Gazebo Sim: `ros_gz_sim`, `ros_gz_bridge`, `gz_ros2_control`; details in the ros2-gazebo skill). Commands of the older simulator in course notes (`gazebo_ros`, `spawn_entity.py`, `gzserver`) are what those Humble courses run: give them only as course context, next to the modern equivalent the note names.
 If the notes do not cover the question, answer from standard Humble knowledge and say so. Never invent APIs or flags.
 
 ## Version marks in notes

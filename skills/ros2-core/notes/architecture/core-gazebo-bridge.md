@@ -2,8 +2,8 @@
 id: core-gazebo-bridge
 type: reference
 owner: equipo-ros2
-updated: 2026-10-20
-review_by: 2027-04-18
+updated: 2026-10-21
+review_by: 2027-04-19
 source: manual
 confidentiality: internal
 title: "Gazebo with ROS 2: versions, ros_gz bridge, Gazebo vs Isaac"
@@ -23,7 +23,7 @@ version_notes:
 ---
 # Gazebo with ROS 2: versions, ros_gz bridge, Gazebo vs Isaac
 
-**TL;DR** The official Gazebo for Humble is **Fortress** (`ign gazebo`, `sudo apt install ros-humble-ros-gz`). ROS and Gazebo topics are connected by `ros_gz_bridge` with a YAML file. Seed note for a future simulation skill.
+**TL;DR** The official Gazebo for Humble is **Fortress** (`ign gazebo`, `sudo apt install ros-humble-ros-gz`). ROS and Gazebo topics are connected by `ros_gz_bridge` with a YAML file. Worlds, spawning, `<gazebo>` tags, sensors and gz_ros2_control (modern Gazebo only): the ros2-gazebo skill.
 
 ## Versions
 | | Classic 11 | Modern Gazebo |

@@ -1,6 +1,6 @@
 # Version audit — ros2-nav2 (Phase 1)
 
-> Date: 2026-10-09 (intro course, NAV2-V01–V41) · 2026-10-10 (advanced course, NAV2-V42–V68).
+> Date: 2026-10-09 (intro course, NAV2-V01–V41) · 2026-10-10 (advanced course, NAV2-V42–V68) · 2026-10-21 (NAV2-V69: modern-Gazebo equivalent of the course's spawn command).
 > Scope: every version-dependent statement in two course wikis (not published): "Introduction to ROS 2 Navigation"
 > (Nav2 servers and parameters, behavior trees, lifecycle manager, map server, AMCL, costmaps, Cartographer,
 > multi-robot setup, simulator commands, course code) and "Advanced ROS 2 Navigation" (Simple Commander API,
@@ -155,6 +155,7 @@ Origin: where the wrong statement comes from. "Foxy"/"Galactic" = a name of that
 | NAV2-V66 | A-P51 | DWB generators `StandardTrajectoryGenerator`, `LimitedAccelGenerator`; 10 critics | ✓ | ✓ | ✓ | keep | [dwb_plugins (humble)][dwbp-h], [dwb_critics (humble)][dwbc-h] | High |
 | NAV2-V67 | A-P50, A-P51 | `controller_server`: `progress_checker_plugin`, `goal_checker_plugins`, `controller_plugins` | ✓ | `progress_checker_plugins` list (NAV2-V18) | + path handler plugin (`nav2_controller::FeasiblePathHandler`) and the goal checkers of NAV2-V54 | annotate | [Kilted→Lyrical][mig-k2l] | High |
 | NAV2-V68 | A-P31, A-P33, A-P38, A-P40, A-P45 | plugin `CMakeLists.txt` uses `ament_target_dependencies()` | ✓ | ✓ | deprecated (Kilted), removed (Lyrical): `target_link_libraries(<lib> PUBLIC <pkg>::<pkg>)` | annotate | V09 | High |
+| NAV2-V69 | P50, A-P52 (2026-10-21) | modern-Gazebo equivalent of `spawn_entity.py -entity … -database …` | `ros2 run ros_gz_sim create -name … -file <model.sdf or Fuel URL> -x … -y …` (ros_gz `humble`, Fortress), only in a world started with `ros_gz_sim`; the cone is `https://fuel.gazebosim.org/1.0/OpenRobotics/models/Construction Cone` (CC0); Fuel has no model named gas_bottle (search of 2026-10-21) | same flags (Harmonic) | same flags (Jetty) | annotate (pointer in nav2-global-costmap, nav2-dwb-critic-tuning) | [create.cpp][create-h], [README][rosgz-sim-readme], [Fuel model][fuel-cone], [example world][gz-cone-world] | High |
 
 ## Humble alternatives to features of later distros (advanced course)
 Each alternative was checked in the Humble code or a Humble README before it was listed. "None" means no Humble equivalent was found.
@@ -281,3 +282,7 @@ Each alternative was checked in the Humble code or a Humble README before it was
 [doc-bf]: https://github.com/ros-navigation/docs.nav2.org/blob/rolling/docs/configuration_and_development/configuration_guide/core_servers/costmap_2d/costmap_filters/binary_filter/binary_filter.md
 [doc-vs]: https://github.com/ros-navigation/docs.nav2.org/blob/rolling/docs/configuration_and_development/configuration_guide/core_servers/configuring_velocity_smoother.md
 [doc-cm]: https://github.com/ros-navigation/docs.nav2.org/blob/rolling/docs/configuration_and_development/configuration_guide/core_servers/collision_monitor/index.md
+[create-h]: https://github.com/gazebosim/ros_gz/blob/humble/ros_gz_sim/src/create.cpp
+[rosgz-sim-readme]: https://github.com/gazebosim/ros_gz/blob/jazzy/ros_gz_sim/README.md
+[fuel-cone]: https://app.gazebosim.org/OpenRobotics/fuel/models/Construction%20Cone
+[gz-cone-world]: https://github.com/gazebosim/gz-sim/blob/gz-sim8/examples/worlds/camera_sensor.sdf

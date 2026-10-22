@@ -2,8 +2,8 @@
 id: nav2-dwb-critic-tuning
 type: reference
 owner: equipo-ros2
-updated: 2026-10-10
-review_by: 2027-04-08
+updated: 2026-10-21
+review_by: 2027-04-19
 source: manual
 confidentiality: internal
 title: "DWB critic tuning: PathAlign keeps the robot stuck behind an unmapped obstacle"
@@ -18,6 +18,7 @@ see: ["[[nav2-dwb-generators-critics]]", "[[nav2-dwb-controller]]", "[[nav2-mp40
 requires: [ros2-core]
 version_notes:
   - "humble: ros2 run gazebo_ros spawn_entity.py (Gazebo Classic); jazzy: gazebo_ros is not released, use ros2 run ros_gz_sim create — https://github.com/ros/rosdistro/blob/master/humble/distribution.yaml (NAV2-V28)"
+  - "humble: modern Gazebo spawns with ros_gz_sim create -file <file or Fuel URL>; OpenRobotics/Construction Cone is on Gazebo Fuel (CC0) — https://github.com/gazebosim/ros_gz/blob/humble/ros_gz_sim/README.md (NAV2-V69)"
   - "humble: the outcome below is the course's observation in its simulation [verify] — https://github.com/ros-navigation/docs.nav2.org/blob/rolling/docs/configuration_and_development/configuration_guide/controller_plugins/dwb_controller/trajectory_critics/path_align.md (NAV2-V66)"
 ---
 # DWB critic tuning: PathAlign keeps the robot stuck behind an unmapped obstacle
@@ -30,6 +31,10 @@ version_notes:
 3. Spawn a cone in the simulation (Humble, Gazebo Classic):
    ```bash
    ros2 run gazebo_ros spawn_entity.py -entity construction_cone -database construction_cone -x -1
+   ```
+   Modern Gazebo (Humble + Fortress or Jazzy + Harmonic, only in a world started with `ros_gz_sim`): the cone is a Gazebo Fuel model (NAV2-V69; more: ros2-gazebo skill, `gazebo-spawn-urdf`):
+   ```bash
+   ros2 run ros_gz_sim create -name construction_cone -file 'https://fuel.gazebosim.org/1.0/OpenRobotics/models/Construction Cone' -x -1
    ```
 4. Put the robot in front of the cone at approximately 1 meter and give a goal on the other side of the cone with RViz. The planned path goes over the cone: the planner does not consider the new obstacle.
 

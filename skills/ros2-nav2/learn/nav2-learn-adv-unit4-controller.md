@@ -2,8 +2,8 @@
 id: nav2-learn-adv-unit4-controller
 type: reference
 owner: equipo-ros2
-updated: 2026-10-10
-review_by: 2027-04-08
+updated: 2026-10-21
+review_by: 2027-04-19
 source: manual
 confidentiality: internal
 title: "Advanced Unit 4 exercise: critics with an unmapped obstacle"
@@ -33,7 +33,7 @@ See the difference between using one critic or another (the course numbers it E1
 4. Put the robot about 1 m in front of the cone and send a goal on the other side.
 5. Observe; then remove the `PathAlign` critic, recompile, relaunch and repeat. What happens?
 
-Steps, explanation and expected results: [[nav2-dwb-critic-tuning]]. [changed in Jazzy: spawn with `ros2 run ros_gz_sim create`, NAV2-V28]
+Steps, explanation and expected results: [[nav2-dwb-critic-tuning]]. [changed in Jazzy: spawn with `ros2 run ros_gz_sim create`, NAV2-V28]; the modern-Gazebo command for the cone is in [[nav2-dwb-critic-tuning]] (NAV2-V69)
 
 ## Conclusions
 You explored the controller server, how it manages robot motion, and how critics influence the way the controller evaluates and selects trajectories.

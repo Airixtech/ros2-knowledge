@@ -2,8 +2,8 @@
 id: nav2-global-costmap
 type: reference
 owner: equipo-ros2
-updated: 2026-10-10
-review_by: 2027-04-08
+updated: 2026-10-21
+review_by: 2027-04-19
 source: manual
 confidentiality: internal
 title: "Global costmap: config in planner_server.yaml and general parameters"
@@ -19,6 +19,7 @@ requires: [ros2-core]
 version_notes:
   - "humble: code defaults always_send_full_costmap false, resolution 0.1, robot_radius 0.1, update_frequency 5.0, width/height 5 — https://github.com/ros-navigation/navigation2/blob/humble/nav2_costmap_2d/src/costmap_2d_ros.cpp (NAV2-V09)"
   - "jazzy: gazebo_ros (Gazebo Classic) is not released; spawn with ros_gz_sim create — https://github.com/ros/rosdistro/blob/master/jazzy/distribution.yaml (NAV2-V28)"
+  - "humble: modern Gazebo spawns with ros_gz_sim create -name -file <file or Fuel URL> -x -y (same flags in jazzy and lyrical) — https://github.com/gazebosim/ros_gz/blob/humble/ros_gz_sim/src/create.cpp (NAV2-V69)"
 ---
 # Global costmap: config in planner_server.yaml and general parameters
 
@@ -69,7 +70,7 @@ Spawn an object that is not on the map (Gazebo Classic, Humble):
 ```bash
 ros2 run gazebo_ros spawn_entity.py -entity gas_bottle3 -database gas_bottle -x -0.6 -y -0.3
 ```
-[changed in Jazzy: `ros2 run ros_gz_sim create` (no Gazebo Classic)]. The laser sees the gas bottle, but this costmap does not include it, so the path crosses it and the robot crashes: **the object is not taken into account**. Fix: add the `obstacle_layer` ([[nav2-costmap-layers]]). Conversely, anything in the map is an obstacle for the planner **even if it is no longer there**.
+[changed in Jazzy: `ros2 run ros_gz_sim create` (no Gazebo Classic)]. Modern Gazebo (Humble + Fortress or Jazzy + Harmonic, only in a world started with `ros_gz_sim`): `ros2 run ros_gz_sim create -name gas_bottle3 -file <model_folder>/model.sdf -x -0.6 -y -0.3`; Gazebo Fuel has no model of that name, so use your own model or any Fuel model URL (NAV2-V69; spawning and resource paths: ros2-gazebo skill, `gazebo-spawn-urdf`). The laser sees the gas bottle, but this costmap does not include it, so the path crosses it and the robot crashes: **the object is not taken into account**. Fix: add the `obstacle_layer` ([[nav2-costmap-layers]]). Conversely, anything in the map is an obstacle for the planner **even if it is no longer there**.
 
 ## Pitfalls
 - Wrong indentation (the block not at column 0, or inside `planner_server`) → the costmap silently uses defaults.
