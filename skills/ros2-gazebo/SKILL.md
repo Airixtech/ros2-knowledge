@@ -23,7 +23,7 @@ Atomic notes for running robots in Gazebo Sim from ROS 2. **Jazzy + Gazebo Harmo
 2. Open that area's `_index.md` and choose notes by their summary.
 3. Open 1–3 notes. Use their XML, launch and YAML as the template: keep the structure, adapt the names.
 4. No clear match → `grep -ril "<keyword>" notes/` (system, element and topic names work best: `DiffDrive`, `gz_frame_id`, `parameter_bridge`, `GazeboSimSystem`) and open the top hits.
-5. Follow a note's `see:` links **one hop** at most; URDF questions go to ros2-urdf.
+5. Follow a note's `see:` links **one hop** at most; URDF questions go to ros2-urdf, ros2_control questions outside the simulator (controller states, `ros2 control` CLI, hardware interfaces) to ros2-control.
 6. Do not open `learn/` unless the question is about the URDF course (box_bot units 4–7).
 7. Humble, Kilted, Lyrical or porting → open `migration/` and apply the version marks.
 If the notes do not cover the question, read the official source for the user's version (below) or say that you answer from standard knowledge. Never invent elements, plugin names or parameters.

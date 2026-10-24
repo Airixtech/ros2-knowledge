@@ -43,4 +43,4 @@ If the notes do not cover the question, answer from standard URDF/xacro knowledg
 <!-- INDEX:END -->
 
 ## Related skills
-ros2-core (required): TF basics and broadcasters, launch, packages, colcon, ros2_control overview, multi-robot namespacing; this skill's notes link into it. ros2-gazebo builds on this skill: simulating these models in Gazebo Sim (spawn, friction, plugins, gz_ros2_control, sensors). Install ros2-core with this skill.
+ros2-core (required): TF basics and broadcasters, launch, packages, colcon, ros2_control overview, multi-robot namespacing; this skill's notes link into it. ros2-gazebo builds on this skill: simulating these models in Gazebo Sim (spawn, friction, plugins, gz_ros2_control, sensors). ros2-control builds on this skill too: the `<ros2_control>` tag, controllers and hardware interfaces for these models. Install ros2-core with this skill.
