@@ -2,8 +2,8 @@
 id: gazebo-ros2-control-urdf
 type: reference
 owner: equipo-ros2
-updated: 2026-10-21
-review_by: 2027-04-19
+updated: 2026-10-24
+review_by: 2027-04-22
 source: manual
 confidentiality: internal
 title: "gz_ros2_control: <ros2_control> hardware plugin, interfaces, system plugin + YAML"
@@ -14,15 +14,15 @@ tested: false
 audience: dev
 summary: "URDF <ros2_control> with gz_ros2_control/GazeboSimSystem, command/state interfaces position/velocity/effort, gz_ros2_control-system plugin with <parameters> YAML; Humble robot_param_node."
 tags: [gz_ros2_control, ros2_control, GazeboSimSystem, GazeboSimROS2ControlPlugin, gz_ros2_control-system, command_interface, state_interface, parameters, robot_param_node, controller_manager]
-see: ["[[gazebo-ros2-control-controllers]]", "[[core-ros2-control-overview]]", "[[gazebo-velocity-control]]", "[[gazebo-jtc-action-client]]", "[[gazebo-sim-overview]]"]
-requires: [ros2-core, ros2-urdf]
+see: ["[[gazebo-ros2-control-controllers]]", "[[control-urdf-tag]]", "[[core-ros2-control-overview]]", "[[gazebo-velocity-control]]", "[[gazebo-jtc-action-client]]", "[[gazebo-sim-overview]]"]
+requires: [ros2-core, ros2-urdf, ros2-control]
 version_notes:
   - "jazzy/harmonic: GazeboSimSystem exports only the interfaces named position, velocity and effort; other names are not exported — https://github.com/ros-controls/gz_ros2_control/blob/jazzy/gz_ros2_control/src/gz_system.cpp (GZ-V50)"
   - "jazzy/harmonic: the controller manager receives the description from the /robot_description topic; humble: from the parameter robot_description of node robot_state_publisher (<robot_param_node>, <robot_param>) — https://github.com/ros-controls/gz_ros2_control/blob/humble/doc/index.rst (GZ-V29)"
   - "humble/fortress: gz_ros2_control 0.7.21 uses the same names (plus ign_ros2_control aliases); lyrical drops ign_ros2_control::IgnitionSystem — https://github.com/ros/rosdistro/blob/master/humble/distribution.yaml (GZ-V28)"
   - "jazzy/harmonic: the course text calls the laser collision a cylinder; its file and inertia use the box shown here (GZ-V53)"
   - "jazzy/harmonic: $(find pkg) in <parameters> works because the launch file runs the .urdf through xacro (GZ-V30)"
-  - "jazzy/harmonic: command interface min/max are metadata; whether anything clamps to them [verify] (GZ-V31)"
+  - "jazzy/harmonic: gz_system does not clamp; the controller manager clamps to the most restrictive of min/max and the URDF <limit> only with enforce_command_limits: true (default false; kilted/lyrical: true) — https://github.com/ros-controls/ros2_control/blob/jazzy/controller_manager/src/controller_manager_parameters.yaml (GZ-V31)"
 ---
 # gz_ros2_control: <ros2_control> hardware plugin, interfaces, system plugin + YAML
 
@@ -56,7 +56,8 @@ version_notes:
 </gazebo>
 ```
 - One `<joint>` per controlled joint, each with the interfaces its controllers claim. GazeboSimSystem knows only `position`, `velocity` and `effort`: the interface names are not free.
-- `<param name="min">`/`max` describe the command range; the joint's own `<limit>` (here −0.1…0.0) still applies to the physics.
+- `<param name="min">`/`max` describe the command range; the joint's own `<limit>` (here −0.1…0.0) still applies to the physics. Neither clamps the commands unless the controller manager has `enforce_command_limits: true` (Jazzy default `false`, Kilted/Lyrical `true`; [[control-urdf-tag]]).
+- The `<gazebo>` block is read by Gazebo Sim, not by ros2_control: in simulation the controller YAML goes only into its `<parameters>`; without Gazebo the launch file gives the YAML to `ros2_control_node` ([[control-bringup-hardware-launch]]).
 - `$(find my_box_bot_description)` is a xacro substitution: it works because the launch file passes the file through `xacro` ([[urdf-description-package]]). Use an absolute path if you load a plain URDF without xacro.
 - Several `<parameters>` elements are allowed; the plugin also reads `<controller_manager_name>`, `<hold_joints>` and `<ros>` (namespace, remappings).
 

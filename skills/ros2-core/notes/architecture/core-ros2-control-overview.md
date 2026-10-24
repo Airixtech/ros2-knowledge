@@ -2,8 +2,8 @@
 id: core-ros2-control-overview
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-24
+review_by: 2027-04-22
 source: manual
 confidentiality: internal
 title: "ros2_control: controllers, YAML, CLI, mock hardware"
@@ -56,6 +56,8 @@ ros2 control switch_controllers --activate arm_controller --deactivate forward_p
 </ros2_control>
 ```
 Same packages, different launch + YAML for real and sim ([[core-time-timers]]).
+
+More detail (controller states, every `ros2 control` verb, spawner, JTC parameters, writing a hardware interface, Humble vs Jazzy vs Lyrical hardware API): ros2-control skill.
 
 ## Pitfalls
 - Never run joint_state_publisher_gui alongside joint_state_broadcaster.

@@ -2,8 +2,8 @@
 id: gazebo-velocity-control
 type: reference
 owner: equipo-ros2
-updated: 2026-10-21
-review_by: 2027-04-19
+updated: 2026-10-24
+review_by: 2027-04-22
 source: manual
 confidentiality: internal
 title: "Velocity commands on /<controller>/commands; a visual-only rotating link"
@@ -15,15 +15,16 @@ audience: dev
 summary: "JointGroupVelocityController commands with std_msgs/Float64MultiArray on /velocity_controller/commands; continuous joint with a velocity interface; spinning lidar model link."
 tags: [JointGroupVelocityController, velocity_controller, commands, Float64MultiArray, ros2 topic pub, continuous joint, velocity interface, laser_scan_model_link, rplidar]
 see: ["[[gazebo-ros2-control-controllers]]", "[[gazebo-ros2-control-urdf]]", "[[gazebo-sensors-lidar]]", "[[core-topic-cli]]"]
-requires: [ros2-core, ros2-urdf]
+requires: [ros2-core, ros2-urdf, ros2-control]
 version_notes:
   - "jazzy/harmonic: GazeboSimSystem knows only the interface names position, velocity, effort (GZ-V50) — https://github.com/ros-controls/gz_ros2_control/blob/jazzy/gz_ros2_control/src/gz_system.cpp"
-  - "jazzy/harmonic: the controller does not clamp; whether Gazebo applies the URDF velocity limit to 20 rad/s commands [verify] (GZ-V34)"
+  - "jazzy/harmonic: the controller does not clamp, nor does the controller manager (enforce_command_limits default false; kilted/lyrical: true); whether Gazebo applies the URDF velocity limit to 20 rad/s commands [verify] (GZ-V34)"
+  - "lyrical/jetty: no velocity_controllers package; use forward_command_controller/ForwardCommandController with interface_name: velocity — https://github.com/ros-controls/ros2_controllers/blob/master/doc/migration.rst (GZ-V59)"
   - "jazzy/harmonic: the course reuses the large box's inertia for the smaller box and the cylinder (GZ-V52)"
 ---
 # Velocity commands on /<controller>/commands; a visual-only rotating link
 
-**TL;DR** A `velocity_controllers/JointGroupVelocityController` takes one velocity per joint as `std_msgs/msg/Float64MultiArray` on `/<controller_name>/commands` and writes it to the joints' `velocity` command interface. The course uses it to spin the lidar mesh while the lidar sensor stays on a frame that does not rotate.
+**TL;DR** A `velocity_controllers/JointGroupVelocityController` takes one velocity per joint as `std_msgs/msg/Float64MultiArray` on `/<controller_name>/commands` and writes it to the joints' `velocity` command interface. The course uses it to spin the lidar mesh while the lidar sensor stays on a frame that does not rotate. [changed in Lyrical + Jetty: no `velocity_controllers` package; use `forward_command_controller/ForwardCommandController` with `interface_name: velocity`].
 
 ## Split the lidar into a moving mount and a spinning model
 - `laser_scan_link` (prismatic mount, [[gazebo-ros2-control-urdf]]) becomes a small 0.02 m box (visual and collision).
@@ -80,5 +81,5 @@ One value per joint listed in the controller's `joints`, in that order. The pris
 
 ## Pitfalls
 - Commands with the wrong number of values → "command size (…) does not match number of interfaces (…)" and the command is not applied (one value per joint).
-- 20 rad/s against a URDF `velocity="2.0"` and `max 2.0`: the controller passes it on unchanged; what Gazebo does with it [verify].
+- 20 rad/s against a URDF `velocity="2.0"` and `max 2.0`: the controller passes it on unchanged, and so does the controller manager unless `enforce_command_limits: true` (Jazzy default `false`; Kilted/Lyrical `true`, [[control-urdf-tag]]); what Gazebo does with it [verify].
 - The inertia values here are those of the larger box of the first version; recompute them for the 0.02 m box and for the cylinder ([[urdf-inertia]]).

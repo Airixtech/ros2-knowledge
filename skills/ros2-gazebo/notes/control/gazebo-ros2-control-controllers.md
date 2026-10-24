@@ -2,8 +2,8 @@
 id: gazebo-ros2-control-controllers
 type: reference
 owner: equipo-ros2
-updated: 2026-10-21
-review_by: 2027-04-19
+updated: 2026-10-24
+review_by: 2027-04-22
 source: manual
 confidentiality: internal
 title: "Controller YAML (JTC, JointGroupVelocity, broadcaster) and spawners in launch"
@@ -14,12 +14,13 @@ tested: false
 audience: dev
 summary: "controller_manager YAML: update_rate, joint_trajectory_controller, JointGroupVelocityController, joint_state_broadcaster; spawner nodes in launch; launch chain; exec_depend packages."
 tags: [controller_manager, update_rate, joint_trajectory_controller, JointTrajectoryController, velocity_controllers, JointGroupVelocityController, joint_state_broadcaster, spawner, controller yaml, ros2_controllers]
-see: ["[[gazebo-ros2-control-urdf]]", "[[core-ros2-control-overview]]", "[[gazebo-jtc-action-client]]", "[[gazebo-velocity-control]]", "[[core-pkg-dependencies]]"]
-requires: [ros2-core, ros2-urdf]
+see: ["[[gazebo-ros2-control-urdf]]", "[[control-controller-config]]", "[[control-services-spawner]]", "[[core-ros2-control-overview]]", "[[gazebo-jtc-action-client]]", "[[gazebo-velocity-control]]", "[[core-pkg-dependencies]]"]
+requires: [ros2-core, ros2-urdf, ros2-control]
 version_notes:
   - "humble/fortress: interface_name is not a JointTrajectoryController parameter (ignored); JTC uses joints, command_interfaces, state_interfaces — https://github.com/ros-controls/ros2_controllers/blob/humble/joint_trajectory_controller/src/joint_trajectory_controller_parameters.yaml (GZ-V06)"
   - "humble/fortress: JointGroupVelocityController takes joints only (interface_name is set to velocity by the controller) — https://github.com/ros-controls/ros2_controllers/blob/jazzy/forward_command_controller/src/forward_command_controller_parameters.yaml (GZ-V07)"
   - "jazzy/harmonic: controllers are run-time dependencies: <exec_depend> in package.xml, not CMake (GZ-V08)"
+  - "lyrical/jetty: no velocity_controllers package (JointGroupVelocityController deprecated); use forward_command_controller/ForwardCommandController with interface_name: velocity — https://github.com/ros-controls/ros2_controllers/blob/master/doc/migration.rst (GZ-V59)"
   - "jazzy/harmonic: spawner takes several controller names, -c, -p/--param-file, --inactive (GZ-V32) — https://github.com/ros-controls/ros2_control/blob/jazzy/controller_manager/controller_manager/spawner.py"
 ---
 # Controller YAML (JTC, JointGroupVelocity, broadcaster) and spawners in launch
@@ -55,6 +56,7 @@ velocity_controller:
 ```
 - The course's first file (`controller_position.yaml`) is the same without `velocity_controller`.
 - The course also writes `interface_name: position` under the trajectory controller and `interface_name`/`command_interfaces`/`state_interfaces` under the velocity controller: JTC has no `interface_name`, and the velocity controller fixes its interface to `velocity` and reads only `joints`. They are ignored and left out here.
+- [changed in Lyrical + Jetty: no `velocity_controllers` package; declare `velocity_controller` with `type: forward_command_controller/ForwardCommandController` and `interface_name: velocity`].
 - The `command_interfaces`/`state_interfaces` of JTC must exist in the URDF `<ros2_control>` joint.
 
 ## launch/control_position_velocity.launch.py
@@ -103,7 +105,7 @@ def generate_launch_description():
   <include file="$(find-pkg-share my_box_bot_gazebo)/launch/control_position_velocity.launch.py"/>
 </launch>
 ```
-Check with `ros2 control list_controllers` (all `active`) and `ros2 control list_hardware_interfaces` ([[core-ros2-control-overview]]).
+Check with `ros2 control list_controllers` (all `active`) and `ros2 control list_hardware_interfaces` ([[core-ros2-control-overview]]; states and CLI in detail: [[control-cli-list]], spawner options: [[control-services-spawner]]).
 
 ## Dependencies
 The controllers are plugins loaded at run time. Declare them in `package.xml` (`<exec_depend>joint_trajectory_controller</exec_depend>`, `velocity_controllers`, `joint_state_broadcaster`, `controller_manager`, `gz_ros2_control`) and install them: `sudo apt install ros-jazzy-ros2-controllers ros-jazzy-gz-ros2-control`.

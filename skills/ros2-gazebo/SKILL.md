@@ -53,4 +53,4 @@ Full links: [[gazebo-migration-fortress]] and [[gazebo-migration-jetty]].
 <!-- INDEX:END -->
 
 ## Related skills
-ros2-core (required): launch, sim time, TF, Gazebo pairing overview (`core-gazebo-bridge`), ros2_control overview, multi-robot namespacing. ros2-urdf (required): links, joints, inertia, xacro, robot_state_publisher. Install the three together: this skill's notes link into both.
+ros2-core (required): launch, sim time, TF, Gazebo pairing overview (`core-gazebo-bridge`), ros2_control overview, multi-robot namespacing. ros2-urdf (required): links, joints, inertia, xacro, robot_state_publisher. ros2-control (required): controller YAML, controller states, `ros2 control` CLI, spawner, `<ros2_control>` tag and hardware interfaces outside simulation. Install the four together: this skill's notes link into all three.

@@ -111,6 +111,12 @@
 | CONTROL-V40 | 2.5 | controller YAML layout (`type` under `controller_manager`) | ✓ (official Humble demo) | ✓; the Jazzy demo also writes `type` in each controller's `ros__parameters` and loads the file with `spawner --param-file` | ✓ | annotate | [demo1-h], [demo1-launch-j] | High |
 | CONTROL-V41 | 1.3 | "Successfully loaded controller X into state active" | `ros2 control load_controller --set-state` | same | same | keep | [cli-ld-j] | High |
 | CONTROL-V42 | 3.5 | spawner on an already active controller: "Controller already loaded, skipping load_controller" then "Failed to configure controller" | ✓ | ✓ | ✓ | keep | [spawner-h], [spawner-j] | High |
+| CONTROL-V44 | 2.7 | the explained snippet names the node `robot_state_pub_node` with `output="both"`; the launch file names it `node_robot_state_publisher` with `output='screen'` (found while writing) | — | course mistake: the launch code wins | — | **fix** | course launch | High |
+| CONTROL-V45 | 4.7, 4.9, 4.10 | the text pastes the methods into `my_robot_hardware.cpp`; 4.6 and the CMake source list use `my_robot_hardware_interface.cpp` (found while writing) | — | course mistake: the file is `my_robot_hardware_interface.cpp` | — | **fix** | course CMakeLists | High |
+| CONTROL-V46 | 5.5 | the explanation shows `namespace my_robot_hardware_interface` and "protected variables"; the header uses `namespace dynamixel_hardware` and private members (found while writing) | — | course mistake: the header wins | — | **fix** | course header | High |
+| CONTROL-V47 | 5.8 | the explained snippet exports `&hw_joint_state_`, a member the class does not have (found while writing) | — | course mistake: the method of the same section uses `&joints_[i].state.position` | — | **fix** | course code | High |
+| CONTROL-V48 | 5.10–5.12 | Dynamixel `on_activate()`, `on_deactivate()`, `read()` | — | logic: `on_activate()` ignores the results of `read()`/`write()`; `on_deactivate()` leaves the torque on (servos hold their goal); `read()` returns `OK` after a failed Sync Read and converts the zero-initialised raw values (upstream 1.0 now holds the last state on read errors) | — | annotate | [dxlhw-061], [dxlhw-cl] | High |
+| CONTROL-V49 | 5.14, 5.15 | Dynamixel `enable_torque()`, `set_control_mode()` | — | logic: `torque_enabled_` starts `false`, so the first `enable_torque(false)` sends nothing; every mode switch calls `enable_torque(true)` → `reset_command()`, which zeroes the velocity commands of the `write()` cycle that switches to velocity mode; whether a servo with torque still on refuses the mode write [verify] | — | annotate | course code, [dxlhw-061] | High |
 | CONTROL-V43 | 1.3 | `switch_controllers` prints "Successfully switched controllers!" and the deactivated/activated lists | prints only "Successfully switched controllers" | ✓ | ✓ | annotate | [cli-sw-h], [cm-j] | High |
 
 ## Humble alternatives (features that exist only in Jazzy or later)
@@ -196,3 +202,4 @@
 [rosdistro-l]: https://github.com/ros/rosdistro/blob/master/lyrical/distribution.yaml
 [apt-jammy]: http://packages.ros.org/ros2/ubuntu/dists/jammy/main/binary-amd64/Packages.gz
 [apt-noble]: http://packages.ros.org/ros2/ubuntu/dists/noble/main/binary-amd64/Packages.gz
+[dxlhw-cl]: https://github.com/dynamixel-community/dynamixel_hardware/blob/jazzy/dynamixel_hardware/CHANGELOG.rst
