@@ -45,6 +45,8 @@ hardware_interface::CallbackReturn RRBotSystemPositionOnlyHardware::on_init(
     return hardware_interface::CallbackReturn::ERROR;
   }
   // ... the rest uses info_ (the member), e.g. info_.hardware_parameters, info_.joints
+  return hardware_interface::CallbackReturn::SUCCESS;
+}
 ```
 - Drop the `hardware_component_interface_params.hpp` include, and replace `params.hardware_info` with `info_` (the template's `const auto & info = params.hardware_info;` becomes `const auto & info = info_;`). The Dynamixel `on_init()` changes the same way.
 - `export_state_interfaces()`/`export_command_interfaces()` with pointers into member vectors are the normal way in Humble: the course code stays as it is ([[control-hw-template-export]]).
