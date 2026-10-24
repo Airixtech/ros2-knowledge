@@ -1,6 +1,6 @@
 # Version audit — ros2-gazebo (Phase 1)
 
-> Date: 2026-10-20.
+> Date: 2026-10-20. Extended 2026-10-24 by the ros2_control course audit ([version_audit_control.md](version_audit_control.md)): GZ-V31 resolved, GZ-V34 narrowed, GZ-V59.
 > Scope: every version-dependent or checkable statement of the URDF course (course wiki, not published) that lands
 > in `ros2-gazebo`: starting Gazebo Sim, worlds, spawning a URDF, `<gazebo>` tags (friction, contact, materials),
 > the JointStatePublisher and DiffDrive systems, `ros_gz_bridge`, `gz_ros2_control` and its controllers, sensors
@@ -87,10 +87,10 @@
 | GZ-V28 | 5.5–5.8 | gz_ros2_control names `gz_ros2_control/GazeboSimSystem`, `gz_ros2_control-system`, `gz_ros2_control::GazeboSimROS2ControlPlugin`, `<parameters>` | ✓ in Humble's gz_ros2_control 0.7.21 (also the old `ign_ros2_control` aliases) | ✓ | ✓; the `ign_ros2_control::IgnitionSystem` export is gone | annotate | [gzr2c-j], [gzr2c-h], [gzr2c-l], [rosdistro-h] | High |
 | GZ-V29 | 5.6 | Where the controller manager gets the robot description | Humble: parameter `robot_description` of node `robot_state_publisher` (`<robot_param_node>`, `<robot_param>`); the course names the node `robot_state_publisher_node`, so add `<robot_param_node>robot_state_publisher_node</robot_param_node>` or keep the default node name | from the `/robot_description` topic | topic | annotate | [gzr2c-h], [gzr2c-h-doc], [gzr2c-j] | High |
 | GZ-V30 | 5.6 | `<parameters>$(find pkg)/config/x.yaml</parameters>` inside a `.urdf` | ✓ only because the launch file runs the `.urdf` through xacro; a URDF loaded without xacro keeps the literal `$(find …)` | ✓ | ✓ | annotate | [xacro] | High |
-| GZ-V31 | 5.6 | Command interface `<param name="min">`/`max` (−0.05…0) while the URDF limit is −0.1…0 | interface metadata parsed by ros2_control; whether anything clamps to it [verify] | same | same | annotate | — | Medium |
+| GZ-V31 | 5.6 | Command interface `<param name="min">`/`max` (−0.05…0) while the URDF limit is −0.1…0 | humble/fortress: parsed, the controller manager does not enforce limits | `gz_system.cpp` does not clamp; the controller manager clamps to the most restrictive of the URDF `<limit>` and `min`/`max` only with `enforce_command_limits: true` (default `false`); resolved 2026-10-24 (CONTROL-V22) | default `true` | annotate | [rc-parser-j], [cm-params-j], [cm-params-m], [gzr2c-sys-j] | High |
 | GZ-V32 | 5.6, 5.8 | `controller_manager: update_rate`, controller `type`s; `spawner <name>` per controller | ✓ | ✓ (spawner also takes several names and `--param-file`) | ✓ | annotate | [spawner-j] | High |
 | GZ-V33 | 5.7 | Python FollowJointTrajectory client: `rclpy.shutdown()` in the result callback, `rclpy.spin` in main | ✓ same pattern as the official action client tutorial; `send_goal` returns nothing (the `future` variable is `None`) | ✓ | ✓ | keep | [docs-action-j] | High |
-| GZ-V34 | 5.8 | `ros2 topic pub /velocity_controller/commands std_msgs/msg/Float64MultiArray` with 20 rad/s while the joint limit is 2.0 | the controller does not clamp; whether Gazebo enforces the URDF velocity limit [verify] | same | same | annotate | — | Medium |
+| GZ-V34 | 5.8 | `ros2 topic pub /velocity_controller/commands std_msgs/msg/Float64MultiArray` with 20 rad/s while the joint limit is 2.0 | the controller does not clamp; the controller manager clamps velocity commands only with `enforce_command_limits: true` (Jazzy default `false`, CONTROL-V22); whether Gazebo's physics applies the URDF velocity limit [verify] | same | Kilted/Lyrical default `true`: the controller manager clamps to 2.0 | annotate | [cm-params-j], [cm-params-m] | Medium |
 | GZ-V35 | 6.2 | Sensors system loaded from the robot (`<gazebo><plugin gz-sim-sensors-system>`) with `<render_engine>ogre2` | works (default engine `ogre2`); the official template loads Sensors in the world SDF; with several robots each model would add its own Sensors system [verify] | same | same | annotate | [sensors-8], [template] | Medium |
 | GZ-V36 | 6.2 | `<gz_frame_id>` sets `header.frame_id`; default "scoped name" | default = the sensor's name as gz-sim passes it; Fortress reads `ignition_frame_id` and also `gz_frame_id` ([ign-sensors6][sensor-6]) | ✓ | ✓ | annotate | [sensor-8] | High |
 | GZ-V37 | 6.2 | `gpu_lidar`: `<topic>` is a Gazebo topic; `<always_on>`, `<visualize>`, `<update_rate>`, `<ray>`/`<scan>`/`<range>` | ✓ | ✓ | ✓ | keep | [lidar-8] | High |
@@ -115,12 +115,13 @@
 | GZ-V56 | 6.5 | IMU "publishes to ROS topics" | ✗ Gazebo topic, bridge needed | ✗ | ✗ | **fix** | [bridge-j] | High |
 | GZ-V57 | 5.3 | JointStatePublisher "inside your model or <world>" | ✗ model only | ✗ | ✗ | **fix** | [jsp-sys-8] | High |
 | GZ-V58 | 5.6–7.9 | `<axis xyz="0 0 0"/>` in the fixed `laser_scan_frame_joint` | ignored: urdfdom reads `<axis>` only for non-fixed, non-floating joints; left out of the notes | same | same | **fix** | [urdfdom-joint-h], [urdfdom-joint-j] | High |
+| GZ-V59 | 5.8 | `velocity_controllers/JointGroupVelocityController` for the velocity controller | ✓ | ✓ | deprecated in favour of `forward_command_controller/ForwardCommandController` with `interface_name: velocity`, and no `velocity_controllers` package in the Lyrical release (found 2026-10-24, CONTROL-V35) | annotate | [rctrl-mig-m], [rosdistro-l] | High |
 
 ## Open `[verify]` (Phase 5 or a real machine)
 - GZ-V12: installed Fortress version on the Humble machine (`ign gazebo --versions`) for the `gz-sim` names and the NavSat alias.
 - GZ-V17: wheel behaviour with `kd = 1e7` vs a small damping.
 - GZ-V20: what Gazebo does with a URDF `floating`/`planar` joint.
-- GZ-V31, GZ-V34: whether interface `min`/`max` or the URDF velocity limit clamp commands in simulation.
+- GZ-V34: whether Gazebo's physics applies the URDF velocity limit to 20 rad/s commands (GZ-V31 resolved 2026-10-24).
 - GZ-V35: two robots that each load the Sensors system.
 
 ## Sources
@@ -179,3 +180,8 @@
 [jsp-h]: https://github.com/ros/joint_state_publisher/blob/humble/joint_state_publisher/joint_state_publisher/joint_state_publisher.py
 [rsp-j]: https://github.com/ros/robot_state_publisher/blob/jazzy/src/robot_state_publisher.cpp
 [xacro]: https://github.com/ros/xacro/blob/ros2/xacro/__init__.py
+[rc-parser-j]: https://github.com/ros-controls/ros2_control/blob/jazzy/hardware_interface/src/component_parser.cpp
+[cm-params-j]: https://github.com/ros-controls/ros2_control/blob/jazzy/controller_manager/src/controller_manager_parameters.yaml
+[cm-params-m]: https://github.com/ros-controls/ros2_control/blob/master/controller_manager/src/controller_manager_parameters.yaml
+[rctrl-mig-m]: https://github.com/ros-controls/ros2_controllers/blob/master/doc/migration.rst
+[rosdistro-l]: https://github.com/ros/rosdistro/blob/master/lyrical/distribution.yaml
