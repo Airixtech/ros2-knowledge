@@ -2,8 +2,8 @@
 id: core-learn-concepts-comm
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-25
+review_by: 2027-04-23
 source: manual
 confidentiality: internal
 title: "Concepts: topics vs services vs actions, QoS"
@@ -22,9 +22,12 @@ version_notes: []
 
 **TL;DR** A topic is a radio station, a service a phone call, and an action a delivery order with tracking. Use topics if possible → services → actions. The developer version of this decision is [[core-bp-comm-choice]].
 
+## Nodes first
+Every launched program starts at least one node, and each node handles one capability: wheel motors, a laser rangefinder, face recognition (on the rover: a lidar node, a vision node that finds rocks and hazards, a motor node). Nodes run independently and exchange data through topics, services and actions, so a robot is a network of specialized nodes.
+
 ## Topics vs services vs actions
 - **Topic**: radio station. The publisher broadcasts continuously to any number of listeners, and nobody answers.
-- **Service**: phone call. The client asks, and the server answers once. Good for on-demand data (e.g. a Mars→Earth link at 256 kbit/s: send the status only when asked).
+- **Service**: phone call. The client asks, and the server answers once. Good for on-demand data (e.g. a Mars→Earth link at 256 kbit/s: send the status only when asked). A face recognizer as a service runs only when a client asks "who is in front of the robot?", instead of processing images and publishing names when nobody is there; many clients can call one server.
 - **Action**: delivery order with tracking. Goal → continuous feedback → final result. It can be canceled, and the client keeps working meanwhile.
 Golden rule: topics if possible → services → actions. Exception: heavy data that is only needed sometimes is cheaper as a service than as a 30–50 Hz topic.
 

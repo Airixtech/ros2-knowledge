@@ -2,8 +2,8 @@
 id: core-iface-std-types
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-25
+review_by: 2027-04-23
 source: manual
 confidentiality: internal
 title: "Interface CLI & standard message packages"
@@ -47,6 +47,12 @@ ros2 interface proto std_srvs/srv/Trigger         # request template ("{}")
 
 ## Fields of frequent types
 `std_msgs/String{data}` · `geometry_msgs/Twist{linear,angular:Vector3}` · `geometry_msgs/Pose{position:Point, orientation:Quaternion}` · `nav_msgs/Odometry{header, child_frame_id, pose.pose, twist.twist}` · `sensor_msgs/LaserScan{angle_min, angle_max, angle_increment, range_min, range_max, ranges[]}` · `sensor_msgs/Image` (use cv_bridge, [[core-recipe-cv-bridge]]).
+
+## What the definitions say
+`ros2 interface list` groups Messages (`.msg`: fields and constants), Services (`.srv`: request and response) and Actions (`.action`: goal, result, feedback).
+- `sensor_msgs/LaserScan`: a scan from a planar laser range-finder; the header stamp is the acquisition time of the first ray; angles are measured around the positive Z axis (counterclockwise if Z is up), zero forward along x; `time_increment` and `scan_time` in seconds; ranges in m, values `< range_min` or `> range_max` should be discarded; `intensities` stays empty if the device has none. Use another message for sonar arrays and other non-laser rangers.
+- `sensor_msgs/Image`: uncompressed, (0, 0) at the top-left corner; `height` = rows, `width` = columns; `encoding` from the list in `sensor_msgs/image_encodings.hpp`; `is_bigendian`; `step` = full row length in bytes; `data` holds `step * rows` bytes; the frame is the camera's optical frame (+x right, +y down, +z into the image plane).
+- `geometry_msgs/Twist`: velocity in free space as `linear` and `angular` `Vector3` (x, y, z).
 
 ## Pitfalls
 - `int32` is a primitive field type, and `std_msgs/Int32` is a message with a `.data` field ([[core-iface-syntax-usage]]).

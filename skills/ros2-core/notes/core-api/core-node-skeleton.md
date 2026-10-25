@@ -2,8 +2,8 @@
 id: core-node-skeleton
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-25
+review_by: 2027-04-23
 source: manual
 confidentiality: internal
 title: "Node skeleton and main() (rclpy & rclcpp)"
@@ -84,7 +84,7 @@ int main(int argc, char ** argv) {
   return 0;
 }
 ```
-Build setup: [[core-pkg-ament-cmake]].
+Build setup: [[core-pkg-ament-cmake]]. C++ nodes in depth (classes, timers and clocks, logging, launch): the ros2-cpp skill.
 
 ## Pitfalls
 - Two nodes with the same name → undefined behavior. Rename one with `__node` ([[core-ros-args]]).

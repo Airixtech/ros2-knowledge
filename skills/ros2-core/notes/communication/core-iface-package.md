@@ -2,8 +2,8 @@
 id: core-iface-package
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-25
+review_by: 2027-04-23
 source: manual
 confidentiality: internal
 title: "Custom interface package (rosidl_generate_interfaces)"
@@ -76,6 +76,7 @@ ament_package()
 <member_of_group>rosidl_interface_packages</member_of_group>
 ```
 (`<build_depend>rosidl_default_generators</build_depend>` also works.) Keep ALL interface files listed. Never remove existing ones when you add a new one.
+`rosidl_default_generators` generates the language-specific code at build time, `rosidl_default_runtime` is what the generated interfaces need at run time, and `rosidl_interface_packages` marks the package as an interface package. One interface package serves C++ and Python nodes alike (C++ headers and their use: the ros2-cpp skill). An `.action` keeps both `---` separators even when a section is empty; the file name (CamelCase, e.g. `GoToPose`) sets the generated class names.
 
 ## Build & use
 ```bash

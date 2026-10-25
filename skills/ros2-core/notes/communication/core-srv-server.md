@@ -2,8 +2,8 @@
 id: core-srv-server
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-25
+review_by: 2027-04-23
 source: manual
 confidentiality: internal
 title: "Service server, CLI & C++ server/client"
@@ -74,6 +74,7 @@ Custom srv: `from custom_interfaces.srv import TextRecognition` → read `reques
 A server callback that needs fresh sensor data while it runs must not share a MutuallyExclusive group with that sensor's subscription ([[core-exec-callback-groups]]).
 
 ## C++ (server + async client)
+Full C++ servers, clients, custom services and waiting patterns: the ros2-cpp skill.
 ```cpp
 // server
 srv_ = create_service<std_srvs::srv::Trigger>("get_robot_status",

@@ -2,8 +2,8 @@
 id: core-action-cli-status
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-25
+review_by: 2027-04-23
 source: manual
 confidentiality: internal
 title: "Action CLI, GoalStatus codes & custom actions"
@@ -32,6 +32,7 @@ ros2 action send_goal /rotate leo_description/action/Rotate "{rotation_time: 5.0
 ros2 action send_goal /fibonacci action_tutorials_interfaces/action/Fibonacci "{order: 10}" -f   # -f/--feedback
 ```
 To cancel from the CLI, press Ctrl+C on `send_goal` (it cancels the goal). Types follow `<pkg>/action/<Name>`.
+`ros2 action list` prints full names (`/rotate`). `ros2 action info /rotate -t` prints `Action: /rotate`, `Action clients: 0`, `Action servers: 1` and `/rotate_action_server [leo_description/action/Rotate]`. `send_goal` prints `Waiting for an action server to become available...`, `Sending goal:` with the values, `Goal accepted with ID: <id>`, the `Feedback:` blocks (only with `-f`), `Result:` and `Goal finished with status: SUCCEEDED`.
 [≥Jazzy: `ros2 action type /fibonacci` prints the type. In Humble use `ros2 action list -t`.]
 
 ## GoalStatus codes (`action_msgs.msg.GoalStatus`)

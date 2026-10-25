@@ -2,8 +2,8 @@
 id: core-debug-triage
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-25
+review_by: 2027-04-23
 source: manual
 confidentiality: internal
 title: "Debug triage, symptom table & ros2 doctor"
@@ -18,6 +18,7 @@ see: ["[[core-debug-tools]]", "[[core-qos-usage]]", "[[core-tf-basics]]", "[[cor
 requires: []
 version_notes:
   - "lyrical: ros2 doctor --report also lists Actions, Services and environment variables — https://docs.ros.org/en/rolling/Releases/Release-Lyrical-Luth.html (V77)"
+  - "humble: ros2doctor registers five checks (PlatformCheck, NetworkCheck, TopicCheck, QoSCompatibilityCheck, PackageCheck); the RMW appears only in the report — https://github.com/ros2/ros2cli/blob/humble/ros2doctor/setup.py (CPP-V44)"
 ---
 # Debug triage, symptom table & ros2 doctor
 
@@ -50,13 +51,14 @@ version_notes:
 
 ## ros2 doctor
 ```bash
-ros2 doctor                      # checks: network, platform, RMW, packages, topics -> "All N checks passed"
+ros2 doctor                      # Humble checks: platform, network, topic, QoS compatibility, package -> "All 5 checks passed"
+                                 #   or "N/5 checks failed" + "Failed modules: network"
 ros2 doctor --report             # sections: NETWORK CONFIGURATION, PACKAGE VERSIONS, PLATFORM INFORMATION,
                                  #   QOS COMPATIBILITY LIST, RMW MIDDLEWARE, ROS 2 INFORMATION, TOPIC LIST
 ros2 doctor --include-warnings   # fail on warnings too
 ros2 wtf                         # alias of doctor
 ```
-`UserWarning: X has been updated to a new version` = an outdated pkg (usually harmless). `Publisher without subscriber detected on /t` = nobody listens, or you used the wrong name. [≥Lyrical: the report also lists actions, services and env vars]
+Warnings have the form `<path>: <line>: UserWarning: <message>`. `UserWarning: X has been updated to a new version. local: … < latest: …` = an outdated pkg (usually harmless). The tool is the package `ros2doctor` of the ros2cli repository; its report also shows the RMW in use. `Publisher without subscriber detected on /t` = nobody listens, or you used the wrong name. [≥Lyrical: the report also lists actions, services and env vars]
 
 ## Scripts
 ```bash

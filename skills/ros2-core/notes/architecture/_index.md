@@ -13,6 +13,7 @@ naming & design rules, composition, testing/CI/Docker, launch_testing, layers & 
 | [[core-composition]] | Write rclcpp components, register them in CMake, load them in a container from launch; composition vs processes; zero-copy intra-process. | notes/architecture/core-composition.md |
 | [[core-gazebo-bridge]] | Gazebo pairing per distro (Fortress for Humble), starting the sim, ros_gz_bridge YAML, Gazebo Classic EOL, Gazebo vs Isaac Sim. | notes/architecture/core-gazebo-bridge.md |
 | [[core-isaac-sim-ros]] | Environment for Isaac Sim + ROS 2 (version-dependent), minimal Action Graph, UDP-only Fast DDS profile for Docker, troubleshooting. | notes/architecture/core-isaac-sim-ros.md |
+| [[core-lang-choice]] | rclpy vs rclcpp per node: common rcl core, shared messages, Python prototypes and tools, C++ efficiency, plugins, components; mixing both. | notes/architecture/core-lang-choice.md |
 | [[core-launch-testing]] | Integration test with launch_testing: start a node, subscribe from the test, assert a message arrives; launch_test vs colcon test. | notes/architecture/core-launch-testing.md |
 | [[core-moveit2-overview]] | move_group, planners available in Humble, MoveGroupInterface snippet, URDF/SRDF requirements, Servo, perception; Iron+ additions. | notes/architecture/core-moveit2-overview.md |
 | [[core-multi-robot-namespacing]] | Namespace N robots with __ns or PushRosNamespace, remap /tf per robot, frame prefixes via xacro or frame_prefix, anti-patterns. | notes/architecture/core-multi-robot-namespacing.md |

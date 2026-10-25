@@ -2,8 +2,8 @@
 id: core-bp-comm-choice
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-25
+review_by: 2027-04-23
 source: manual
 confidentiality: internal
 title: "Choosing topic vs service vs action vs parameter"
@@ -33,7 +33,8 @@ version_notes: []
 ## Rules
 - Continuous → topic; one-off with an ACK (<1 s) → service; >1 s with progress/cancel → action; config → params with validation ([[core-param-api]]).
 - Golden rule: use a topic if possible, else a service, else an action.
-- Exception: heavy data needed only on demand (e.g. image analysis only when asked) is better as a service than as a 30 Hz topic.
+- Exception: heavy data needed only on demand (e.g. image analysis only when asked) is better as a service than as a 30 Hz topic; a 50 Hz image topic costs the hardware more than a service or action that works only when called.
+- An action also fits when the caller must do other tasks while the first one runs (navigate while doing face detection).
 - Services suit on-demand short queries and commands: get status, trigger detection, set mode, IK. There is one server per service name and many clients ([[core-srv-server]]).
 - If the task needs no feedback, cancel or parallel work → service. Fire-and-forget → topic ([[core-action-server]]).
 Student explanation with analogies: [[core-learn-concepts-comm]].

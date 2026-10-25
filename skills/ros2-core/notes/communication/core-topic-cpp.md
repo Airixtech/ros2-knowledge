@@ -2,8 +2,8 @@
 id: core-topic-cpp
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-25
+review_by: 2027-04-23
 source: manual
 confidentiality: internal
 title: "Publisher & subscriber (rclcpp)"
@@ -17,12 +17,12 @@ tags: [rclcpp, publisher, subscription, create_wall_timer, ConstSharedPtr]
 see: ["[[core-pkg-ament-cmake]]", "[[core-node-skeleton]]", "[[core-qos-usage]]"]
 requires: []
 version_notes:
-  - "jazzy: non-const shared_ptr<MessageT> subscription callbacks removed — https://docs.ros.org/en/rolling/Releases/Release-Jazzy-Jalisco.html (V27)"
+  - "jazzy: the release notes say non-const shared_ptr<MessageT> subscription callbacks were removed (V27), but rclcpp 28.x still accepts them without a warning (only the deprecation wrapper was removed, #2431); Lyrical deprecates them again (#2975); ConstSharedPtr works everywhere — https://github.com/ros2/rclcpp/blob/jazzy/rclcpp/include/rclcpp/any_subscription_callback.hpp, https://github.com/ros2/rclcpp/blob/lyrical/rclcpp/CHANGELOG.rst (CPP-V46)"
   - "lyrical: ament_target_dependencies removed; use target_link_libraries — https://docs.ros.org/en/rolling/Releases/Release-Kilted-Kaiju.html (V09)"
 ---
 # Publisher & subscriber (rclcpp)
 
-**TL;DR** Keep publishers, subscriptions and timers as `SharedPtr` members. Subscription callbacks take `MessageT::ConstSharedPtr`, which is the only shared-pointer form left in Jazzy+.
+**TL;DR** Keep publishers, subscriptions and timers as `SharedPtr` members. Subscription callbacks take `MessageT::ConstSharedPtr` (or `const MessageT &`), the shared-pointer form that is warning-free in every distro. C++ in depth (packages, services, actions, executors, components): the ros2-cpp skill.
 
 ## Talker / listener
 ```cpp
@@ -63,6 +63,6 @@ private:
 [changed in Lyrical: `ament_target_dependencies` removed → `target_link_libraries(talker PUBLIC rclcpp::rclcpp ${std_msgs_TARGETS})`]
 
 ## Pitfalls
-- A callback written as `std::shared_ptr<MessageT>` (non-const) is deprecated in Humble and fails to compile on Jazzy+.
+- A callback written as `std::shared_ptr<MessageT>` (non-const, also `const MessageT::SharedPtr`) warns as deprecated on Humble and again on Lyrical; Jazzy and Kilted accept it silently although the Jazzy release notes call it removed (CPP-V46). Write `ConstSharedPtr`.
 - A local `auto sub = create_subscription(...)` goes out of scope and silently stops receiving. Store it in a member.
 - Sensor topics need `rclcpp::SensorDataQoS()` instead of the depth `10` ([[core-qos-usage]]).

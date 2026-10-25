@@ -2,8 +2,8 @@
 id: core-launch-basics
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-25
+review_by: 2027-04-23
 source: manual
 confidentiality: internal
 title: "Launch files: CLI, minimal template, install, recipes"
@@ -27,9 +27,11 @@ version_notes:
 ```bash
 ros2 launch <pkg> <file.launch.py> [arg:=value ...]     # [TAB][TAB] lists launch files
 ros2 launch my_pkg bringup.launch.py robot_name:=robot2 use_sim_time:=true
-ros2 launch my_pkg bringup.launch.py --show-args          # declared args
+ros2 launch my_pkg bringup.launch.py --show-args          # declared args (-s, --show-arguments)
 ros2 launch my_pkg bringup.launch.py --print              # print description, do not run
 ros2 launch my_pkg bringup.launch.py --debug
+ros2 launch my_pkg bringup.launch.py -a                   # --show-all-subprocesses-output: override each process's output setting
+ros2 launch my_pkg bringup.launch.py --launch-prefix 'xterm -e gdb -ex run --args' --launch-prefix-filter '<regex>'  # prefix only matching executables
 ros2 launch /abs/path/file.launch.py                      # without package
 ```
 
@@ -54,6 +56,7 @@ def generate_launch_description():
     ])
 ```
 Arguments, YAML from the share dir, includes, namespaces and conditions: [[core-launch-args-include]].
+One launch file can start executables of one package or of several, C++ and Python alike; `executable=` is the CMake executable or the entry point, not the source file.
 
 ## Recipes
 ```python

@@ -2,8 +2,8 @@
 id: core-topic-cli
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-25
+review_by: 2027-04-23
 source: manual
 confidentiality: internal
 title: "Topic CLI: list, info, echo, pub, hz"
@@ -47,6 +47,7 @@ ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist "{}"   # all zeros = stop
 ros2 run rqt_image_view rqt_image_view /camera/image_raw      # view images
 ```
 - The robot keeps executing the last `cmd_vel` it received, so send a zero Twist to stop it.
+- `ros2 topic -h` lists the verbs (`bw`, `delay`, `echo`, `find`, `hz`, `info`, `list`, `pub`, `type`); `ros2 topic info` gives the type plus `Publisher count` (nodes sending) and `Subscription count` (subscriptions listening, CLI echoes included). `--field header.stamp.sec` selects sub-fields with `.`; on Humble `--field ranges` prints the raw array (`array('f', [inf, …, 3.8130645751953125, …])`).
 - Message YAML: nested dicts; unspecified fields are 0/empty. CLI nodes appear as `_ros2cli_<pid>`.
 - [≥Jazzy (since Iron): `echo --timeout`, `pub --max-wait-time`, the `now` keyword for `builtin_interfaces/Time` and `auto` for `std_msgs/Header` in `pub`; `hz/bw/pub` honor `use_sim_time`] [≥Lyrical: `ros2 topic bw` accepts several topics]
 

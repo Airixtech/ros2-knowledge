@@ -2,8 +2,8 @@
 id: core-exec-callback-groups
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-25
+review_by: 2027-04-23
 source: manual
 confidentiality: internal
 title: "Callback groups: long callbacks & same-process deadlock"
@@ -91,4 +91,4 @@ sub_ = create_subscription<Image>("image", 10, cb, opts);
 timer_ = create_wall_timer(100ms, cb2, other_group);
 rclcpp::executors::MultiThreadedExecutor exec; exec.add_node(node); exec.spin();
 ```
-Which combinations actually run in parallel: [[core-exec-model]].
+Which combinations actually run in parallel: [[core-exec-model]]. rclcpp executors and groups with complete programs (plant detector variants, thread safety): the ros2-cpp skill.

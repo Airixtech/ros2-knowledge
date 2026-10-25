@@ -2,8 +2,8 @@
 id: core-debug-tools
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-25
+review_by: 2027-04-23
 source: manual
 confidentiality: internal
 title: "rqt, RViz2, teleop & ros2_tracing"
@@ -43,7 +43,7 @@ rviz2                       # source the ws containing robot meshes first
 rviz2 -d my_config.rviz
 ros2 run rviz2 rviz2 -d $(ros2 pkg prefix my_pkg)/share/my_pkg/rviz/view.rviz
 ```
-Steps: Global Options → Fixed Frame (it must exist in TF: `map`/`odom`/`base_link`) → Add displays → set topic + QoS. Save with Ctrl+S.
+Steps: Global Options → Fixed Frame (it must exist in TF: `map`/`odom`/`base_link`) → Add displays → set topic + QoS. Save with Ctrl+S. Central panel: left mouse button rotates, middle button moves, right button zooms; the Displays panel on the left holds the displays and their options. RViz2 shows what a simulator or a real robot publishes (images, point clouds, laser scans, transforms, robot models, own markers).
 | Display | For |
 |---|---|
 | TF | all frames |
@@ -58,7 +58,7 @@ Nothing shown → check the Fixed Frame, topic, QoS and TF.
 ## Other tools
 ```bash
 ros2 run turtlesim turtlesim_node ; ros2 run turtlesim turtle_teleop_key     # sandbox
-ros2 run teleop_twist_keyboard teleop_twist_keyboard
+ros2 run teleop_twist_keyboard teleop_twist_keyboard                         # its banner: works best with a US keyboard layout
 ros2 run joy joy_node ; ros2 run teleop_twist_joy teleop_node                # joystick
 ros2 run tf2_ros tf2_monitor base_link laser                                 # TF latency
 ```

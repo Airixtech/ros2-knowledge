@@ -2,8 +2,8 @@
 id: core-composition
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-25
+review_by: 2027-04-23
 source: manual
 confidentiality: internal
 title: "Composition, intra-process & component containers"
@@ -54,6 +54,7 @@ ComposableNodeContainer(
     ])
 ```
 CLI: `ros2 component list` · `ros2 component load /container <pkg> <ns::Class> -e use_intra_process_comms:=true`.
+`ros2 component types` lists each package with its registered classes; `ros2 run rclcpp_components component_container` starts an empty container (`/ComponentManager`); `load` answers `Loaded component 1 into '/ComponentManager' container node as '/<node>'` and `ros2 component unload /ComponentManager 1` removes it. Components are loaded at run time (container + CLI or launch: the running system can change) or composed at compile time (an own executable creates the classes and adds them to one executor: fixed, simpler to debug; such nodes do not appear in `ros2 component list`). Writing, registering and running components step by step: the ros2-cpp skill.
 
 ## Composition vs processes
 | | Separate processes | Composition (one container) |
@@ -66,7 +67,7 @@ CLI: `ros2 component list` · `ros2 component load /container <pkg> <ns::Class> 
 Compose per latency domain (perception→planning→control). Keep the UI, logger, rosbag and watchdog separate.
 
 ## Intra-process (zero-copy, rclcpp only in Humble)
-Requirements: same process/container · `NodeOptions().use_intra_process_comms(true)` · publish `std::unique_ptr<Msg>` with `std::move` · KEEP_LAST + VOLATILE.
+Requirements: same process/container · `NodeOptions().use_intra_process_comms(true)` · publish `std::unique_ptr<Msg>` with `std::move` · KEEP_LAST + VOLATILE. It covers publishers and subscriptions only: services between components still go through the middleware.
 ```cpp
 auto node = std::make_shared<MyNode>(rclcpp::NodeOptions().use_intra_process_comms(true));
 auto msg = std::make_unique<sensor_msgs::msg::Image>();

@@ -2,8 +2,8 @@
 id: core-ros-args
 type: reference
 owner: equipo-ros2
-updated: 2026-10-20
-review_by: 2027-04-18
+updated: 2026-10-25
+review_by: 2027-04-23
 source: manual
 confidentiality: internal
 title: "--ros-args (remap, namespace, params) & node CLI"
@@ -42,7 +42,9 @@ YAML format and the param CLI: [[core-param-yaml-cli]]. Per-logger levels: [[cor
 ```bash
 ros2 run <pkg> <exe>
 ros2 node list            # -a / --all includes hidden
-ros2 node info /my_node   # pubs, subs, services, actions
+ros2 node info /my_node   # pubs, subs, services, actions; even an empty node shows /parameter_events (sub + pub),
+                          # /rosout and six parameter services (describe/get/list/set_parameters, get_parameter_types, set_parameters_atomically),
+                          # typed rcl_interfaces/srv/<Name> (DescribeParameters … SetParametersAtomically)
 ros2 node list | sort | uniq -c | sort -rn   # spot duplicate names (zombies)
 ps aux | grep ros2 ; kill -9 <PID> ; pkill -9 -f my_node ; pkill -9 -f ros2   # kill hung nodes
 ```

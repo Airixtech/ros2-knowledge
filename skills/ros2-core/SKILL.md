@@ -45,7 +45,7 @@ If the notes do not cover the question, answer from standard Humble knowledge an
 | security | 9 | `notes/security/_index.md` | SROS2 / DDS-Security: keystore and CA, enclaves, policy XML and generate_artifacts, governance and permissions, openssl checks, ROS_SECURITY_* variables |
 | recipes | 6 | `notes/recipes/_index.md` | mobile-robot code patterns: LaserScan sectors & avoidance, odometry go-to-goal, command state machine, cv_bridge, safe stop |
 | tools | 17 | `notes/tools/_index.md` | TF2, URDF/xacro/robot_state_publisher, rosbag2, lifecycle nodes, debugging (doctor, rqt, RViz2, tracing), CLI cheat sheet |
-| architecture | 18 | `notes/architecture/_index.md` | naming & design rules, composition, testing/CI/Docker, launch_testing, layers & failures, Nav2, MoveIt2, ros2_control, perception, Gazebo, Isaac Sim, multi-robot |
+| architecture | 19 | `notes/architecture/_index.md` | naming & design rules, composition, testing/CI/Docker, launch_testing, layers & failures, Nav2, MoveIt2, ros2_control, perception, Gazebo, Isaac Sim, multi-robot |
 | learn | 11 | `learn/_index.md` | course track for students (Leo rover): concepts and Units 2–8 exercises; open only for course questions |
 | learn-intermediate | 12 | `learn-intermediate/_index.md` | intermediate course (MP-400 simulation): Units 2–9 examples and exercises, final project; open only for course questions |
 | learn-security | 4 | `learn-security/_index.md` | security course (TurtleBot3 simulation): keystore and enclaves for Gazebo and teleop, a secured cmd_vel listener; open only for course questions |

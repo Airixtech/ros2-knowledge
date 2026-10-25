@@ -1,6 +1,6 @@
 # Version audit — ros2-cpp (Phase 1)
 
-> Date: 2026-10-25. Scope: every version-dependent or checkable statement of the C++ basics course (course wiki,
+> Date: 2026-10-25 (rows CPP-V46–V50 added in Phase 2). Scope: every version-dependent or checkable statement of the C++ basics course (course wiki,
 > not published; units 2–9: packages and CMake, nodes and timers, launch, topics, custom interfaces, services,
 > callbacks and executors, callback groups, actions with a Nav2 client inside, components, logging and debugging
 > tools) that lands in the new skill `ros2-cpp`, the course lines that become unions in `ros2-core`, and the claims of
@@ -68,6 +68,10 @@
 | CPP-V17 | 8.5, 8.8 | course mistake | "Inter-Process Communication: Components can communicate efficiently within the same process"; `extra_arguments=[{'use_intra_process_comms': True}]` "optimizes performance" | Inside one process it is **intra**-process communication, and it must be enabled per node (`NodeOptions::use_intra_process_comms`, which the container sets from that extra argument, [component_manager.cpp (humble)][compmgr-h]). rclcpp's intra-process path covers publishers and subscriptions only ([publisher.hpp (humble)][pub-h]; zero-copy needs `std::unique_ptr` messages, [intra-process demo][ipc-h]): both components of the course only offer services and subscribe to a topic of another process, so the flag changes nothing there. |
 | CPP-V18 | 3.2, 5.6, 6.5, 9.5 | course mistake (transcribed outputs) | `ros2 topic list` output headed by the prompt `ros2 node list`; 5.6 shows `[INFO] [launch]: …` and `[callback_spinonce_function-1]` prefixes for a `ros2 run` command; 6.5 "Plant Detecte!"; 9.5 doctor report `inet : 128.0.0.1` for `lo` | Outputs pasted from other runs or edited: `ros2 run` prints no launch lines or process prefixes; the 6.5 program prints "Plant Detected!"; the loopback address is 127.0.0.1. The notes show the outputs the commands print. |
 
+| CPP-V47 | 2.5 | course mistake | "`colcon build --packages-select <package_name>` … will compile only the specified packages and their dependencies" | `--packages-select` processes only the listed packages; `--packages-up-to` adds their recursive dependencies ([select_skip.py][colcon-sel], [dependencies.py][colcon-dep]). Found in Phase 2. |
+| CPP-V48 | 3.3 | course mistake | "now we set `linear.x = 1.0`" for the command `ros2 topic pub … "{linear: {x: 0.1, …}, angular: {…, z: 1.0}}"` | The command sends `linear.x = 0.1` (and `angular.z = 1.0`). Found in Phase 2. |
+| CPP-V49 | 3.5 | course mistake (output vs code) | Exercise 3.2's expected output lists the sectors as Right_Rear, Right, Front_Right, Front_Left, Left, Left_Rear | The program stores them in `std::map<std::string, …>`, which iterates its keys in sorted order: it prints Front_Left, Front_Right, Left, Left_Rear, Right, Right_Rear ([std::map][cpp-map]). Found in Phase 2. |
+
 ## Full table
 | # | Section | Statement | Humble | Jazzy | Lyrical | Action | Source | Confidence |
 |---|---|---|---|---|---|---|---|---|
@@ -116,6 +120,12 @@
 | CPP-V43 | core note | C++-only building blocks: pluginlib plugins, composition, zero-copy intra-process with `std::unique_ptr` | ✓ | ✓ | ✓ | keep (claims of the new note) | [pluginlib-h], [about-comp-h], [ipc-h] | High |
 | CPP-V44 | 9.5 | `ros2 doctor`: "All 5 checks passed", report sections | ✓ 5 checks (platform, network, topic, QoS compatibility, package) | — | — | keep; a failure prints `N/5 checks failed` | [doctor-h] | High |
 | CPP-V45 | 7.6 | `topic_names_and_types.find(topic_name)` (explanation) vs a loop in the code | ✓ both (`std::map`) | ✓ | ✓ | keep | [node-h] | High |
+| CPP-V46 | 3.4–9.2 (all subscriptions) | callbacks `void cb(const MsgT::SharedPtr msg)` (= `std::shared_ptr<MsgT>`, non-const message) | ✓ with a deprecation warning ("use 'void(std::shared_ptr<const MessageT>)' instead", #1713) | ✓ no warning (deprecation wrapper removed, #2431; `SharedPtrCallback` is still in the callback variant) | ✓ deprecated again (#2975) | annotate: use `MsgT::ConstSharedPtr` (or `const MsgT &`), valid and warning-free in every distro. Added in Phase 2; it also corrects `core-topic-cpp`, which said the non-const form "fails to compile on Jazzy+", and the core row V27, which followed the Jazzy release notes ("these subscription signatures have been removed"): the official notes contradict the code | [asc-h], [asc-j], [asc-l], [rclcpp-cl-l] | High |
+
+| CPP-V47 | 2.5 | `--packages-select` builds "the specified packages and their dependencies" | ✗ only the listed ones | same | same | **fix** | [colcon-sel], [colcon-dep] | High |
+| CPP-V48 | 3.3 | text "linear.x = 1.0" vs command 0.1 | ✗ | — | — | **fix** | course command | High |
+| CPP-V49 | 3.5 | sector output order of exercise 3.2 | ✗ `std::map` sorts keys | same | same | **fix** | [cpp-map] | High |
+| CPP-V50 | 4.8 | custom server returns the label's "bounding box" | returns the 5 %-margin search region | same | same | annotate (the code comment says so; (5, 5) → (95, 95) is that region of a 100 × 100 image) | course code | High |
 
 ## Canonical alternatives (features of later distros)
 | Later feature | Humble way | Checked in |
@@ -143,6 +153,10 @@
 [node-j]: https://github.com/ros2/rclcpp/blob/jazzy/rclcpp/include/rclcpp/node.hpp
 [node-k]: https://github.com/ros2/rclcpp/blob/kilted/rclcpp/include/rclcpp/node.hpp
 [client-h]: https://github.com/ros2/rclcpp/blob/humble/rclcpp/include/rclcpp/client.hpp
+[asc-h]: https://github.com/ros2/rclcpp/blob/humble/rclcpp/include/rclcpp/any_subscription_callback.hpp
+[asc-j]: https://github.com/ros2/rclcpp/blob/jazzy/rclcpp/include/rclcpp/any_subscription_callback.hpp
+[asc-l]: https://github.com/ros2/rclcpp/blob/lyrical/rclcpp/include/rclcpp/any_subscription_callback.hpp
+[rclcpp-cl-l]: https://github.com/ros2/rclcpp/blob/lyrical/rclcpp/CHANGELOG.rst
 [pub-h]: https://github.com/ros2/rclcpp/blob/humble/rclcpp/include/rclcpp/publisher.hpp
 [exec-h]: https://github.com/ros2/rclcpp/blob/humble/rclcpp/include/rclcpp/executor.hpp
 [execs-h]: https://github.com/ros2/rclcpp/blob/humble/rclcpp/include/rclcpp/executors.hpp
@@ -188,6 +202,9 @@
 [about-cl-h]: https://docs.ros.org/en/humble/Concepts/Basic/About-Client-Libraries.html
 [about-cl-l]: https://docs.ros.org/en/lyrical/ROS-Framework/About-Client-Libraries.html
 [pluginlib-h]: https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Pluginlib.html
+[colcon-sel]: https://github.com/colcon/colcon-package-selection/blob/master/colcon_package_selection/package_selection/select_skip.py
+[colcon-dep]: https://github.com/colcon/colcon-package-selection/blob/master/colcon_package_selection/package_selection/dependencies.py
+[cpp-map]: https://en.cppreference.com/w/cpp/container/map
 [cpp-fmod]: https://en.cppreference.com/w/cpp/numeric/math/fmod
 [cpp-rem]: https://en.cppreference.com/w/cpp/numeric/math/remainder
 [cpp-race]: https://en.cppreference.com/w/cpp/language/multithread
