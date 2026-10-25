@@ -2,8 +2,8 @@
 id: core-tf-listener
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-25
+review_by: 2027-04-23
 source: manual
 confidentiality: internal
 title: "TF listener & lookup_transform (rclpy, rclcpp)"
@@ -19,6 +19,7 @@ requires: []
 version_notes:
   - "lyrical: tf2_ros/*.h headers deprecated and tf2/LinearMath/Quaternion.h removed (deprecated in Kilted); use .hpp (exists since Humble) — https://github.com/ros2/geometry2/tree/lyrical/tf2/include/tf2/LinearMath (V44)"
   - "jazzy: tf2_geometry_msgs.h, tf2_eigen.h etc. removed; Buffer.wait_for_transform_async returns the transform — https://docs.ros.org/en/rolling/Releases/Release-Jazzy-Jalisco.html (V44)"
+  - "humble: TransformListener subscribes /tf VOLATILE and /tf_static TRANSIENT_LOCAL (depth 100) — https://github.com/ros2/geometry2/blob/humble/tf2_ros_py/tf2_ros/transform_listener.py (TF-V14, TF-V35)"
 ---
 # TF listener & lookup_transform (rclpy, rclcpp)
 
@@ -49,7 +50,7 @@ class Lookup(Node):
             return
         self.get_logger().info(f'x={t.transform.translation.x:.2f}')
 ```
-`lookup_transform(target, source, time)` returns the pose of `source` expressed in `target`. To transform a point or pose: `import tf2_geometry_msgs`, then `self.tf_buffer.transform(pose_stamped, 'map')`.
+`lookup_transform(target, source, time)` returns the pose of `source` expressed in `target`: "where is `source` with respect to `target` right now?" when `time` is `Time()`. The listener subscribes `/tf` (volatile) and `/tf_static` (transient local, depth 100): a node only knows the dynamic transforms published since it started, but receives static ones published earlier, as long as their publisher still runs. To transform a point or pose: `import tf2_geometry_msgs`, then `self.tf_buffer.transform(pose_stamped, 'map')`.
 
 ## C++ essentials
 ```cpp

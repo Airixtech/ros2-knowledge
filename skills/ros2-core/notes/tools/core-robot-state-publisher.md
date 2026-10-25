@@ -2,8 +2,8 @@
 id: core-robot-state-publisher
 type: reference
 owner: equipo-ros2
-updated: 2026-10-20
-review_by: 2027-04-18
+updated: 2026-10-25
+review_by: 2027-04-23
 source: manual
 confidentiality: internal
 title: "robot_state_publisher & xacro in launch"
@@ -19,6 +19,7 @@ requires: []
 version_notes:
   - "lyrical: robot_state_publisher can read robot_description from a topic — https://docs.ros.org/en/rolling/Releases/Release-Lyrical-Luth.html (V19)"
   - "jazzy: ros2_control's controller_manager reads /robot_description (topic) from RSP — https://github.com/ros-controls/ros2_control/blob/jazzy/doc/migration.rst (V60)"
+  - "humble: joint_state_publisher publishes 0, or the middle of the limits when 0 is outside them, for every movable joint unless a source_list feeds it — https://github.com/ros/joint_state_publisher/blob/humble/joint_state_publisher/joint_state_publisher/joint_state_publisher.py (TF-V15, TF-V27)"
 ---
 # robot_state_publisher & xacro in launch
 
@@ -55,6 +56,9 @@ def generate_launch_description():
 - Without `ParameterValue(..., value_type=str)`, launch tries to parse the URDF text as YAML and fails.
 - Install the `urdf/`, `meshes/` and `rviz/` dirs in share ([[core-pkg-ament-python]]). For a plain URDF file, put `open(path).read()` in the param, or keep the same `Command(['xacro ', path])`: xacro passes a plain `.urdf` through, so one launch file serves both.
 - Other consumers: ros2_control reads `robot_description` as a parameter in Humble and from this topic in Jazzy+ ([[core-ros2-control-overview]]).
+- One robot of several: rename the topic with `remappings=[("/robot_description", "/unicycle_bot_robot_description")]`; RViz's RobotModel and a simulator spawner (`ros_gz_sim create -topic …`) must then read the new name.
+- Without robot_state_publisher there is no `/robot_description` and no link transform: RViz shows only what other nodes publish (a simulator's `odom → base`, for example).
+- The `joint_state_publisher` node publishes default positions (0 or mid-range): use it only without a simulator or controllers, which publish the real joint states.
 
 ## Pitfalls
 - `joint_state_publisher_gui` together with a real `joint_state_broadcaster` → conflicting `/joint_states`.

@@ -2,8 +2,8 @@
 id: gazebo-ros-gz-bridge
 type: reference
 owner: equipo-ros2
-updated: 2026-10-21
-review_by: 2027-04-19
+updated: 2026-10-25
+review_by: 2027-04-23
 source: manual
 confidentiality: internal
 title: "ros_gz_bridge parameter_bridge syntax (@ [ ]), type pairs, /clock and sim time"
@@ -61,7 +61,7 @@ Add it to the `LaunchDescription` of the spawn file ([[gazebo-spawn-urdf]]). Uni
 | `sensor_msgs/msg/PointCloud2` | `gz.msgs.PointCloudPacked` | `[` |
 | `sensor_msgs/msg/Image`, `CameraInfo` | `gz.msgs.Image`, `gz.msgs.CameraInfo` | `[` |
 
-Full list: the bridge README. A YAML config file instead of arguments: [[core-gazebo-bridge]].
+Full list: the bridge README. A YAML config file instead of arguments: [[core-gazebo-bridge]]. Services are bridged with only the ROS type, for example `/world/default/set_pose@ros_gz_interfaces/srv/SetEntityPose` to move a model ([[gazebo-tf-follow-frame]]).
 
 ## Sim time
 - The `/clock` bridge is what makes `use_sim_time: true` work; without it, nodes with sim time see time 0.

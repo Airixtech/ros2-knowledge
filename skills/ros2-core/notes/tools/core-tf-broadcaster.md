@@ -2,8 +2,8 @@
 id: core-tf-broadcaster
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-25
+review_by: 2027-04-23
 source: manual
 confidentiality: internal
 title: "TF broadcasters: dynamic & static (rclpy)"
@@ -16,7 +16,8 @@ summary: "Publish odom→base_link with TransformBroadcaster at ≥50 Hz; Static
 tags: [tf2, TransformBroadcaster, StaticTransformBroadcaster, TransformStamped, odom]
 see: ["[[core-tf-basics]]", "[[core-tf-listener]]", "[[core-robot-state-publisher]]"]
 requires: []
-version_notes: []
+version_notes:
+  - "humble: a transform computed from a message should carry that message's header.stamp; tf2_monitor shows delays as now() − stamp in its own clock — https://github.com/ros2/geometry2/blob/humble/tf2_ros/src/tf2_monitor.cpp (TF-V02, TF-V26)"
 ---
 # TF broadcasters: dynamic & static (rclpy)
 
@@ -57,3 +58,4 @@ Publish once; it is latched on `/tf_static`: `from tf2_ros import StaticTransfor
 ## Pitfalls
 - Two nodes publishing the same transform (e.g. your node + a sim plugin or EKF) → jittering frames ([[core-tf-basics]]).
 - Stamping with `time.time()` instead of the node clock → extrapolation errors under `use_sim_time` ([[core-time-timers]]).
+- A transform computed from a message (odometry, a sensor) → copy that message's `header.stamp` into the transform, so data and TF share one clock; `now()` of a node without `use_sim_time` is wall time in a simulation. A complete odometry-to-TF node and `tf2_monitor`: skill ros2-tf.

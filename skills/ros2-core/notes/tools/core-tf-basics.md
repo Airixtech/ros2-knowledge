@@ -2,8 +2,8 @@
 id: core-tf-basics
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-25
+review_by: 2027-04-23
 source: manual
 confidentiality: internal
 title: "TF2 conventions (REP 103/105), CLI & errors"
@@ -18,6 +18,7 @@ see: ["[[core-tf-broadcaster]]", "[[core-tf-listener]]", "[[core-urdf-basics]]",
 requires: []
 version_notes:
   - "lyrical: static_transform_publisher legacy positional args removed (deprecated since Humble) — https://github.com/ros2/geometry2/blob/lyrical/tf2_ros/src/static_transform_broadcaster_program.cpp (V43)"
+  - "humble: REP 103, 105, 120 and 147 are in the official REP index; the serial-manipulator frames text is draft REP 199, not accepted — https://github.com/ros-infrastructure/rep (TF-V16, TF-V31)"
 ---
 # TF2 conventions (REP 103/105), CLI & errors
 
@@ -27,6 +28,8 @@ version_notes:
 - Right-handed, x forward, y left, z up; meters, radians, seconds. Camera optical frame: z forward, x right, y down (rpy `-π/2, 0, -π/2` from the body frame).
 - Tree: `earth → map → odom → base_link → {laser, camera_link, imu_link, wheels}` (`base_footprint` optional, under or above base_link).
 - `map`: global and fixed, but may jump (relocalization). `odom`: continuous, drifts. `base_link`: rigidly attached to the robot.
+- Axes are drawn x red, y green, z blue. A positive turn rate must turn the robot left, or a drive node does not work with Nav2 and other ROS components; the same holds for car-like robots and drones. Pixel coordinates of images are the usual exception to the right-hand rule.
+- Other REPs: 120 (humanoid robots), 147 (aerial vehicles); serial industrial manipulators only have a draft (REP 199, not accepted).
 
 | Transform | Publisher |
 |---|---|
@@ -58,4 +61,4 @@ The legacy positional form prints a deprecation warning in Humble [changed in Ly
 | Jittery/ flickering frames | two publishers of the same transform or low rate |
 | Laser misaligned with robot in RViz | wrong extrinsic/joint origin in URDF or wrong parent frame |
 
-Code: [[core-tf-broadcaster]] · [[core-tf-listener]] · model: [[core-urdf-basics]].
+Code: [[core-tf-broadcaster]] · [[core-tf-listener]] · model: [[core-urdf-basics]]. Each tool in depth (view_frames edge data, tf2_echo argument order, tf2_monitor delays), the RViz TF display and the TF course: skill ros2-tf.

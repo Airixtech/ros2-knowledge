@@ -1,0 +1,6 @@
+# Area descriptions for tools/build_index.py (display order = file order). Not packaged.
+frames: "Coordinate frames, transforms, the TF tree (frame_id, child_frame_id, roots), /tf and /tf_static, TF and RobotModel in RViz2 (Fixed Frame, TF display options)"
+tools: "Introspect TF: view_frames, rqt_tf_tree, ros2 topic echo /tf, tf2_echo, tf2_monitor delays and transform timestamps (sim time vs wall clock)"
+broadcast: "Publish TF: TransformBroadcaster from odometry, static_transform_publisher (CLI, launch), StaticTransformBroadcaster from a Python script, tf_transformations"
+learn: "TF course for students (Cam_bot and turtle, unicycle in Gazebo Sim): course map and units 1–4; open only for course questions"
+migration: "TF course on Humble (+ Fortress) and Lyrical: tool outputs, RViz options, static_transform_publisher, TF topics; open for other distros"

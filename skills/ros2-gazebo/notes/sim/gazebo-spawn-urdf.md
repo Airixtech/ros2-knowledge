@@ -2,8 +2,8 @@
 id: gazebo-spawn-urdf
 type: reference
 owner: equipo-ros2
-updated: 2026-10-21
-review_by: 2027-04-19
+updated: 2026-10-25
+review_by: 2027-04-23
 source: manual
 confidentiality: internal
 title: "Spawn a URDF with ros_gz_sim create; URDF to SDF conversion rules"
@@ -20,6 +20,7 @@ version_notes:
   - "jazzy/harmonic: create flags -world -file -param -string -topic -name -allow_renaming -x -y -z -R -P -Y (same in humble and lyrical) — https://github.com/gazebosim/ros_gz/blob/jazzy/ros_gz_sim/src/create.cpp (GZ-V09, GZ-V18)"
   - "jazzy/harmonic: a massless link (no <inertial>) is an urdf2sdf error unless its fixed parent joint is lumped; fixed joints are lumped unless <preserveFixedJoint> — https://github.com/gazebosim/sdformat/blob/sdf14/src/parser_urdf.cc (GZ-V19, GZ-V46)"
   - "jazzy/harmonic: spawn_entity.py is not a ros_gz tool; Gazebo Sim spawns with ros_gz_sim create (GZ-V09)"
+  - "jazzy/harmonic: -file loads the XML from a file path; without robot_state_publisher only the systems' bridged transforms reach TF — https://github.com/gazebosim/ros_gz/blob/jazzy/ros_gz_sim/src/create.cpp (TF-V07, TF-V25)"
 ---
 # Spawn a URDF with ros_gz_sim create; URDF to SDF conversion rules
 
@@ -88,6 +89,8 @@ The first include is the RViz launch file of [[urdf-description-package]] with t
 | `-name` | model name in Gazebo; `-allow_renaming` renames it if the name is taken |
 | `-x -y -z` (m), `-R -P -Y` (rad) | initial pose; spawn above the ground (`-z 0.2`) so it does not start inside it |
 | `-world` | target world; empty = the first world the running server reports |
+
+`-file` takes a **path** (`"-file", urdf_path`), not the URDF text (that is `-string`). Spawning from the file without robot_state_publisher works, but nothing publishes `/robot_description` or the link transforms: TF holds only what the robot's systems send through the bridge (the DiffDrive `odom → base` transform), and RViz cannot draw the model from a topic. With robot_state_publisher and a remapped description (`remappings=[("/robot_description", "/unicycle_bot_robot_description")]`), give `create` that name: `"-topic", "/unicycle_bot_robot_description"`; `/tf` then has two publishers, robot_state_publisher and the bridge ([[core-robot-state-publisher]]).
 
 ## URDF → SDF rules
 - Links joined by **fixed** joints are merged into their parent link (lumping), with mass and inertia combined; an empty frame link (`laser_scan_frame`) is fine there. Keep one as a separate link with `<gazebo reference="joint_name"><preserveFixedJoint>true</preserveFixedJoint></gazebo>`.
