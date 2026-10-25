@@ -20,10 +20,12 @@ version_notes:
   - "jazzy: state_publish_rate is not a JointTrajectoryController parameter (ignored); humble: default 50.0 — https://github.com/ros-controls/ros2_controllers/blob/jazzy/joint_trajectory_controller/src/joint_trajectory_controller_parameters.yaml (CONTROL-V06)"
   - "jazzy: goal_time 0.0 means no time limit, not 'start immediately'; lyrical: default 10.0, 0.0 = on time, negative = no limit — https://github.com/ros-controls/ros2_controllers/blob/master/doc/migration.rst (CONTROL-V07)"
   - "jazzy: open_loop_control deprecated (use interpolate_from_desired_state and zero feedback gains); lyrical: removed — https://github.com/ros-controls/ros2_controllers/blob/jazzy/doc/migration.rst (CONTROL-V28)"
+  - "jazzy: the unit 6 explanation list shifts three defaults by one line (state_interfaces none, state_publish_rate 50.0 on Humble, action_monitor_rate 20.0) — https://github.com/ros-controls/ros2_controllers/blob/jazzy/joint_trajectory_controller/src/joint_trajectory_controller_parameters.yaml (CONTROL-V53)"
+  - "jazzy: allowed command/state interface combinations — https://github.com/ros-controls/ros2_controllers/blob/jazzy/joint_trajectory_controller/doc/userdoc.rst (CONTROL-V65)"
 ---
 # joint_trajectory_controller parameters of the course YAML: defaults, goal_time, removed and deprecated keys
 
-**TL;DR** The course's trajectory controller block ([[control-controller-config]]) comes from the official Humble demo. On Jazzy one key is no longer a parameter, one is deprecated and one comment is wrong; on Lyrical the meaning of `goal_time` changes.
+**TL;DR** The course's trajectory controller block ([[control-controller-config]]; the same keys in unit 6 and in the unit 8 solution) comes from the official Humble demo. Topic, action and tolerance behaviour: [[control-jtc-commands]]. On Jazzy one key is no longer a parameter, one is deprecated and one comment is wrong; on Lyrical the meaning of `goal_time` changes.
 
 ## The parameters used
 | Parameter | Course value | Default (Jazzy) | Meaning |
@@ -32,10 +34,14 @@ version_notes:
 | `command_interfaces` / `state_interfaces` | `position` / `position` | — | interfaces claimed and read; they must exist in `<ros2_control>` |
 | `action_monitor_rate` | 20.0 | 20.0 | rate to monitor status changes while executing a `FollowJointTrajectory` action |
 | `allow_partial_joints_goal` | false | false | accept goals for only some joints |
-| `open_loop_control` | true | false | [changed in Jazzy: deprecated, use `interpolate_from_desired_state` and zero feedback gains; removed in Lyrical] |
+| `open_loop_control` | true | false | ignore the hardware states and use the last commands as states in the next step: for hardware whose states do not follow the commands (an offset, typical of hydraulic arms). At start it reads the command interfaces, so the hardware must start them as NaN or equal to the states. [changed in Jazzy: deprecated, use `interpolate_from_desired_state` and zero feedback gains; removed in Lyrical] |
 | `allow_integration_in_goal_trajectories` | true | false | accept goals without position or velocity, which are then integrated |
 | `constraints.stopped_velocity_tolerance` | 0.01 | 0.01 | velocity below which the system counts as stopped at the end of the trajectory |
 | `constraints.goal_time` | 0.0 | 0.0 | time tolerance for reaching the goal before or after the commanded time |
+| `constraints.<joint>.trajectory` | — | 0.0 | allowed deviation from the trajectory while moving; 0.0 = not enforced |
+| `constraints.<joint>.goal` | — | 0.0 | allowed deviation from the goal at the end; 0.0 = not enforced |
+
+Command interfaces may be `position`; `position, velocity`; `position, velocity, acceleration`; `velocity`; `effort`; or `position, effort` (velocity and effort go through a PID loop when gains are configured). State interfaces: `velocity` only together with `position`, `acceleration` only with both; a `velocity`-only, `effort` or `acceleration` command needs the `position` and `velocity` states. The course's explanation list (unit 6) shifts three defaults by one line: `state_interfaces` has none, `state_publish_rate` was 50.0 (Humble only), `action_monitor_rate` is 20.0.
 
 ## goal_time
 The course (and the official Humble demo file) comment `goal_time: 0.0 # Defaults to 0.0 (start immediately)` is wrong: on Humble and Jazzy 0.0 means **no time limit** (the controller may wait indefinitely for the goal). [changed in Lyrical: default 10.0; 0.0 now means the goal must be reached on time and a negative value waits indefinitely: set `goal_time: -1.0` to keep the old behaviour].

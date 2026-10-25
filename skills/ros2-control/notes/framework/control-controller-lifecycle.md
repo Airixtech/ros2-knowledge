@@ -21,6 +21,7 @@ version_notes:
   - "jazzy: the course's state diagram matches the lifecycle design except ErrorProcessing, added here — https://github.com/ros2/design/blob/gh-pages/articles/node_lifecycle.md (CONTROL-V33)"
   - "jazzy: publishers and subscribers of joint_state_broadcaster and the forward controllers are created in on_configure — https://github.com/ros-controls/ros2_controllers/blob/jazzy/joint_state_broadcaster/src/joint_state_broadcaster.cpp (CONTROL-V03)"
   - "jazzy: an inactive forward controller logs 'Can't accept new commands. Controller is not active.'; humble: it stores them without a log and drops them at activation — https://github.com/ros-controls/ros2_controllers/blob/jazzy/forward_command_controller/src/forward_controllers_base.cpp (CONTROL-V27)"
+  - "jazzy: an on_init() error shuts the controller node down and the controller is not loaded — https://github.com/ros-controls/ros2_control/blob/jazzy/controller_interface/src/controller_interface_base.cpp (CONTROL-V75)"
 ---
 # Controller states and transitions: unconfigured, inactive, active, finalized
 
@@ -57,4 +58,5 @@ Check the state with `ros2 control list_controllers` ([[control-cli-list]]); cha
 ## Pitfalls
 - Robot ignores commands, no error → the controller is `inactive`, or the topic exists only because it was configured: check `list_controllers`.
 - A topic you expect is missing → the controller is still `unconfigured` (loaded, not configured).
+- A controller that is not listed at all after loading → its `on_init()` returned an error: its node was shut down and the controller manager logged "Could not initialize the controller named '…'" ([[control-custom-init]]).
 - If you do not know the states, you cannot tell which situation caused an error, or you may not notice a problem at all: look at the state first when debugging.

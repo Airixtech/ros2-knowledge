@@ -2,8 +2,8 @@
 id: gazebo-joint-state-diffdrive
 type: reference
 owner: equipo-ros2
-updated: 2026-10-21
-review_by: 2027-04-19
+updated: 2026-10-24
+review_by: 2027-04-22
 source: manual
 confidentiality: internal
 title: "JointStatePublisher and DiffDrive systems: elements, odom and TF output"
@@ -15,7 +15,7 @@ audience: dev
 summary: "Gazebo JointStatePublisher (topic, update_rate, joint_name) and DiffDrive (wheels, separation, radius, cmd_vel, odom, tf, frames) systems; teleop after bridging."
 tags: [JointStatePublisher, gz-sim-joint-state-publisher-system, DiffDrive, gz-sim-diff-drive-system, joint_states, cmd_vel, odom, tf, wheel_separation, wheel_radius, child_frame_id, teleop_twist_keyboard]
 see: ["[[gazebo-ros-gz-bridge]]", "[[gazebo-sim-overview]]", "[[urdf-joint-state-publisher]]", "[[core-tf-basics]]", "[[gazebo-multi-robot]]"]
-requires: [ros2-core, ros2-urdf]
+requires: [ros2-core, ros2-urdf, ros2-control]
 version_notes:
   - "jazzy/harmonic: DiffDrive reads no publish_odom, publish_odom_tf or publish_wheel_tf (not gz-sim DiffDrive elements); it always publishes odometry and the odom→child transform; wheel TFs come from JointStatePublisher + robot_state_publisher (same in Fortress and Jetty) — https://github.com/gazebosim/gz-sim/blob/gz-sim8/src/systems/diff_drive/DiffDrive.cc (GZ-V03)"
   - "jazzy/harmonic: the joint_state_publisher ROS node does not read simulated joints (GZ-V04)"
@@ -82,6 +82,8 @@ It must be a model plugin: in the `<world>` it fails ("The JointStatePublisher s
 | `<odom_topic>`, `<tf_topic>` | odometry (`gz.msgs.Odometry`) and transform (`gz.msgs.Pose_V`) topics |
 | `<frame_id>`, `<child_frame_id>` | odometry frames; the child must be the robot's root frame (`base_link`) |
 | limits | optional `<max_linear_velocity>`, `<max_linear_acceleration>`, `<min_…>`, `<odom_publish_frequency>` |
+
+With ros2_control instead of this system, the wheels get velocity command interfaces in `<ros2_control>` and `diff_drive_controller` turns the twist into wheel velocities ([[control-diff-drive-controller]]).
 
 ## Drive it
 After bridging `/cmd_vel`, `/odom`, `/tf` and `/joint_states`:

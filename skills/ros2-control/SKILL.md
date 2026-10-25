@@ -48,7 +48,8 @@ If the notes do not cover the question, read the official source for the user's 
 | setup | 5 | `notes/setup/_index.md` | Controller YAML (controller_manager, update_rate, types, forward_command_controller, JTC parameters), the <ros2_control> URDF tag, simulation and real-hardware launch files, spawner order |
 | manager | 3 | `notes/manager/_index.md` | ros2 control CLI (list_controllers, list_controller_types, set_controller_state, load/unload, switch_controllers), controller_manager services, spawner |
 | hardware | 14 | `notes/hardware/_index.md` | Writing a hardware interface: SystemInterface methods, on_init params, exporting interfaces, read/write, pluginlib export, CMake and package.xml; Dynamixel example with dynamixel_workbench |
-| learn | 7 | `learn/_index.md` | ros2_control course units 1–5 for students (rrbot demo, bringup package, controller manager, hardware template, Dynamixel) and the course map; open only for course questions |
+| controllers | 11 | `notes/controllers/_index.md` | Built-in controllers of ros2_controllers (forward family, joint_trajectory_controller topic and action, diff_drive_controller) and writing a custom controller: ControllerInterface methods, interface configuration, realtime tools, plugin, build, launch |
+| learn | 12 | `learn/_index.md` | ros2_control course units 1–5 for students (rrbot demo, bringup package, controller manager, hardware template, Dynamixel) and the course map; open only for course questions |
 | migration | 2 | `migration/_index.md` | Humble hardware interface API and other Humble differences; Jazzy → Kilted/Lyrical removals and default changes; open for other distros or porting |
 <!-- INDEX:END -->
 

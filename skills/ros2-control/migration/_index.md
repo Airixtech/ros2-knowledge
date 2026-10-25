@@ -5,5 +5,5 @@ Humble hardware interface API and other Humble differences; Jazzy → Kilted/Lyr
 
 | id | summary | path |
 |---|---|---|
-| [[control-humble-to-jazzy]] | Run the course on Humble: on_init(HardwareInfo), SystemInterface::on_init(info), robot_description parameter, CLI and spawner differences, JTC and broadcaster parameters, Dynamixel packages. | migration/control-humble-to-jazzy.md |
-| [[control-jazzy-to-lyrical]] | Port the course to Lyrical: export_state/command_interfaces and HardwareInfo on_init removed, set_state/get_command checklist, target_link_libraries, enforce_command_limits, JTC and broadcaster defaults. | migration/control-jazzy-to-lyrical.md |
+| [[control-humble-to-jazzy]] | Run the course on Humble: on_init(HardwareInfo), robot_description parameter, CLI, JTC and diff_drive parameters, custom controller set_value/get_value, realtime_tools, Dynamixel. | migration/control-humble-to-jazzy.md |
+| [[control-jazzy-to-lyrical]] | Port the course to Lyrical: export methods removed, set_state/get_command checklist, target_link_libraries, realtime_tools try_publish, diff_drive limits, changed defaults. | migration/control-jazzy-to-lyrical.md |

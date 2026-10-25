@@ -5,10 +5,15 @@ ros2_control course units 1–5 for students (rrbot demo, bringup package, contr
 
 | id | summary | path |
 |---|---|---|
-| [[control-learn-start-here]] | ros2_control course map: units 1–8 (part 1 = units 1–5), packages, prerequisites, course workspace, reading order, running it on Humble. | learn/control-learn-start-here.md |
+| [[control-learn-start-here]] | ros2_control course map: units 1–8 in two parts (1–5, 6–8), packages, prerequisites, workspace, reading order, running on Humble. | learn/control-learn-start-here.md |
 | [[control-learn-unit1-demo]] | Unit 1 exercises 1.1.1–1.1.3: course packages, load_controllers.launch.py output, forward command topic, switch_controllers to position_trajectory_controller, joint_trajectory_publisher. | learn/control-learn-unit1-demo.md |
 | [[control-learn-unit2-setup]] | Unit 2 exercises 2.2.1–2.5.1: spawn rrbot without control, my_robot_bringup, one-joint controller_configuration.yaml, ros2_control tags in rrbot.xacro, my_robot.launch.py. | learn/control-learn-unit2-setup.md |
 | [[control-learn-unit2-test]] | Unit 2 exercises 2.6.1–2.7.1: launch my_robot.launch.py, publish one-joint commands, add joint2 to YAML and xacro, publish two-joint commands. | learn/control-learn-unit2-test.md |
 | [[control-learn-unit3-manager]] | Unit 3 exercises 3.2.1–3.4.1: list_controller_types, list_controllers, set_controller_state, unload/load, service list and ListControllers call, spawner on a loaded controller. | learn/control-learn-unit3-manager.md |
 | [[control-learn-unit4-template]] | Unit 4 exercises 4.3.1–4.20.1: my_robot_hardware_interface files, plugin switch in rrbot_unit3, launch and YAML, colcon build --packages-select, test with forward commands. | learn/control-learn-unit4-template.md |
 | [[control-learn-unit5-dynamixel]] | Unit 5 exercises 5.2.1–5.22.1: Dynamixel SDK install, dynamixel_hardware_interface files, plugin switch in rrbot_unit4, launch, YAML, test with use_dummy. | learn/control-learn-unit5-dynamixel.md |
+| [[control-learn-unit6-controllers]] | Unit 6 exercises 6.2.1–6.6.1: rrbot_unit5 ros2_control blocks per controller, YAML, build, spawn_rrbot, load/test/unload, joint_trajectory_publisher. | learn/control-learn-unit6-controllers.md |
+| [[control-learn-unit6-diffbot]] | Unit 6 exercise 6.7.1: diffbot_description xacro files, spawn_diffbot and diffbot_controllers launches, list_controllers, topic list, TwistStamped command. | learn/control-learn-unit6-diffbot.md |
+| [[control-learn-unit7-custom]] | Unit 7 exercises: create rrbot_controller files step by step, build with my_robot_bringup and rrbot_unit2, start world, launch rrbot_with_rrbot_controller, list_controllers. | learn/control-learn-unit7-custom.md |
+| [[control-learn-unit8-project]] | Unit 8 project: Solo 8 quadruped on a stand, starter xacro files, joint names, spawn_solo, six tasks, push-ups test. | learn/control-learn-unit8-project.md |
+| [[control-learn-unit8-solution]] | Unit 8 solution: my_quadruped_bringup, joint_trajectory_controller choice, xacro actuator macro with GazeboSimSystem, solo8_controller_config.yaml, start_controllers.launch.py, run. | learn/control-learn-unit8-solution.md |

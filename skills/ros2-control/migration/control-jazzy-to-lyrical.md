@@ -12,19 +12,23 @@ area: migration
 distro: jazzy
 tested: false
 audience: dev
-summary: "Port the course to Lyrical: export_state/command_interfaces and HardwareInfo on_init removed, set_state/get_command checklist, target_link_libraries, enforce_command_limits, JTC and broadcaster defaults."
+summary: "Port the course to Lyrical: export methods removed, set_state/get_command checklist, target_link_libraries, realtime_tools try_publish, diff_drive limits, changed defaults."
 tags: [lyrical, kilted, migration, export_state_interfaces, export_command_interfaces, set_state, get_state, set_command, get_command, joint_state_interfaces_, target_link_libraries, enforce_command_limits, goal_time, publish_dynamic_joint_states, forward_command_controller]
-see: ["[[control-hw-template-export]]", "[[control-hw-template-activate-rw]]", "[[control-hw-package-build]]", "[[control-jtc-parameters]]", "[[control-urdf-tag]]", "[[control-humble-to-jazzy]]"]
+see: ["[[control-hw-template-export]]", "[[control-hw-template-activate-rw]]", "[[control-hw-package-build]]", "[[control-jtc-parameters]]", "[[control-urdf-tag]]", "[[control-custom-configure]]", "[[control-custom-package-build]]", "[[control-diff-drive-controller]]", "[[control-humble-to-jazzy]]"]
 requires: [ros2-core]
 version_notes:
   - "lyrical: ros2_control 6.12.0 removed export_state_interfaces/export_command_interfaces, the HardwareInfo on_init and the Handle(prefix, name, double *) constructor — https://github.com/ros-controls/ros2_control/blob/master/doc/migration.rst (CONTROL-V19)"
   - "kilted: ament_target_dependencies deprecated; lyrical: removed (V09, CONTROL-V29)"
   - "kilted/lyrical: enforce_command_limits default true — https://github.com/ros-controls/ros2_control/blob/master/controller_manager/src/controller_manager_parameters.yaml (CONTROL-V22)"
   - "lyrical: JTC goal_time default 10.0, open_loop_control removed; publish_dynamic_joint_states default false; JointGroup*Controller packages not released — https://github.com/ros-controls/ros2_controllers/blob/master/doc/migration.rst (CONTROL-V07, CONTROL-V28, CONTROL-V34, CONTROL-V35)"
+  - "kilted: realtime_tools .h headers removed, RealtimePublisher members deprecated; lyrical: removed, RealtimeBuffer deprecated — https://github.com/ros-controls/realtime_tools/blob/master/realtime_tools/CHANGELOG.rst (CONTROL-V73)"
+  - "kilted: double get_value() removed — https://github.com/ros-controls/ros2_control/blob/kilted/hardware_interface/include/hardware_interface/handle.hpp (CONTROL-V74)"
+  - "kilted: diff_drive has_*_limits removed (jerk 0.0 becomes a real limit [verify]); lyrical: publish_rate removed — https://github.com/ros-controls/ros2_controllers/blob/kilted/doc/migration.rst (CONTROL-V68, CONTROL-V69)"
+  - "lyrical: RealtimeThreadSafeBox pattern as in example_7 — https://github.com/ros-controls/ros2_control_demos/blob/master/example_7/controller/r6bot_controller.cpp (CONTROL-V56)"
 ---
 # Jazzy → Kilted/Lyrical: removed export methods, set_state/get_command, CMake targets, new defaults
 
-**TL;DR** The course's hardware code compiles on Jazzy and Kilted with deprecated methods, and not on Lyrical (ros2_control 6.12.0): the export methods, the `HardwareInfo` form of `on_init()` and the interface constructor that takes a pointer are removed. Port the code to the framework's interfaces (possible since Jazzy) and to namespaced CMake targets, and check three changed defaults.
+**TL;DR** The course's hardware code compiles on Jazzy and Kilted with deprecated methods, and not on Lyrical (ros2_control 6.12.0); its custom controller (unit 7) stops compiling on Kilted (realtime_tools `.h` headers) and needs `try_publish()` on Lyrical. In the hardware code the export methods, the `HardwareInfo` form of `on_init()` and the interface constructor that takes a pointer are removed. Port the code to the framework's interfaces (possible since Jazzy) and to namespaced CMake targets, and check three changed defaults.
 
 ## Hardware interface: the official checklist (ros2_control migration guide, Kilted → Lyrical)
 1. Mark the `export_state_interfaces()`/`export_command_interfaces()` overrides with `override` (the course already does): a method without it would compile and never be called.
@@ -57,6 +61,46 @@ The template's `on_configure()`, `on_activate()` and `read()` in this form: [[co
 | JTC `open_loop_control` | deprecated | Lyrical: removed |
 | joint_state_broadcaster `publish_dynamic_joint_states` | `true` | Lyrical: deprecated, default `false`: no `/dynamic_joint_states` |
 | `JointGroupEffort/Position/VelocityController` | available | Lyrical: deprecated, packages not released: use `forward_command_controller/ForwardCommandController` with `interface_name` |
+
+## Custom controller (unit 7)
+- realtime_tools: [changed in Kilted: `realtime_buffer.h`/`realtime_publisher.h` removed, include the `.hpp` headers; `RealtimePublisher::msg_`, `lock()`, `unlock()`, `trylock()`, `unlockAndPublish()` deprecated]. [changed in Lyrical (5.4.0): those members removed, the constructor that wraps an existing publisher deprecated, `RealtimeBuffer` deprecated]. The appendix's `get_value()` does not compile from Kilted on ([[control-custom-activate-update]]).
+- The state publisher in the Lyrical form: the controller keeps its own message and hands it to `try_publish()`; `s_publisher_` is no longer needed [verify build]:
+```cpp
+// header: members
+std::unique_ptr<ControllerStatePublisher> state_publisher_;
+ControllerStateMsg state_msg_;
+
+// on_configure()
+state_publisher_ = std::make_unique<ControllerStatePublisher>(
+    get_node(), "~/state", rclcpp::SystemDefaultsQoS());
+state_msg_.header.frame_id = joint_names_[0];
+
+// update()
+state_msg_.header.stamp = time;
+state_msg_.set_point = command_interfaces_[0].get_optional().value_or(
+    std::numeric_limits<double>::quiet_NaN());
+state_publisher_->try_publish(state_msg_);
+```
+- The command buffer with `RealtimeThreadSafeBox` (available since Jazzy; the pattern of the official ros2_control_demos example_7) [verify build]:
+```cpp
+// header: members
+realtime_tools::RealtimeThreadSafeBox<ControllerCommandMsg> input_command_;
+ControllerCommandMsg last_command_;
+
+// subscriber callback and on_activate(): store a copy
+input_command_.set(*msg);
+
+// update(): take the newest message when the box is free, keep the last one otherwise
+auto new_command = input_command_.try_get();
+if (new_command.has_value()) {
+  last_command_ = new_command.value();
+}
+```
+  The loop then reads `last_command_.displacements[i]`.
+- CMake: `target_link_libraries` with the targets of `controller_interface`, `hardware_interface`, `pluginlib`, `rclcpp`, `rclcpp_lifecycle`, `realtime_tools` and `${control_msgs_TARGETS}` ([[control-custom-package-build]]).
+
+## diff_drive_controller (unit 6)
+[changed in Kilted: `has_velocity_limits`, `has_acceleration_limits`, `has_jerk_limits` and `min_acceleration` removed: an unset limit (NaN) means no limit. The course's `max_jerk: 0.0` and `min_jerk: 0.0` then are a jerk limit of 0 and the robot never accelerates [verify]: delete those lines]. [changed in Lyrical: `publish_rate` removed]. The wheel `min`/`max` of ±1 rad/s now clamp the commands (`enforce_command_limits`) ([[control-diff-drive-controller]]).
 
 ## Dynamixel
 `dynamixel_hardware` (the code of the course) is not released for Lyrical; ROBOTIS's `dynamixel_hardware_interface` (1.5.1) is ([[control-dynamixel-sdk]]).
