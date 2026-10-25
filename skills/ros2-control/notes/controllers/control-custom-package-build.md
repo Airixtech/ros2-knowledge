@@ -162,4 +162,4 @@ The `<depend>` lines are those of `ros2 pkg create`; nothing else is needed whil
 ```bash
 cd ~/ros2_ws && colcon build --packages-select rrbot_controller
 ```
-If it fails, read the compiler messages one by one; the most common cause is a method signature that does not match the base class ([[control-custom-header]]).
+If it fails, read the compiler messages one by one; for example, a method signature that does not match the base class makes its `override` fail ([[control-custom-header]]).
