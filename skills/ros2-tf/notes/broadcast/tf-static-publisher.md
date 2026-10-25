@@ -87,4 +87,4 @@ the tree has one root, `world`, with `odom → turtle_base_link → …` and `ca
 ## Pitfalls
 - Degrees instead of radians → `--yaw 90` means 90 rad: 14 full turns plus 2.035 rad, a 116.6° rotation instead of 90° (use 1.5708).
 - A frame that moves published as static → it never updates; use a broadcaster ([[tf-odom-broadcaster]]).
-- Stopping the publisher → listeners that start later never get the frame ([[tf-static-python]]).
+- Stopping the publisher → listeners that start later never get the frame (TF-V35 `[verify]`, [[tf-static-python]]).
