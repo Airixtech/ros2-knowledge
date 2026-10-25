@@ -47,7 +47,7 @@
 ## Real Jazzy errors (fix)
 | ID | Section | Origin | Error | Correct statement |
 |---|---|---|---|---|
-| TF-V01 | 1.5 | course mistake (older syntax) | `static_transform_publisher x y z yaw pitch roll frame_id child_frame_id` with "the three rotational degrees of freedom (in degrees)" | Angles are **radians** (the program's usage text: "roll, pitch, yaw euler angles in radians"; 3.6 of the course says so). Use the flags `--x --y --z --roll --pitch --yaw` (or `--qx --qy --qz --qw`) `--frame-id --child-frame-id`. The positional form prints "Old-style arguments are deprecated" in Humble, Jazzy and Kilted; Lyrical no longer parses it and exits with "Frame id must not be empty". Sources: [program (jazzy)][stp-j], [program (lyrical)][stp-l]. |
+| TF-V01 | 1.5 | course mistake (older syntax) | `static_transform_publisher x y z yaw pitch roll frame_id child_frame_id` with "the three rotational degrees of freedom (in degrees)" | Angles are **radians** (the program's usage text: "roll, pitch, yaw euler angles in radians"; 3.6 of the course says so). Use the flags `--x --y --z --roll --pitch --yaw` (or `--qx --qy --qz --qw`) `--frame-id --child-frame-id`. The positional form prints "Old-style arguments are deprecated" in Humble, Jazzy and Kilted; Lyrical no longer parses it and exits with "Frame id must not be empty". Official docs: the tf2 static broadcaster tutorial ("In ROS 2, roll/pitch/yaw refers to rotation in radians about the x/y/z-axis, respectively", [Humble][docs-static-h], [Jazzy][docs-static-j]) and REP 103 (angle unit: radian, [REP 103][rep-103]). Sources: [program (jazzy)][stp-j], [program (lyrical)][stp-l]. |
 | TF-V02 | 3.4 | course mistake | `tf2_monitor`: the huge delay of the static chain "reflects" a zero delay; 4.4 ms "is too much for the image module in RVIZ"; after the fix, 1.67e9 s "indicates that it behaves like a static transform" | `tf2_monitor` prints `now() − header.stamp` with **its own node clock** (wall time unless `use_sim_time:=true`). Static transforms carry stamp 0, so their "delay" is the current Unix time. The first broadcaster stamped with `get_clock().now()` of a node without sim time (wall time), so the monitor saw ~4 ms; RViz, however, looks up the camera images (sim-time stamps) and found no transform at those times (inferred from the stamps, `[verify]`). Stamping with the odometry header puts the transform in sim time: the data and the TF agree, and the 1.67e9 s is only the wall-clock − sim-time difference of the monitor. Run it with `--ros-args -p use_sim_time:=true` for real delays [verify]. Sources: [tf2_monitor.cpp (jazzy)][mon-j]. |
 | TF-V03 | 3.3 | course mistake | Example 3.2.1: the script "publishes a **static** TF transform from camera_bot_base_link to world" | It publishes a **dynamic** transform (`TransformBroadcaster`, topic `/tf`) on every odometry message; static transforms use `StaticTransformBroadcaster` and `/tf_static` (3.8). Source: the course code; [tf2_ros_py (jazzy)][tb-py-j]. |
 | TF-V04 | 3.3 | course mistake | Explained snippet subscribes with `self.listener_callback` | The program defines and uses `self.odom_callback`; `listener_callback` does not exist (AttributeError). The file wins. |
@@ -68,7 +68,7 @@
 ## Full table
 | # | Section | Statement | Humble (Fortress) | Jazzy (Harmonic) | Lyrical (Jetty) | Action | Source | Confidence |
 |---|---|---|---|---|---|---|---|---|
-| TF-V01 | 1.5 | positional args, angles in degrees | ✗ radians; positional deprecated (warning) | ✗ same | ✗ radians; positional not parsed | **fix** | [stp-h], [stp-j], [stp-l] | High |
+| TF-V01 | 1.5 | positional args, angles in degrees | ✗ radians; positional deprecated (warning) | ✗ same | ✗ radians; positional not parsed | **fix** | [stp-h], [stp-j], [stp-l], [docs-static-h], [docs-static-j], [rep-103] | High |
 | TF-V02 | 3.4 | reading of the tf2_monitor delays | ✗ monitor clock − stamp | ✗ same | ✗ same | **fix** | [mon-j] | High (formula), `[verify]` (sim-time run) |
 | TF-V03 | 3.3 | odometry → TF called "static" | ✗ dynamic `/tf` | ✗ same | ✗ same | **fix** | course code | High |
 | TF-V04 | 3.3 | `self.listener_callback` in the snippet | ✗ | ✗ | ✗ | **fix** | course code | High |
@@ -144,6 +144,7 @@
 [tei-h]: https://github.com/ros2/rclpy/blob/humble/rclpy/rclpy/topic_endpoint_info.py
 [tei-j]: https://github.com/ros2/rclpy/blob/jazzy/rclpy/rclpy/topic_endpoint_info.py
 [tut-static-j]: https://github.com/ros/geometry_tutorials/blob/jazzy/turtle_tf2_py/turtle_tf2_py/static_turtle_tf2_broadcaster.py
+[docs-static-h]: https://docs.ros.org/en/humble/Tutorials/Intermediate/Tf2/Writing-A-Tf2-Static-Broadcaster-Py.html
 [docs-static-j]: https://docs.ros.org/en/jazzy/Tutorials/Intermediate/Tf2/Writing-A-Tf2-Static-Broadcaster-Py.html
 [docs-tf2-h]: https://docs.ros.org/en/humble/Tutorials/Intermediate/Tf2/Tf2-Main.html
 [docs-tf2-j]: https://docs.ros.org/en/jazzy/Tutorials/Intermediate/Tf2/Tf2-Main.html
