@@ -23,7 +23,8 @@ Errors (exit 1):
   - an ID of a "## Real ... (fix)" section of reports/version_audit*.md that no note cites (the fix never
     reached the notes); a report without that section is a WARNING (its fixes are not checked)
 Warnings: > MAX_TOKENS (≈ chars/4 without the knowledge-base fields), summary > 20 words, audience not dev|students,
-  learn/ note not audience: students, SKILL.md description > 200 chars or body > 2500 tokens,
+  learn/ note not audience: students, SKILL.md description > 200 chars or body > 2500 tokens (from 2250, 90 %:
+  near the budget, ask before adding to it whether to merge or shorten rules, move detail to notes or split),
   generated indexes out of date, review_by date passed (the server reports the note as overdue),
   knowledge-base fields out of date (python tools/kb_meta.py --check; needs git), pyflakes findings in
   complete Python programs (only if pyflakes is installed; a block is "complete" when it has an import and
@@ -63,6 +64,7 @@ MAX_SUMMARY_WORDS = 20
 MAX_DESC = 200                 # project rule for SKILL.md descriptions
 MAX_DESC_HARD = 1024           # Claude skill limit
 MAX_SKILL_BODY_TOKENS = 2500
+NEAR_SKILL_BODY_TOKENS = 2250  # 90 %: the next union into the skill needs a decision first
 MD_LINK_RE = re.compile(r'(?<!!)\[[^\]\n]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)')
 FENCE_RE = re.compile(r'^\s*```', re.M)
 PY_BLOCK_RE = re.compile(r'^\s*```(?:python|py)\s*\n(.*?)^\s*```', re.S | re.M | re.I)
@@ -366,8 +368,12 @@ def main(argv):
                 errors.append(f'{where}: broken wikilink [[{target}]]')
             elif t['skill'] != skill:
                 errors.append(f"{where}: links to [[{target}]] in another skill ('{t['skill']}')")
-        if tokens_estimate(body) > MAX_SKILL_BODY_TOKENS:
-            warnings.append(f'{where}: body ~{tokens_estimate(body)} tokens (> {MAX_SKILL_BODY_TOKENS})')
+        body_tokens = tokens_estimate(body)
+        if body_tokens > MAX_SKILL_BODY_TOKENS:
+            warnings.append(f'{where}: body ~{body_tokens} tokens (> {MAX_SKILL_BODY_TOKENS})')
+        elif body_tokens >= NEAR_SKILL_BODY_TOKENS:
+            warnings.append(f'{where}: body ~{body_tokens} tokens (near {MAX_SKILL_BODY_TOKENS}): before adding '
+                            'to it, ask whether to merge or shorten rules, move detail to notes or split the skill')
         m = SECRET_RE.search(text)
         if m:
             errors.append(f'{where}: signed link or local user path ({m.group(0)}): remove it')
