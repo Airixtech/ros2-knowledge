@@ -44,4 +44,4 @@ If the notes do not cover the question, answer from standard knowledge and say s
 <!-- INDEX:END -->
 
 ## Related skills
-ros2-core (required): nodes, executors, callback groups, QoS, TF; install it together with this skill. ros2-nav2 requires this skill: Nav2's own behavior trees (bt_navigator, Nav2 BT nodes, recoveries) live there; this skill never links to it.
+ros2-core (required): nodes, executors, callback groups, QoS, TF; install it together with this skill. ros2-cpp (optional): rclcpp in detail (packages, nodes, actions, executors) behind the C++ BT nodes; not required. ros2-nav2 requires this skill: Nav2's own behavior trees (bt_navigator, Nav2 BT nodes, recoveries) live there; this skill never links to it.

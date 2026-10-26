@@ -54,4 +54,4 @@ If the notes do not cover the question, read the official source for the user's 
 <!-- INDEX:END -->
 
 ## Related skills
-ros2-core (required): packages, colcon, launch, parameters, lifecycle nodes, the short ros2_control overview. ros2-urdf (required): URDF and xacro of the robot that carries the `<ros2_control>` tag. ros2-gazebo builds on this skill: gz_ros2_control in Gazebo Sim (GazeboSimSystem, the system plugin, Humble + Fortress) and the DiffDrive system as the simulator-only alternative to `diff_drive_controller`. Install ros2-core and ros2-urdf with this skill.
+ros2-core (required): packages, colcon, launch, parameters, lifecycle nodes, the short ros2_control overview. ros2-urdf (required): URDF and xacro of the robot that carries the `<ros2_control>` tag. ros2-gazebo builds on this skill: gz_ros2_control in Gazebo Sim (GazeboSimSystem, the system plugin, Humble + Fortress) and the DiffDrive system as the simulator-only alternative to `diff_drive_controller`. Install ros2-core and ros2-urdf with this skill. ros2-cpp (optional): rclcpp itself behind the C++ controllers and hardware interfaces; not required.

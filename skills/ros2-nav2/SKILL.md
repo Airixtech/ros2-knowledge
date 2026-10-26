@@ -54,3 +54,4 @@ If the notes do not cover the question, answer from standard Humble knowledge an
 ros2-core (required): install it together with this skill; this skill links into it, never the other way round.
 ros2-gazebo (optional, needs ros2-urdf): modern Gazebo (Gazebo Sim) for simulation: worlds, spawning, `ros_gz_bridge`, sensors, gz_ros2_control. The simulation steps of the course notes name its equivalents in plain text.
 ros2-bt (required): generic behavior trees and the BehaviorTree.CPP v3 API (sequence types, ports and blackboard, SubTrees, writing a BT node with rclcpp, v3 → v4); the behavior-tree notes here link into it for those details. Install ros2-core, ros2-bt and ros2-nav2 together.
+ros2-cpp (optional): rclcpp in detail (C++ action clients and servers, executors, components) for C++ code around Nav2; not required.

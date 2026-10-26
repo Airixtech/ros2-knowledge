@@ -1,11 +1,11 @@
 # ros2-knowledge
 
-Base de conocimiento de **ROS 2** en notas atómicas de Markdown, con ocho skills: **ros2-core** (ROS 2 base), **ros2-bt** (behavior trees con BehaviorTree.CPP), **ros2-snap** (empaquetar y desplegar apps ROS 2 como snaps), **ros2-nav2** (navegación con Nav2), **ros2-urdf** (describir robots con URDF y xacro), **ros2-control** (controladores y hardware interfaces con ros2_control), **ros2-gazebo** (simular robots en Gazebo Sim) y **ros2-tf** (frames y transformaciones con TF2). Sirve para dos cosas:
+Base de conocimiento de **ROS 2** en notas atómicas de Markdown, con nueve skills: **ros2-core** (ROS 2 base), **ros2-cpp** (programar ROS 2 en C++ con rclcpp), **ros2-bt** (behavior trees con BehaviorTree.CPP), **ros2-snap** (empaquetar y desplegar apps ROS 2 como snaps), **ros2-nav2** (navegación con Nav2), **ros2-urdf** (describir robots con URDF y xacro), **ros2-control** (controladores y hardware interfaces con ros2_control), **ros2-gazebo** (simular robots en Gazebo Sim) y **ros2-tf** (frames y transformaciones con TF2). Sirve para dos cosas:
 
 - **Leer y estudiar** en [Obsidian](https://obsidian.md), con enlaces `[[...]]` entre las notas.
 - **Usarla como Skills de Claude**, para que genere código y configuraciones ROS 2 correctas y ayude a depurar.
 
-*ROS 2 knowledge base (core, behavior trees, snaps, Nav2, URDF, ros2_control, Gazebo, TF) as atomic Markdown notes, for Obsidian and as Claude Skills. Notes are in English.*
+*ROS 2 knowledge base (core, C++ with rclcpp, behavior trees, snaps, Nav2, URDF, ros2_control, Gazebo, TF) as atomic Markdown notes, for Obsidian and as Claude Skills. Notes are in English.*
 
 **Humble es la versión de referencia** (Ubuntu 22.04, Python 3.10). Las diferencias con Jazzy y Lyrical están marcadas en cada nota. No se reemplazan. Excepciones: **ros2-gazebo** toma Jazzy + Gazebo Harmonic como referencia, y marca Humble + Fortress con enlaces a las fuentes oficiales de Humble; **ros2-control** toma Jazzy como referencia (la API de su curso), y da la forma Humble de cada diferencia desde las ramas oficiales `humble`; **ros2-tf** toma Jazzy como referencia (el código y las salidas de su curso; la API de tf2 en Python es la misma en Humble).
 
@@ -13,12 +13,16 @@ Base de conocimiento de **ROS 2** en notas atómicas de Markdown, con ocho skill
 
 | Carpeta | Qué hay |
 |---|---|
-| `skills/ros2-core/` | Skill base de ROS 2: 134 notas ([índice](skills/ros2-core/SKILL.md)) |
+| `skills/ros2-core/` | Skill base de ROS 2: 135 notas ([índice](skills/ros2-core/SKILL.md)) |
 | `skills/ros2-core/notes/` | Notas técnicas por área: `build-run`, `core-api` (nodos, parámetros, executors), `communication` (topics, services, actions, interfaces), `middleware` (QoS, DDS y RMW), `security` (SROS2: keystore, enclaves, permisos), `recipes`, `tools`, `architecture` |
 | `skills/ros2-core/learn/` | Material del curso: conceptos y ejercicios de las Units 2–8 ([empieza aquí](skills/ros2-core/learn/core-learn-start-here.md)) |
 | `skills/ros2-core/learn-intermediate/` | Material del curso intermedio con el MP-400 en simulación: Units 2–9 y proyecto final ([empieza aquí](skills/ros2-core/learn-intermediate/core-learn-inter-start-here.md)) |
 | `skills/ros2-core/learn-security/` | Material del curso de seguridad (SROS2) con TurtleBot3 en simulación: Units 2–3 ([empieza aquí](skills/ros2-core/learn-security/core-learn-sec-start-here.md)) |
 | `skills/ros2-core/migration/` | Cambios Humble → Jazzy → Lyrical y una checklist para migrar proyectos |
+| `skills/ros2-cpp/` | Skill de ROS 2 en C++ con rclcpp (Humble, con Jazzy, Kilted y Lyrical marcados): 44 notas ([índice](skills/ros2-cpp/SKILL.md)). Necesita `ros2-core` |
+| `skills/ros2-cpp/notes/` | Notas técnicas por área: `basics` (paquetes ament_cmake, CMakeLists, la clase Node, timers, launch, logging), `communication` (publishers, subscribers, interfaces propias, servicios, acciones), `executors` (callbacks, spin y spin_some, MultiThreadedExecutor, callback groups, varios nodos en un executor), `components` (escribir y ejecutar componentes), `recipes` (LaserScan, cv_bridge y OpenCV) |
+| `skills/ros2-cpp/learn/` | Material del curso básico de ROS 2 en C++ con el rover Leo en Marte, en simulación: Units 2–9 ([empieza aquí](skills/ros2-cpp/learn/cpp-learn-start-here.md)) |
+| `skills/ros2-cpp/migration/` | El código C++ del curso en Jazzy, Kilted y Lyrical (CMake, headers, QoS de servicios, firmas de callbacks, timers) |
 | `skills/ros2-bt/` | Skill de behavior trees (BehaviorTree.CPP v3, con las diferencias de v4): 32 notas ([índice](skills/ros2-bt/SKILL.md)). Necesita `ros2-core` |
 | `skills/ros2-bt/notes/` | Notas técnicas por área: `concepts` (qué es un BT, Sequence/Fallback, nodos reactivos y asíncronos, BT vs FSM, BT estocásticos), `btcpp` (la API: XML, factory, ports, blackboard, SubTrees, Groot), `ros2` (nodos BT que hablan con ROS 2) |
 | `skills/ros2-bt/learn/` | Material del curso de behavior trees con un TurtleBot 3 en simulación: Units 1–5 y proyecto ([empieza aquí](skills/ros2-bt/learn/bt-learn-start-here.md)) |
@@ -69,19 +73,20 @@ Cada nota sigue el mismo formato: un TL;DR de 1–2 líneas, luego el código o 
    ```
 2. En Obsidian, abre la carpeta como bóveda, o simplemente ábrela si ya está dentro de la tuya.
 3. Por dónde empezar:
-   - **Estudiantes:** `skills/ros2-core/learn/core-learn-start-here.md` (ROS 2 base), `skills/ros2-core/learn-intermediate/core-learn-inter-start-here.md` (ROS 2 intermedio), `skills/ros2-core/learn-security/core-learn-sec-start-here.md` (seguridad con SROS2), `skills/ros2-bt/learn/bt-learn-start-here.md` (behavior trees), `skills/ros2-nav2/learn/nav2-learn-start-here.md` (navegación) y `skills/ros2-nav2/learn/nav2-learn-adv-start-here.md` (navegación avanzada) , `skills/ros2-snap/learn/snap-learn-start-here.md` (snaps), `skills/ros2-gazebo/learn/gazebo-learn-start-here.md` (curso de URDF y simulación; las unidades de URDF están en `skills/ros2-urdf/learn/`), `skills/ros2-control/learn/control-learn-start-here.md` (ros2_control) y `skills/ros2-tf/learn/tf-learn-start-here.md` (TF).
-   - **Consulta técnica:** el índice de áreas en `skills/ros2-core/SKILL.md`, `skills/ros2-bt/SKILL.md`, `skills/ros2-snap/SKILL.md`, `skills/ros2-nav2/SKILL.md`, `skills/ros2-urdf/SKILL.md`, `skills/ros2-control/SKILL.md`, `skills/ros2-gazebo/SKILL.md` y `skills/ros2-tf/SKILL.md`.
+   - **Estudiantes:** `skills/ros2-core/learn/core-learn-start-here.md` (ROS 2 base), `skills/ros2-core/learn-intermediate/core-learn-inter-start-here.md` (ROS 2 intermedio), `skills/ros2-core/learn-security/core-learn-sec-start-here.md` (seguridad con SROS2), `skills/ros2-cpp/learn/cpp-learn-start-here.md` (ROS 2 base en C++), `skills/ros2-bt/learn/bt-learn-start-here.md` (behavior trees), `skills/ros2-nav2/learn/nav2-learn-start-here.md` (navegación) y `skills/ros2-nav2/learn/nav2-learn-adv-start-here.md` (navegación avanzada) , `skills/ros2-snap/learn/snap-learn-start-here.md` (snaps), `skills/ros2-gazebo/learn/gazebo-learn-start-here.md` (curso de URDF y simulación; las unidades de URDF están en `skills/ros2-urdf/learn/`), `skills/ros2-control/learn/control-learn-start-here.md` (ros2_control) y `skills/ros2-tf/learn/tf-learn-start-here.md` (TF).
+   - **Consulta técnica:** el índice de áreas en `skills/ros2-core/SKILL.md`, `skills/ros2-cpp/SKILL.md`, `skills/ros2-bt/SKILL.md`, `skills/ros2-snap/SKILL.md`, `skills/ros2-nav2/SKILL.md`, `skills/ros2-urdf/SKILL.md`, `skills/ros2-control/SKILL.md`, `skills/ros2-gazebo/SKILL.md` y `skills/ros2-tf/SKILL.md`.
 4. Para actualizar: `git pull`.
 
 ## Usarlo como Skill de Claude
 
 Requisitos: Python 3.10+ y bash (en Windows, Git Bash), y los paquetes de `requirements.txt` (PyYAML y pyflakes): `python -m pip install -r requirements.txt`, mejor dentro de un entorno virtual. Sin ellos, `validate.py` no revisa los bloques YAML ni los programas Python de las notas, y lo avisa al final de su resumen con `NOT CHECKED: …`.
 
-Instala siempre `ros2-core`. `ros2-bt`, `ros2-snap` y `ros2-urdf` lo necesitan, `ros2-nav2` necesita core y bt, `ros2-control` y `ros2-tf` necesitan core y urdf, y `ros2-gazebo` necesita core, urdf y control: sus notas enlazan a las de esos skills. Lo más simple es instalar los ocho juntos; un skill instalado solo ocupa su descripción hasta que el agente lo usa.
+Instala siempre `ros2-core`. `ros2-cpp`, `ros2-bt`, `ros2-snap` y `ros2-urdf` lo necesitan, `ros2-nav2` necesita core y bt, `ros2-control` y `ros2-tf` necesitan core y urdf, y `ros2-gazebo` necesita core, urdf y control: sus notas enlazan a las de esos skills. Lo más simple es instalar los nueve juntos; un skill instalado solo ocupa su descripción hasta que el agente lo usa.
 
 **Claude Code** (un acceso directo a la carpeta del repo, así que cada `git pull` se ve al instante):
 ```bash
 bash tools/package_skill.sh ros2-core --no-zip
+bash tools/package_skill.sh ros2-cpp --no-zip
 bash tools/package_skill.sh ros2-bt --no-zip
 bash tools/package_skill.sh ros2-nav2 --no-zip
 bash tools/package_skill.sh ros2-snap --no-zip
@@ -90,11 +95,12 @@ bash tools/package_skill.sh ros2-control --no-zip
 bash tools/package_skill.sh ros2-gazebo --no-zip
 bash tools/package_skill.sh ros2-tf --no-zip
 ```
-Esto crea `~/.claude/skills/ros2-core`, `~/.claude/skills/ros2-bt`, `~/.claude/skills/ros2-nav2`, `~/.claude/skills/ros2-snap`, `~/.claude/skills/ros2-urdf`, `~/.claude/skills/ros2-control`, `~/.claude/skills/ros2-gazebo` y `~/.claude/skills/ros2-tf`: un *junction* en Windows y un *symlink* en Linux/macOS.
+Esto crea `~/.claude/skills/ros2-core`, `~/.claude/skills/ros2-cpp`, `~/.claude/skills/ros2-bt`, `~/.claude/skills/ros2-nav2`, `~/.claude/skills/ros2-snap`, `~/.claude/skills/ros2-urdf`, `~/.claude/skills/ros2-control`, `~/.claude/skills/ros2-gazebo` y `~/.claude/skills/ros2-tf`: un *junction* en Windows y un *symlink* en Linux/macOS.
 
 **Claude Desktop / claude.ai** (genera un zip para subir):
 ```bash
 bash tools/package_skill.sh ros2-core --no-link
+bash tools/package_skill.sh ros2-cpp --no-link
 bash tools/package_skill.sh ros2-bt --no-link
 bash tools/package_skill.sh ros2-nav2 --no-link
 bash tools/package_skill.sh ros2-snap --no-link
@@ -103,16 +109,16 @@ bash tools/package_skill.sh ros2-control --no-link
 bash tools/package_skill.sh ros2-gazebo --no-link
 bash tools/package_skill.sh ros2-tf --no-link
 ```
-Sube `dist/ros2-core.zip`, `dist/ros2-bt.zip`, `dist/ros2-nav2.zip`, `dist/ros2-snap.zip`, `dist/ros2-urdf.zip`, `dist/ros2-control.zip`, `dist/ros2-gazebo.zip` y `dist/ros2-tf.zip` en la configuración de Skills de Claude (los ocho). Si subes nav2 sin bt, control o tf sin urdf, o gazebo sin urdf y control, sus enlaces a esas notas quedan rotos. Cuando cambien las notas, vuelve a generarlos y a subirlos.
+Sube `dist/ros2-core.zip`, `dist/ros2-cpp.zip`, `dist/ros2-bt.zip`, `dist/ros2-nav2.zip`, `dist/ros2-snap.zip`, `dist/ros2-urdf.zip`, `dist/ros2-control.zip`, `dist/ros2-gazebo.zip` y `dist/ros2-tf.zip` en la configuración de Skills de Claude (los nueve). Si subes nav2 sin bt, control o tf sin urdf, o gazebo sin urdf y control, sus enlaces a esas notas quedan rotos. Cuando cambien las notas, vuelve a generarlos y a subirlos.
 
 > No uses las dos vías a la vez: un zip subido a claude.ai también aparece en Claude Code y el skill quedaría duplicado.
 
 ## Para quienes editan
 
 - **Una idea por nota, sin duplicar.** Si un concepto ya existe, enlázalo con `[[id-de-la-nota]]`.
-- **Formato:** el `id` es igual al nombre del archivo y lleva el prefijo del dominio (`core-…`, `bt-…`, `nav2-…`, `snap-…`, `urdf-…`, `control-…`, `gazebo-…`, `tf-…`). El frontmatter obligatorio es `id`, `title`, `domain` y `summary` (máximo 20 palabras), más 6 campos de mantenimiento que usa un servidor MCP de base de conocimiento para saber quién cuida cada nota y cuándo revisarla: `type`, `owner`, `updated`, `review_by`, `source` y `confidentiality`. No los escribas a mano: los pone `tools/kb_meta.py`.
+- **Formato:** el `id` es igual al nombre del archivo y lleva el prefijo del dominio (`core-…`, `cpp-…`, `bt-…`, `nav2-…`, `snap-…`, `urdf-…`, `control-…`, `gazebo-…`, `tf-…`). El frontmatter obligatorio es `id`, `title`, `domain` y `summary` (máximo 20 palabras), más 6 campos de mantenimiento que usa un servidor MCP de base de conocimiento para saber quién cuida cada nota y cuándo revisarla: `type`, `owner`, `updated`, `review_by`, `source` y `confidentiality`. No los escribas a mano: los pone `tools/kb_meta.py`.
 - **Tamaño:** 400–900 tokens por nota, más o menos 1.600–3.600 caracteres.
-- **Enlaces:** nunca hacia fuera del repo. Una nota solo enlaza a los skills que declara en `requires`: `ros2-bt` → core; `ros2-snap` → core; `ros2-urdf` → core; `ros2-nav2` → core y bt; `ros2-control` → core y urdf; `ros2-tf` → core y urdf; `ros2-gazebo` → core, urdf y control. Las de core nunca enlazan a los otros skills, las de bt nunca enlazan a nav2, las de urdf nunca enlazan a control, a gazebo ni a tf, las de control nunca enlazan a gazebo, y las de tf nombran las de gazebo solo en texto.
+- **Enlaces:** nunca hacia fuera del repo. Una nota solo enlaza a los skills que declara en `requires`: `ros2-cpp` → core; `ros2-bt` → core; `ros2-snap` → core; `ros2-urdf` → core; `ros2-nav2` → core y bt; `ros2-control` → core y urdf; `ros2-tf` → core y urdf; `ros2-gazebo` → core, urdf y control. Las de core nunca enlazan a los otros skills, las de bt nunca enlazan a nav2, las de urdf nunca enlazan a control, a gazebo ni a tf, las de control nunca enlazan a gazebo, y las de tf nombran las de gazebo solo en texto. Ningún skill necesita `ros2-cpp`: core, bt, nav2 y control lo nombran solo en texto.
 - **Antes de cada commit:**
   ```bash
   python tools/build_index.py      # regenera los _index.md y el índice de SKILL.md (no los edites a mano)
