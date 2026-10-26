@@ -2,8 +2,8 @@
 id: cpp-learn-start-here
 type: reference
 owner: equipo-ros2
-updated: 2026-10-25
-review_by: 2027-04-23
+updated: 2026-10-26
+review_by: 2027-04-24
 source: manual
 confidentiality: internal
 title: "C++ basics course map: units 2-9, packages per unit, environment, the Python twin course"
@@ -15,7 +15,7 @@ audience: students
 order: 1
 summary: "Learning path of the C++ basics course (Leo Mars rover, Humble): units 2-9, packages, notes, environment, Python twin."
 tags: [course, learning path, Leo rover, Mars rover, C++, units, packages, environment, students]
-see: ["[[core-learn-start-here]]", "[[cpp-learn-unit2-basics]]", "[[cpp-node-first-program]]", "[[cpp-pkg-cmake]]"]
+see: ["[[core-learn-start-here]]", "[[cpp-learn-unit2-basics]]", "[[cpp-node-first-program]]", "[[cpp-pkg-cmake]]", "[[cpp-learn-inter-start-here]]"]
 requires: [ros2-core]
 version_notes: []
 ---
@@ -42,3 +42,5 @@ version_notes: []
 
 ## Python and C++
 The same missions in Python: [[core-learn-unit2-basics]] and the following units of ros2-core. Choosing a language for a node, and mixing both in one robot: [[core-lang-choice]].
+
+Next course: the intermediate course in C++ (launch formats, parameters, QoS, DDS, managed nodes), [[cpp-learn-inter-start-here]].

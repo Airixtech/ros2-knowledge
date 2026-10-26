@@ -2,8 +2,8 @@
 id: core-learn-inter-start-here
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-26
+review_by: 2027-04-24
 source: manual
 confidentiality: internal
 title: "Intermediate course: start here"
@@ -38,7 +38,7 @@ version_notes: []
 | 6 | Executors and callback groups | [[core-exec-model]], [[core-exec-callback-groups]] | [[core-learn-inter-unit6-blocking]], [[core-learn-inter-unit6-executor]], [[core-learn-inter-unit6-exercises]], [[core-learn-inter-unit6-groups-demo]] |
 | 7 | QoS | [[core-qos-policies]], [[core-qos-events]], [[core-qos-durability]], [[core-qos-deadline]], [[core-qos-lifespan]], [[core-qos-liveliness]] | [[core-learn-inter-unit7-8-qos-dds]]; programs: [[core-qos-events-demo]], [[core-qos-durability-demo]], [[core-qos-deadline-demo]], [[core-qos-lifespan-demo]], [[core-qos-liveliness-demo]] |
 | 8 | DDS | [[core-dds-overview]], [[core-rmw-implementations]], [[core-dds-loss-test]], [[core-ros2-daemon]] | [[core-learn-inter-unit7-8-qos-dds]] |
-| 9 | Managed nodes | [[core-lifecycle-concepts]], [[core-lifecycle-cpp-node]], [[core-lifecycle-services-cli]], [[core-lifecycle-manager-client]] | [[core-learn-inter-unit9-lifecycle]] |
+| 9 | Managed nodes | [[core-lifecycle-concepts]], `cpp-lifecycle-node` (ros2-cpp skill), [[core-lifecycle-services-cli]], `cpp-lifecycle-manager-client` (ros2-cpp skill) | [[core-learn-inter-unit9-lifecycle]] |
 | 10 | Final project | [[core-recipe-laser-circles]] | [[core-learn-inter-project]] |
 
 ## Unit 2 in one paragraph

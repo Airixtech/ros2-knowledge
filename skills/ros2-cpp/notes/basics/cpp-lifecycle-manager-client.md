@@ -1,23 +1,24 @@
 ---
-id: core-lifecycle-manager-client
+id: cpp-lifecycle-manager-client
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-26
+review_by: 2027-04-24
 source: manual
 confidentiality: internal
 title: "Own lifecycle manager in C++: ChangeState client"
-domain: core
-area: tools
+domain: cpp
+area: basics
 distro: humble
 tested: false
 audience: dev
 summary: "C++ node that configures then activates a managed node through its change_state service; CMake and launch for both nodes."
-tags: [lifecycle manager, ChangeState, change_state client, TRANSITION_CONFIGURE, TRANSITION_ACTIVATE, wait_for_service, async_send_request, spin_until_future_complete]
-see: ["[[core-lifecycle-services-cli]]", "[[core-lifecycle-cpp-node]]", "[[core-lifecycle-concepts]]", "[[core-srv-server]]"]
-requires: []
+tags: [lifecycle manager, ChangeState, change_state client, TRANSITION_CONFIGURE, TRANSITION_ACTIVATE, wait_for_service, async_send_request, spin_until_future_complete, wait_for_result, WallRate, param_vel_lifecycle_node]
+see: ["[[core-lifecycle-services-cli]]", "[[cpp-lifecycle-node]]", "[[cpp-lifecycle-param-node]]", "[[core-lifecycle-concepts]]", "[[core-srv-server]]", "[[cpp-learn-inter-unit9-lifecycle]]"]
+requires: [ros2-core]
 version_notes:
   - "lyrical: ament_target_dependencies deprecated in Kilted, removed in Lyrical — https://docs.ros.org/en/rolling/Releases/Release-Kilted-Kaiju.html (V09)"
+  - "course (intermediate C++): ament_target_dependencies(lifecycle_manager \"lifecycle_msgs\" \"rclcpp_lifecycle\" \"std_msgs\") in a package that never calls find_package(std_msgs) and does not use it; list rclcpp lifecycle_msgs [verify] whether the original stops CMake — https://github.com/ament/ament_cmake/blob/humble/ament_cmake_target_dependencies/cmake/ament_target_dependencies.cmake (CPP-V67)"
 ---
 # Own lifecycle manager in C++: ChangeState client
 
@@ -172,7 +173,7 @@ install(TARGETS
   lifecycle_manager  # <--- ADD THIS LINE!
   DESTINATION lib/${PROJECT_NAME})
 ```
-Keep `ament_package()` as the last line ([[core-lifecycle-cpp-node]]).
+Keep `ament_package()` as the last line ([[cpp-lifecycle-node]]).
 
 ## Launch both nodes
 ```python
@@ -189,6 +190,17 @@ def generate_launch_description():
     ])
 ```
 `managed_scan_node` starts unconfigured; `manager_client_node` configures it, waits 10 s and activates it, so `/managed_scan` starts publishing.
+
+## Variant: the intermediate C++ course (`managed_node_tests`, unit 9.6)
+The same program drives [[cpp-lifecycle-param-node]] instead of the laser node. Differences from the listing above:
+- Includes: adds `<future>`; no commented `state.hpp` include and no `rcutils/logging_macros.h`.
+- `static constexpr char const * change_state_topic = "/param_vel_lifecycle_node/change_state";` (a service name, despite the variable name).
+- Class order: `public:` constructor, `init()` and `change_state()` first, then `private:` with `rclcpp::Client<lifecycle_msgs::srv::ChangeState>::SharedPtr client_change_state_;`.
+- `change_state(std::uint8_t transition, std::chrono::seconds timeout = 3s)` (the explanation text still says `time_out`); logs through `this->get_logger()`; time-out message `"Timed out while requesting transition %d."` and failure message `"Failed to trigger transition %d."`, both with `static_cast<int>(transition)`.
+- The thread function is `lifecycle_manager_callback(std::shared_ptr<MyLifecycleServiceClient> lc_client)` with braces around each `return`, and `rclcpp::WallRate time_between_state_changes(10.0);`: a 10 Hz rate, so only 0.1 s passes between configure and activate (the listing above waits 10 s with `0.1`).
+- `main()` names the executor `executor` instead of `exe`.
+
+CMake additions: `add_executable(lifecycle_manager src/lifecycle_manager.cpp)`, then `ament_target_dependencies(lifecycle_manager rclcpp lifecycle_msgs)` — the course lists `"lifecycle_msgs" "rclcpp_lifecycle" "std_msgs"`, but the package never finds `std_msgs` and the program uses neither it nor `rclcpp_lifecycle` (CPP-V67) — and `install(TARGETS managed_node_example lifecycle_manager DESTINATION lib/${PROJECT_NAME})`. The launch file adds `Node(package='managed_node_tests', name='manager_client_node', executable='lifecycle_manager', output='screen')` next to the `LifecycleNode` of `param_vel_lifecycle_node`. After `ros2 launch managed_node_tests start_managed_node.launch.py`, `ros2 lifecycle get /param_vel_lifecycle_node` prints `active [3]`.
 
 ## Pitfalls
 - In Humble, `async_send_request` returns a `FutureAndRequestId`: `get()` may be called only once. Use `.future.share()` (as the official demo) if you read the result twice.

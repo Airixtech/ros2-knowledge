@@ -2,8 +2,8 @@
 id: core-rmw-implementations
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-26
+review_by: 2027-04-24
 source: manual
 confidentiality: internal
 title: "RMW implementations in Humble and switching with RMW_IMPLEMENTATION"
@@ -38,7 +38,7 @@ ros2 doctor --report            # section "RMW MIDDLEWARE": middleware name : rm
 ## Implementations in Humble
 | RMW | Vendor, license | Install |
 |---|---|---|
-| `rmw_fastrtps_cpp` [default] | eProsima Fast DDS, Apache 2 | installed with ROS 2 |
+| `rmw_fastrtps_cpp` [default] | eProsima Fast DDS, Apache 2 | installed with ROS 2 (`ros-humble-rmw-fastrtps-cpp`) |
 | `rmw_cyclonedds_cpp` | Eclipse Cyclone DDS, EPL 2.0 | `sudo apt install ros-humble-rmw-cyclonedds-cpp` |
 | `rmw_connextdds` | RTI Connext, commercial; free for prototyping, research, non-commercial and academic use | `sudo apt install ros-humble-rmw-connextdds` |
 | `rmw_gurumdds_cpp` | GurumDDS, commercial | `ros-humble-rmw-gurumdds-cpp` plus GurumDDS itself (separate) |

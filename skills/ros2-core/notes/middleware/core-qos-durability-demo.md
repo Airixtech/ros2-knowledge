@@ -2,8 +2,8 @@
 id: core-qos-durability-demo
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-26
+review_by: 2027-04-24
 source: manual
 confidentiality: internal
 title: "Durability demo: one-shot publisher and late subscriber"
@@ -21,7 +21,7 @@ version_notes:
 ---
 # Durability demo: one-shot publisher and late subscriber
 
-**TL;DR** The publisher publishes a single message, then spins; start the subscriber afterwards. Both take `-durability transient_local|volatile`. Concepts and results: [[core-qos-durability]].
+**TL;DR** The publisher publishes a single message, then spins; start the subscriber afterwards. Both take `-durability transient_local|volatile`. Concepts and results: [[core-qos-durability]]. C++ version: `cpp-qos-durability-demo` (ros2-cpp skill).
 
 ## Subscriber (`subscriber_durability.py`)
 ```python

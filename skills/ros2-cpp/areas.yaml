@@ -1,8 +1,9 @@
 # Area descriptions for tools/build_index.py (display order = file order). Not packaged.
-basics: "C++ packages (ament_cmake, CMakeLists, package.xml, own headers and libraries), first rclcpp program, Node subclass, timers and clocks, launching C++ executables, RCLCPP_* logging"
+basics: "C++ packages (ament_cmake, CMakeLists, package.xml, own headers and libraries), first rclcpp program, Node subclass, timers and clocks, parameters and their validation callback, managed (lifecycle) nodes and an own lifecycle manager, launching C++ executables, RCLCPP_* logging"
 communication: "rclcpp publishers and subscribers, custom interfaces from C++, service servers and clients (async, spin_some, spin thread), rclcpp_action servers and clients, timeouts and cancel"
 executors: "Callbacks and the executor: single-threaded blocking, spin vs spin_some, MultiThreadedExecutor, Reentrant and MutuallyExclusive callback groups, thread safety, several nodes in one executor"
 components: "rclcpp components: NodeOptions constructor, RCLCPP_COMPONENTS_REGISTER_NODE, SHARED library, component_container, ros2 component CLI, ComposableNodeContainer, compile-time composition"
+middleware: "QoS from C++: rclcpp::QoS setters, event callbacks (incompatible QoS, deadline, liveliness) and their info types, demos of durability, deadline, lifespan and liveliness, a DDS message-loss and latency test"
 recipes: "C++ recipes: LaserScan sectors and obstacle detection, cv_bridge and OpenCV (HSV masks, excess green, trackbar tuner)"
-learn: "C++ basics course for students (Leo Mars rover simulation): course map, units 2-9, exercises and quizzes; open only for course questions"
-migration: "The course's rclcpp code on Jazzy, Kilted and Lyrical: CMake linking, headers, service QoS, callback signatures, timers; open for other distros"
+learn: "C++ courses for students (Leo Mars rover simulation): basics course (units 2-9) and intermediate course (launch, parameters, QoS, DDS, managed nodes); exercises and quizzes; open only for course questions"
+migration: "The courses' rclcpp code on Jazzy, Kilted and Lyrical: CMake linking, headers, service QoS, callback signatures, timers, parameter callbacks, QoS event header; open for other distros"

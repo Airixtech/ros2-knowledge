@@ -2,8 +2,8 @@
 id: core-lifecycle-services-cli
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-26
+review_by: 2027-04-24
 source: manual
 confidentiality: internal
 title: "Driving a managed node: lifecycle services, transition_event, CLI session"
@@ -14,7 +14,7 @@ tested: false
 audience: dev
 summary: "Services every managed node offers (get_state, change_state…), transition ids, a configure/activate/shutdown CLI session, on_error outcome."
 tags: [lifecycle services, change_state, get_state, ros2 lifecycle, transition id, TRANSITION_CONFIGURE, finalized, on_error, ErrorProcessing, LifecyclePublisher]
-see: ["[[core-lifecycle-concepts]]", "[[core-lifecycle-cpp-node]]", "[[core-lifecycle-manager-client]]", "[[core-srv-client-async]]"]
+see: ["[[core-lifecycle-concepts]]", "[[core-srv-client-async]]"]
 requires: []
 version_notes:
   - "humble: on_error SUCCESS -> unconfigured, FAILURE/ERROR -> finalized — https://github.com/ros2/rcl/blob/humble/rcl_lifecycle/src/default_state_machine.c (V99)"
@@ -22,7 +22,7 @@ version_notes:
 ---
 # Driving a managed node: lifecycle services, transition_event, CLI session
 
-**TL;DR** Every managed node offers the services `<node>/change_state`, `<node>/get_state`, `<node>/get_available_states`, `<node>/get_available_transitions` and `<node>/get_transition_graph`. A manager, the `ros2 lifecycle` CLI or a plain `ros2 service call` uses them. Example node: `managed_scan_node` from [[core-lifecycle-cpp-node]]. State diagram: [[core-lifecycle-concepts]].
+**TL;DR** Every managed node offers the services `<node>/change_state`, `<node>/get_state`, `<node>/get_available_states`, `<node>/get_available_transitions` and `<node>/get_transition_graph`. A manager, the `ros2 lifecycle` CLI or a plain `ros2 service call` uses them. Example node: `managed_scan_node` from `cpp-lifecycle-node` (ros2-cpp skill). State diagram: [[core-lifecycle-concepts]].
 
 ## 1. After launch: unconfigured, no topic
 `/managed_scan` does not exist yet: the publisher is created in `on_configure`, the node's "constructor" for everything it needs before working. Its publisher is a `LifecyclePublisher`, the type that can be activated and deactivated; there is no lifecycle class for subscriptions.

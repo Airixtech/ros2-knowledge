@@ -1,21 +1,21 @@
 ---
-id: core-lifecycle-cpp-node
+id: cpp-lifecycle-node
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-26
+review_by: 2027-04-24
 source: manual
 confidentiality: internal
 title: "C++ managed node: LifecycleNode, LifecyclePublisher, CMake and launch"
-domain: core
-area: tools
+domain: cpp
+area: basics
 distro: humble
 tested: false
 audience: dev
 summary: "Complete rclcpp_lifecycle node with a LifecyclePublisher, its CMakeLists.txt, a LifecycleNode launch action and the transition_event topic."
 tags: [rclcpp_lifecycle, LifecycleNode, LifecyclePublisher, managed node, on_configure, on_activate, transition_event, lifecycle_msgs, CMakeLists]
-see: ["[[core-lifecycle-concepts]]", "[[core-lifecycle-node]]", "[[core-lifecycle-services-cli]]", "[[core-lifecycle-manager-client]]"]
-requires: []
+see: ["[[core-lifecycle-concepts]]", "[[core-lifecycle-node]]", "[[core-lifecycle-services-cli]]", "[[cpp-lifecycle-manager-client]]", "[[cpp-lifecycle-param-node]]"]
+requires: [ros2-core]
 version_notes:
   - "humble: managed nodes also exist in Python (rclpy.lifecycle, new in Humble) — https://github.com/ros2/rclpy/tree/humble/rclpy/rclpy/lifecycle (V98)"
   - "humble: ament_package() must be the last call of CMakeLists.txt — https://docs.ros.org/en/humble/How-To-Guides/Ament-CMake-Documentation.html (V97)"

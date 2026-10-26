@@ -2,8 +2,8 @@
 id: core-dds-loss-test
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-26
+review_by: 2027-04-24
 source: manual
 confidentiality: internal
 title: "Message-loss and latency test between RMW implementations"
@@ -20,7 +20,7 @@ version_notes: []
 ---
 # Message-loss and latency test between RMW implementations
 
-**TL;DR** The publisher sends `"<id>:<seconds>,<nanoseconds>"` with a growing id; the subscriber checks that each id is the expected one (counting the gap as lost messages) and prints the delay between publication and reception. Run the pair with each `RMW_IMPLEMENTATION` ([[core-rmw-implementations]]) and with a faster timer to see how each one copes.
+**TL;DR** The publisher sends `"<id>:<seconds>,<nanoseconds>"` with a growing id; the subscriber checks that each id is the expected one (counting the gap as lost messages) and prints the delay between publication and reception. Run the pair with each `RMW_IMPLEMENTATION` ([[core-rmw-implementations]]) and with a faster timer to see how each one copes. C++ version: `cpp-dds-loss-test` (ros2-cpp skill).
 
 ## publisher_dds.py
 ```python

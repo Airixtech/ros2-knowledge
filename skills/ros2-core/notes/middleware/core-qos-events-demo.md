@@ -2,8 +2,8 @@
 id: core-qos-events-demo
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-26
+review_by: 2027-04-24
 source: manual
 confidentiality: internal
 title: "QoS events demo: configurable publisher and RELIABLE subscriber"
@@ -21,7 +21,7 @@ version_notes:
 ---
 # QoS events demo: configurable publisher and RELIABLE subscriber
 
-**TL;DR** A subscriber that requires RELIABLE and a publisher whose reliability comes from the command line (`-reliability best_effort|reliable`) with an `incompatible_qos` callback. Package `qos_tests_pkg` (`ros2 pkg create --build-type ament_python qos_tests_pkg --dependencies rclpy std_msgs`). Concepts: [[core-qos-events]].
+**TL;DR** A subscriber that requires RELIABLE and a publisher whose reliability comes from the command line (`-reliability best_effort|reliable`) with an `incompatible_qos` callback. Package `qos_tests_pkg` (`ros2 pkg create --build-type ament_python qos_tests_pkg --dependencies rclpy std_msgs`). Concepts: [[core-qos-events]]. C++ version: `cpp-qos-events-demo` (ros2-cpp skill).
 
 ## Subscriber that requires RELIABLE (`subscriber_custom_minimal_qos.py`)
 ```python

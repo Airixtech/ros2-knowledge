@@ -11,8 +11,6 @@ TF2, URDF/xacro/robot_state_publisher, rosbag2, lifecycle nodes, debugging (doct
 | [[core-debug-tools]] | rqt plugins, RViz2 setup and displays, teleop/joystick tools, and ros2_tracing (enabling it on Humble, CLI, launch Trace action). | notes/tools/core-debug-tools.md |
 | [[core-debug-triage]] | Ordered 'it doesn't work' checklist, symptom→cause→fix table, ros2 doctor checks/report, health and bug-report scripts. | notes/tools/core-debug-triage.md |
 | [[core-lifecycle-concepts]] | Managed node state machine, what each transition should do, ros2 lifecycle CLI, lifecycle_manager orchestration, when to use. | notes/tools/core-lifecycle-concepts.md |
-| [[core-lifecycle-cpp-node]] | Complete rclcpp_lifecycle node with a LifecyclePublisher, its CMakeLists.txt, a LifecycleNode launch action and the transition_event topic. | notes/tools/core-lifecycle-cpp-node.md |
-| [[core-lifecycle-manager-client]] | C++ node that configures then activates a managed node through its change_state service; CMake and launch for both nodes. | notes/tools/core-lifecycle-manager-client.md |
 | [[core-lifecycle-node]] | rclpy.lifecycle LifecycleNode with lifecycle publisher and transition callbacks; rclcpp_lifecycle equivalent. | notes/tools/core-lifecycle-node.md |
 | [[core-lifecycle-services-cli]] | Services every managed node offers (get_state, change_state…), transition ids, a configure/activate/shutdown CLI session, on_error outcome. | notes/tools/core-lifecycle-services-cli.md |
 | [[core-robot-state-publisher]] | What robot_state_publisher publishes, running it from CLI, canonical xacro→robot_description launch with ParameterValue. | notes/tools/core-robot-state-publisher.md |

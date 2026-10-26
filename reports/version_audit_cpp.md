@@ -1,6 +1,6 @@
 # Version audit — ros2-cpp (Phase 1)
 
-> Date: 2026-10-25 (rows CPP-V46–V50 added in Phase 2; rows CPP-V51–V84 from the intermediate C++ course, see below). Scope: every version-dependent or checkable statement of the C++ basics course (course wiki,
+> Date: 2026-10-25 (rows CPP-V46–V50 added in Phase 2; rows CPP-V51–V88 from the intermediate C++ course, see below; V85–V88 found while writing the notes). Scope: every version-dependent or checkable statement of the C++ basics course (course wiki,
 > not published; units 2–9: packages and CMake, nodes and timers, launch, topics, custom interfaces, services,
 > callbacks and executors, callback groups, actions with a Nav2 client inside, components, logging and debugging
 > tools) that lands in the new skill `ros2-cpp`, the course lines that become unions in `ros2-core`, and the claims of
@@ -104,6 +104,10 @@
 | CPP-V73 | 7.10 | course mistake | The C++ publisher is titled `publisher_liveliness.py`, its explanation shows Python (`MutuallyExclusiveCallbackGroup()`, `PublisherEventCallbacks(…)`, `MultiThreadedExecutor(num_threads=3)`), and example 2's output comes from another program (node `subscriber_liveliness`, `alive_count=1`) | The file is `publisher_liveliness.cpp`; its C++ forms are `create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive)`, `PublisherOptions::event_callbacks` plus `callback_group`, the group argument of `create_wall_timer`, and `rclcpp::executors::MultiThreadedExecutor executor(rclcpp::ExecutorOptions(), 3)`. With this subscriber, example 2 prints `[subscriber_qos_obj]` and `alive_count = 1`. |
 | CPP-V74 | 8.7 | course mistake | `subscriber_dds.cpp`: `rclcpp::Time time_obj(seconds, nanoseconds)` from the parsed fields; `id_next` and `lost_messages_counter` never initialized; `delta = time_obj − now` | The second field is the full stamp in nanoseconds: as the `uint32_t nanoseconds` argument of `Time(int32_t seconds, uint32_t nanoseconds)` ([time.hpp (humble)][time-h]) it overflows, and the seconds would count twice. Members without initializers hold indeterminate values ([default initialization][cpp-definit]), so the first ID check and the loss counter are undefined. Parse the stamp as `int64_t` nanoseconds, start `id_next_` at −1 and the counter at 0, and compute `now − stamp`. |
 | CPP-V75 | 8.8 | course mistake (outputs of an older distro) | `ps faux \| grep "ros2_daemon"` and the outputs `/usr/bin/python3 /opt/ros/galactic/bin/_ros2_daemon --rmw-implementation …` | Humble and Jazzy start the daemon as `python3 -c from ros2cli.daemon.daemonize import main; main() --name ros2-daemon --ros-domain-id 0 --rmw-implementation …` ([daemonize.py (humble)][daemonize-h], [daemon.py (humble)][daemon-h], [daemon.py (jazzy)][daemon-j]), as the course's own 8.7 warning shows: `grep "ros2_daemon"` finds only the grep. Use `grep "ros2-daemon"` or `grep "rmw-implementation"`. core-ros2-daemon called the `_ros2_daemon` form the newer one; it is the older one (corrected there). |
+| CPP-V85 | 7.9 | course mistake (text vs steps) | "To make this test, you must start the subscriber first" for the too-restrictive publisher lifespan | The same test's steps start the subscriber "after more than 5 seconds have passed since the publisher started", which is what shows the expiry: start the publisher first (found in Phase 2). |
+| CPP-V86 | 5.9 | course mistake | The second `test_parameters.launch.py` loads `config/params.yaml`, dumped from `/move_robot_node`, into a node renamed `name='param_vel_node'` | A parameter file applies to the node named by its top key or a matching wildcard (`/**`, `/*`) ([Node arguments (Humble)][node-args-h]): `/move_robot_node:` does not match `param_vel_node`, so the node keeps its defaults. Use `/param_vel_node:`, `/**:`, or drop `name=` (found in Phase 2). |
+| CPP-V87 | 7.4 | course mistake | The `/laser_scan` publisher is RELIABLE, so "the subscriber must also use a compatible reliability policy (i.e., RELIABLE) to establish communication" | A RELIABLE publisher is compatible with BEST_EFFORT and RELIABLE subscriptions ([QoS settings (Humble)][qos-doc-h], reliability table); only BEST_EFFORT publisher + RELIABLE subscription fails (found in Phase 2). |
+| CPP-V88 | 5.4 | earlier note mistake | core-param-yaml-cli gave the `ros2 param get` answer as `The double value is: 0.0` | Humble prints `Double value is: 0.0` (`Boolean`/`Integer`/`String value is:` for other types), as the C++ course shows ([get.py (humble)][param-get-h]); corrected there (found in Phase 2). |
 | CPP-V76 | 8.8 | course mistake | Start the daemon before a complex node system, because a new node "discovers ALL of the Node web" | The daemon serves the command-line tools only; nodes never use it, so starting it first changes nothing for them (same correction as core V91, [About command-line tools (Humble)][cli-doc-h]). It makes `ros2 node list`, `ros2 topic list`… answer fast. |
 
 ## Full table
@@ -194,6 +198,10 @@
 | CPP-V82 | 7.3–7.10 | `qos.reliability(RMW_QOS_POLICY_…)` setters | ✓ (`rclcpp::ReliabilityPolicy` enum classes too) | ✓ | ✓ | keep | [qos-hpp-h], [qos-hpp-l] | High |
 | CPP-V83 | 9.4 | `publisher_->on_activate()` inside `on_activate` | ✓; `LifecycleNode::on_activate(state)` also activates every managed entity | same | same | annotate | [lc-node-h] | High |
 | CPP-V84 | 9.4 | `is_activated()` check before publishing | ✓ avoids the "publisher is not activated" warning | same | same | keep | [lc-pub-h] | High |
+| CPP-V85 | 7.9 | "start the subscriber first" in the restrictive-lifespan test | ✗ the steps start it > 5 s after the publisher | — | — | **fix** | course text | High |
+| CPP-V86 | 5.9 | params.yaml with key `/move_robot_node` for a node named `param_vel_node` | ✗ file not applied | same | same | **fix** | [node-args-h] | High |
+| CPP-V87 | 7.4 | a RELIABLE publisher needs a RELIABLE subscriber | ✗ BEST_EFFORT subscriber is compatible | same | same | **fix** | [qos-doc-h] | High |
+| CPP-V88 | 5.4 | `ros2 param get` output in core-param-yaml-cli | ✗ `Double value is: 0.0` | same | — | **fix** | [param-get-h] | High |
 
 ## Canonical alternatives (features of later distros)
 | Later feature | Humble way | Checked in |
@@ -305,3 +313,5 @@
 [cli-doc-h]: https://docs.ros.org/en/humble/Concepts/Basic/About-Command-Line-Tools.html
 [connext-doc-h]: https://docs.ros.org/en/humble/Installation/RMW-Implementations/DDS-Implementations/Working-with-RTI-Connext-DDS.html
 [rd-h]: https://github.com/ros/rosdistro/blob/master/humble/distribution.yaml
+[node-args-h]: https://docs.ros.org/en/humble/How-To-Guides/Node-arguments.html
+[param-get-h]: https://github.com/ros2/ros2cli/blob/humble/ros2param/ros2param/verb/get.py

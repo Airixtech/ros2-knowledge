@@ -2,8 +2,8 @@
 id: core-launch-xml-yaml
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-26
+review_by: 2027-04-24
 source: manual
 confidentiality: internal
 title: "XML and YAML launch files (same launch as Python)"
@@ -128,3 +128,4 @@ ros2 launch launch_tests_pkg yaml_main.launch.yaml turning_speed:=1.0 forward_sp
 - `exec` (not `executable`) and `pkg` (not `package`) are the XML/YAML attribute names.
 - A launch file that is not in `data_files` is not installed: `glob('launch/*.launch.py')` skips `.xml` and `.yaml` files.
 - Without a matching `declare_parameter()` in the node, the `param` values are ignored.
+- XML and YAML can log: `LogInfo` is exposed as `<log message="turning_speed: $(var turning_speed)"/>` and `- log: {message: "…"}` (the C++ course says XML cannot, CPP-V53). `emulate_tty="true"` is a valid `<node>` attribute too.

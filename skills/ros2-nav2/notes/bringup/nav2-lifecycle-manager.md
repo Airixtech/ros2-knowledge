@@ -2,8 +2,8 @@
 id: nav2-lifecycle-manager
 type: reference
 owner: equipo-ros2
-updated: 2026-10-10
-review_by: 2027-04-08
+updated: 2026-10-26
+review_by: 2027-04-24
 source: manual
 confidentiality: internal
 title: "nav2_lifecycle_manager: node_names, autostart, bonds"
@@ -25,7 +25,7 @@ version_notes:
 **TL;DR** Nav2 servers are **managed (lifecycle) nodes**: they start `unconfigured` and do nothing until an external agent moves them to `active`. In Nav2 that agent is `nav2_lifecycle_manager`: it configures and activates the nodes in `node_names`, in order.
 
 ## Managed nodes in Nav2
-Managed nodes can be restarted, paused or run in a controlled way. States: `unconfigured`, `inactive`, `active`, `finalized`; the usual state is `active` (running its main code and timers). Several Nav2 nodes are lifecycle enabled: `map_server`, `amcl`, `planner_server`, `controller_server`, `bt_navigator`, `behavior_server`… They override `on_configure()`, `on_activate()`, `on_deactivate()`, `on_cleanup()`, `on_shutdown()` and `on_error()`. State machine and CLI: [[core-lifecycle-concepts]].
+Managed nodes can be restarted, paused or run in a controlled way. States: `unconfigured`, `inactive`, `active`, `finalized`; the usual state is `active` (running its main code and timers). Several Nav2 nodes are lifecycle enabled: `map_server`, `amcl`, `planner_server`, `controller_server`, `bt_navigator`, `behavior_server`… They override `on_configure()`, `on_activate()`, `on_deactivate()`, `on_cleanup()`, `on_shutdown()` and `on_error()`. State machine and CLI: [[core-lifecycle-concepts]]. In C++ they subclass `nav2_util::LifecycleNode`, a wrapper around `rclcpp_lifecycle::LifecycleNode` that also keeps the bond with the lifecycle manager (the log shows `Destroying bond (bt_navigator) to lifecycle manager.` on deactivation); a plain managed node in C++ is in the ros2-cpp skill (`cpp-lifecycle-param-node`).
 
 ## What the lifecycle manager does
 - Changes the states of the managed nodes for a controlled **startup, shutdown, reset, pause or resume** of the navigation stack.

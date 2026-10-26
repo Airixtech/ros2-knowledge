@@ -2,8 +2,8 @@
 id: core-qos-lifespan-demo
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-26
+review_by: 2027-04-24
 source: manual
 confidentiality: internal
 title: "Lifespan demo: message-age subscriber and one-shot publisher"
@@ -21,7 +21,7 @@ version_notes:
 ---
 # Lifespan demo: message-age subscriber and one-shot publisher
 
-**TL;DR** The publisher sends one message stamped with `"<seconds>,<nanoseconds>"`; the subscriber prints how old it is when it arrives. Both use RELIABLE + TRANSIENT_LOCAL and take `-lifespan <seconds>`. Scenarios and results: [[core-qos-lifespan]].
+**TL;DR** The publisher sends one message stamped with `"<seconds>,<nanoseconds>"`; the subscriber prints how old it is when it arrives. Both use RELIABLE + TRANSIENT_LOCAL and take `-lifespan <seconds>`. Scenarios and results: [[core-qos-lifespan]]. C++ version: `cpp-qos-lifespan-demo` (ros2-cpp skill).
 
 ## Subscriber that prints the message age (`subscriber_lifespan.py`)
 ```python

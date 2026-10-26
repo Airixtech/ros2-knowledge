@@ -2,8 +2,8 @@
 id: cpp-humble-to-jazzy
 type: reference
 owner: equipo-ros2
-updated: 2026-10-25
-review_by: 2027-04-23
+updated: 2026-10-26
+review_by: 2027-04-24
 source: manual
 confidentiality: internal
 title: "The course's rclcpp code on Jazzy, Kilted and Lyrical: what changes"
@@ -12,8 +12,8 @@ area: migration
 distro: humble
 tested: false
 audience: dev
-summary: "Porting the Humble C++ code: ament_target_dependencies removed, cv_bridge.hpp, tf2 .hpp headers, create_service QoS, Node::create_timer, ConstSharedPtr callbacks."
-tags: [migration, jazzy, kilted, lyrical, ament_target_dependencies, target_link_libraries, cv_bridge.hpp, Quaternion.hpp, create_service, ServicesQoS, create_timer, ConstSharedPtr, RCLCPP_VERSION_GTE, __has_include]
+summary: "Porting the Humble C++ code: ament_target_dependencies, cv_bridge.hpp, tf2 headers, service QoS, create_timer, ConstSharedPtr, QoS event header, parameter callbacks."
+tags: [migration, jazzy, kilted, lyrical, ament_target_dependencies, target_link_libraries, cv_bridge.hpp, Quaternion.hpp, create_service, ServicesQoS, create_timer, ConstSharedPtr, RCLCPP_VERSION_GTE, __has_include, event_handler.hpp, add_post_set_parameters_callback]
 see: ["[[core-humble-to-jazzy]]", "[[core-jazzy-to-lyrical]]", "[[cpp-pkg-cmake]]", "[[cpp-cmake-library]]", "[[cpp-node-class]]"]
 requires: [ros2-core]
 version_notes:
@@ -23,6 +23,8 @@ version_notes:
   - "jazzy/kilted: create_service with rmw_qos_profile_t deprecated (Jazzy) then removed (Kilted) — https://github.com/ros2/rclcpp/blob/kilted/rclcpp/include/rclcpp/node.hpp (CPP-V23)"
   - "jazzy: Node::create_timer(period, callback, group) added — https://github.com/ros2/rclcpp/blob/jazzy/rclcpp/include/rclcpp/node.hpp (CPP-V01)"
   - "humble/lyrical: shared_ptr<MsgT> subscription callbacks deprecated (Humble #1713, again in Lyrical #2975), accepted without warning on Jazzy/Kilted (#2431) — https://github.com/ros2/rclcpp/blob/lyrical/rclcpp/CHANGELOG.rst (CPP-V46)"
+  - "jazzy: rclcpp/qos_event.hpp became rclcpp/event_handler.hpp, same type names — https://github.com/ros2/rclcpp/blob/jazzy/rclcpp/include/rclcpp/event_handler.hpp (CPP-V81)"
+  - "jazzy: add_pre_set_parameters_callback and add_post_set_parameters_callback added next to add_on_set_parameters_callback — https://github.com/ros2/rclcpp/blob/jazzy/rclcpp/include/rclcpp/node.hpp (CPP-V80)"
 ---
 # The course's rclcpp code on Jazzy, Kilted and Lyrical
 
@@ -36,6 +38,8 @@ version_notes:
 | `create_service<T>(name, cb, rmw_qos_profile_services_default, group)` | deprecated | **removed** | removed | `create_service<T>(name, cb, rclcpp::ServicesQoS(), group)` (Jazzy+) |
 | `create_wall_timer(...)` when sim time matters | ✓ | ✓ | ✓ | Humble `rclcpp::create_timer(this, this->get_clock(), Duration, cb)`; Jazzy+ also `this->create_timer(period, cb)` ([[cpp-node-class]]) |
 | callbacks `const MsgT::SharedPtr msg` | ✓ no warning | ✓ no warning | deprecated (warning) | `MsgT::ConstSharedPtr msg` — warning-free everywhere |
+| `#include "rclcpp/qos_event.hpp"` (QoS event callbacks) | renamed `rclcpp/event_handler.hpp` | same | same | include `rclcpp/rclcpp.hpp` only; the `rclcpp::QOS*Info` and `*EventCallbacks` names stay ([[cpp-qos-profile]]) |
+| validation in `add_on_set_parameters_callback` | ✓, plus `add_pre_set_parameters_callback` and `add_post_set_parameters_callback` | same | same | keep the on-set callback for validation; post-set for acting on accepted values ([[cpp-params-callback]]) |
 
 ## One source for several distros
 ```cpp

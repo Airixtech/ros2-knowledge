@@ -2,8 +2,8 @@
 id: core-qos-deadline-demo
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-26
+review_by: 2027-04-24
 source: manual
 confidentiality: internal
 title: "Deadline demo: 1 Hz publisher with pauses, subscriber with deadline"
@@ -21,7 +21,7 @@ version_notes:
 ---
 # Deadline demo: 1 Hz publisher with pauses, subscriber with deadline
 
-**TL;DR** Both programs take `-deadline <seconds>` and register `deadline` and `incompatible_qos` callbacks. The publisher publishes every second and pauses 2 s inside its timer callback every few messages. Scenarios and results: [[core-qos-deadline]].
+**TL;DR** Both programs take `-deadline <seconds>` and register `deadline` and `incompatible_qos` callbacks. The publisher publishes every second and pauses 2 s inside its timer callback every few messages. Scenarios and results: [[core-qos-deadline]]. C++ version: `cpp-qos-deadline-demo` (ros2-cpp skill).
 
 ## Subscriber (`subscriber_deadline.py`)
 ```python

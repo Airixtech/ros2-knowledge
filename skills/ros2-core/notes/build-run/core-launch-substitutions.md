@@ -2,8 +2,8 @@
 id: core-launch-substitutions
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-26
+review_by: 2027-04-24
 source: manual
 confidentiality: internal
 title: "Launch substitutions: LaunchConfiguration, TextSubstitution, PathJoinSubstitution, LogInfo"
@@ -55,7 +55,7 @@ ros2 launch launch_args_example_pkg start_with_arguments_dummy.launch.py extra_m
 [INFO] [launch.user]: ROS2 is Great!
 [INFO] [launch.user]: Execute Order 66
 ```
-Without `important_msg:=…` the launch stops and reports the missing argument. `LogInfo(msg=str(rviz_config_dir))` also prints plain Python values, for example the path of the RViz config a launch file loads.
+Without `important_msg:=…` the launch stops and reports the missing argument. `LogInfo(msg=str(rviz_config_dir))` also prints plain Python values, for example the path of the RViz config a launch file loads. `msg` also takes a list that mixes text and substitutions: `LogInfo(msg=['linear_speed: ', LaunchConfiguration('linear_speed')])`. `DeclareLaunchArgument('linear_speed', default_value='0.2', description='Linear speed of the robot')`: the description is what `--show-args` prints. `LaunchConfiguration('linear_speed')` is a placeholder, not the value `0.2`; launch resolves it when an action that uses it runs.
 
 ## A main launch: args, includes, namespace
 ```python

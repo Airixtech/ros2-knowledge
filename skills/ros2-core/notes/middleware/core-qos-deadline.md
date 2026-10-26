@@ -2,8 +2,8 @@
 id: core-qos-deadline
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-26
+review_by: 2027-04-24
 source: manual
 confidentiality: internal
 title: "Deadline: missed-deadline events and compatibility"
@@ -31,6 +31,11 @@ version_notes:
 | 1.0 | — | publisher event during the pause phase |
 | 1.2 | 1.8 | events on both sides only during the 2 s pause |
 | 1.5 | 1.0 | **incompatible** (publisher deadline > subscriber's): `RMW_QOS_POLICY_DEADLINE` in both incompatible-QoS callbacks; the publisher keeps publishing, the subscriber receives nothing |
+| 1.0 (C++ course run) | 10.0 | publisher events about every second during normal publishing too (timer jitter pushes some 1 s gaps over 1.0), and in the pause |
+| 1.1 | 10.0 | publisher event only after the pause |
+| 1.5 | 1.5 | subscriber event twice in the ~3 s gap (1.5 s apart); the publisher's once, when the pause ends: its event callback waits for the blocked timer callback on the single-threaded executor |
+
+C++ version of the demo: `cpp-qos-deadline-demo` (ros2-cpp skill).
 ```text
 deadline==Duration(nanoseconds=990000000)
 [ERROR] [1644945025.239750790] [publisher_qos_obj]: PUBLISHER:::  Deadline Triggered!

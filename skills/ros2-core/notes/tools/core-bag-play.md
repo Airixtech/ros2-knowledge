@@ -2,8 +2,8 @@
 id: core-bag-play
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-26
+review_by: 2027-04-24
 source: manual
 confidentiality: internal
 title: "rosbag2 info, play with sim time & convert"
@@ -57,7 +57,7 @@ A bag stores the QoS each topic was **recorded** with, and `play` offers it agai
 ```bash
 ros2 bag record /scan -o neobotixs_mp400_scan_bag
 ros2 bag play --remap /scan:=/scan2 --qos-profile-overrides-path qos_override.yaml -l neobotixs_mp400_scan_bag
-ros2 topic info /scan2 --verbose     # Reliability: RELIABLE, Deadline: 1000000100 nanoseconds
+ros2 topic info /scan2 --verbose     # Reliability: RELIABLE, Deadline: 1000000100 nanoseconds; the publisher is the node rosbag2_player
 ```
 `--remap /scan:=/scan2` keeps the replay apart while the robot still publishes `/scan`. Durations need both `sec` and `nsec`. In RViz2, set each laser display's QoS to match the topic you add.
 

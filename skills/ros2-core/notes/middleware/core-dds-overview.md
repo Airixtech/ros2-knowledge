@@ -2,8 +2,8 @@
 id: core-dds-overview
 type: reference
 owner: equipo-ros2
-updated: 2026-10-20
-review_by: 2027-04-18
+updated: 2026-10-26
+review_by: 2027-04-24
 source: manual
 confidentiality: internal
 title: "DDS and ROS 2: what DDS provides, the rmw layer"
@@ -26,6 +26,7 @@ version_notes:
 ## How ROS 2 uses DDS
 - Discovery is **distributed**: no `roscore`; nodes find each other through the DDS discovery protocol ([[core-ros2-daemon]] for its cost on the CLI).
 - Each vendor implementation is wrapped by a "ROS middleware interface" (**rmw**) package. The rmw API sits between the client libraries (rclcpp, rclpy) and the vendor, so ROS 2 can support several implementations, each with its own platforms, languages, performance, memory footprint, dependencies and license. Choosing and switching: [[core-rmw-implementations]].
+- A ROS 2 topic is the developer-level abstraction; the rmw layer maps it onto a DDS topic, which carries the data.
 
 ## The four foundations
 1. **Data centricity**: publishers, subscribers and participants (nodes) decide how data moves with minimum impact and latency. DDS stops sending a topic nobody reads, avoids useless copies when several apps read the same data, and cleans or keeps old data as the publisher specifies.

@@ -2,8 +2,8 @@
 id: core-param-yaml-cli
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-26
+review_by: 2027-04-24
 source: manual
 confidentiality: internal
 title: "Parameter YAML files, passing params & param CLI"
@@ -18,6 +18,7 @@ see: ["[[core-param-api]]", "[[core-ros-args]]", "[[core-launch-args-include]]"]
 requires: []
 version_notes:
   - "jazzy: ros2 param dump --print/--output-dir removed, --timeout added (Iron); lyrical: get from all nodes, get/set several params — https://docs.ros.org/en/rolling/Releases/Release-Iron-Irwini.html (V39)"
+  - "humble: ros2 param get prints 'Double value is: 0.0' (also Boolean/Integer/String value is:); this note said 'The double value is' — https://github.com/ros2/ros2cli/blob/humble/ros2param/ros2param/verb/get.py (CPP-V88)"
 ---
 # Parameter YAML files, passing params & param CLI
 
@@ -53,7 +54,7 @@ ros2 param load /controller controller.yaml
 ros2 param delete /controller some_param   # only for undeclared/dynamic params
 ```
 GUI: `ros2 run rqt_reconfigure rqt_reconfigure`.
-Parameters live in their node (no parameter server): they disappear when the node dies. Every node has `use_sim_time`; `ros2 param list` without a node also lists the `qos_overrides.…` entries. Typical answers: `describe` → `Type: double`, `Description: …`, `Constraints:`; `get` → `The double value is: 0.0`; `set` → `Set parameter successful`; `load` → `Set parameter velocity successful`. An int for a double parameter: `ros2 param set /param_vel_node velocity 0` → `Setting parameter failed: Wrong parameter type, expected 'Type.DOUBLE' got 'Type.INTEGER'` (write `0.0`). Course walkthrough: [[core-learn-inter-unit5-params]].
+Parameters live in their node (no parameter server): they disappear when the node dies. Every node has `use_sim_time`; `ros2 param list` without a node also lists the `qos_overrides.…` entries (the QoS of `/parameter_events`; they are read-only, so remove them from a dumped file before `ros2 param load`). Typical answers: `describe` → `Type: double`, `Description: …`, `Constraints:`; `get` → `Double value is: 0.0` (CPP-V88); `set` → `Set parameter successful`; `load` → `Set parameter velocity successful`. An int for a double parameter: `ros2 param set /param_vel_node velocity 0` → `Setting parameter failed: Wrong parameter type, expected 'Type.DOUBLE' got 'Type.INTEGER'` (write `0.0`). Course walkthrough: [[core-learn-inter-unit5-params]].
 [Humble] `dump` prints to stdout, and `--print`/`--output-dir` are deprecated [changed in Jazzy: removed (Iron); `--timeout` added] [≥Lyrical: get a parameter from all nodes; get/set several at once].
 
 ## Pitfalls

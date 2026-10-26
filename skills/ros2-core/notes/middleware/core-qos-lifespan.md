@@ -2,8 +2,8 @@
 id: core-qos-lifespan
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-26
+review_by: 2027-04-24
 source: manual
 confidentiality: internal
 title: "Lifespan: message expiry"
@@ -36,3 +36,4 @@ Publisher `-lifespan 20.0`, subscriber `-lifespan 1.0` started 10 s later:
 ## Pitfalls
 - The age is measured with `self.get_clock().now()` on both sides: fine on one machine, misleading across computers with unsynchronized clocks.
 - With VOLATILE + BEST_EFFORT, messages are delivered at once or not at all, so a lifespan rarely drops anything visible.
+- Lifespan takes no part in the compatibility check (the Humble QoS page lists reliability, durability, deadline, liveliness and lease duration): a subscriber cannot "require" messages valid for a minimum time, as the C++ course claims (CPP-V71).

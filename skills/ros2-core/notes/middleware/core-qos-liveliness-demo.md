@@ -2,8 +2,8 @@
 id: core-qos-liveliness-demo
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-26
+review_by: 2027-04-24
 source: manual
 confidentiality: internal
 title: "Liveliness demo: publisher with pauses and asserts, subscriber with liveliness events"
@@ -21,7 +21,7 @@ version_notes:
 ---
 # Liveliness demo: publisher with pauses and asserts, subscriber with liveliness events
 
-**TL;DR** The publisher takes `-liveliness_lease_duration`, `-publish_period`, `-topic_assert_period` (milliseconds), `--publish_assert yes|no` and `--policy AUTOMATIC|MANUAL_BY_TOPIC`; it pauses 5 s every few messages. The subscriber prints every liveliness change. Scenarios and results: [[core-qos-liveliness]].
+**TL;DR** The publisher takes `-liveliness_lease_duration`, `-publish_period`, `-topic_assert_period` (milliseconds), `--publish_assert yes|no` and `--policy AUTOMATIC|MANUAL_BY_TOPIC`; it pauses 5 s every few messages. The subscriber prints every liveliness change. Scenarios and results: [[core-qos-liveliness]]. C++ version: `cpp-qos-liveliness-demo` (ros2-cpp skill).
 
 ## Subscriber that reports liveliness changes (`subscriber_liveliness.py`)
 ```python

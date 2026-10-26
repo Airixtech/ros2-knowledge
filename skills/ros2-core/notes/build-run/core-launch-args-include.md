@@ -2,8 +2,8 @@
 id: core-launch-args-include
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-26
+review_by: 2027-04-24
 source: manual
 confidentiality: internal
 title: "Launch arguments, includes, namespaces & conditions"
@@ -78,3 +78,5 @@ other = IncludeLaunchDescription(
 ## Pitfalls
 - Actions placed before `PushRosNamespace` in the group are not namespaced.
 - `if LaunchConfiguration('x') == 'true':` compares an object and is always false. Use `IfCondition` or `OpaqueFunction`.
+- A list of actions (e.g. `log_args = [LogInfo(…), …]`) goes into `LaunchDescription([..., *log_args, ...])`: without `*` it is a list inside the list.
+- `PushRosNamespace` only changes relative names: a node publishing `cmd_vel` inside the group publishes `/<ns>/cmd_vel`, so a robot listening on `/cmd_vel` does not move. Use the absolute name `/cmd_vel` in the node, or a remap.

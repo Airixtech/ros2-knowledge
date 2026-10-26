@@ -2,8 +2,8 @@
 id: core-lifecycle-concepts
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-26
+review_by: 2027-04-24
 source: manual
 confidentiality: internal
 title: "Lifecycle states, transitions, CLI & orchestration"
@@ -56,4 +56,4 @@ ros2 run nav2_util lifecycle_bringup <node>  # configure+activate helper
 - In launch: `launch_ros.actions.LifecycleNode` + event handlers, or Nav2's manager. [≥Jazzy (since Iron): the `LifecycleTransition` launch action]
 - When to use: drivers with costly init (cameras, LIDAR), safety-critical stacks, certification contexts, controlled debugging.
 - Two reasons in practice: start nodes **in order** (localization only after `map_server` provides the map) and **restart or pause** a running system without killing and relaunching it (re-initialize navigation when conditions change). Nav2 and MoveIt 2 use managed nodes heavily.
-Implementation in rclpy/rclcpp: [[core-lifecycle-node]] · complete C++ node: [[core-lifecycle-cpp-node]] · services and a CLI session: [[core-lifecycle-services-cli]] · own manager: [[core-lifecycle-manager-client]].
+Implementation in rclpy/rclcpp: [[core-lifecycle-node]] · complete C++ node: `cpp-lifecycle-node` (ros2-cpp skill) · services and a CLI session: [[core-lifecycle-services-cli]] · own manager: `cpp-lifecycle-manager-client` (ros2-cpp skill).

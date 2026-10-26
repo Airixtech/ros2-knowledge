@@ -2,8 +2,8 @@
 id: core-ros2-daemon
 type: reference
 owner: equipo-ros2
-updated: 2026-10-14
-review_by: 2027-04-12
+updated: 2026-10-26
+review_by: 2027-04-24
 source: manual
 confidentiality: internal
 title: "The ros2 daemon: discovery cache, start/stop/status, stale RMW"
@@ -18,6 +18,7 @@ see: ["[[core-rmw-implementations]]", "[[core-dds-overview]]", "[[core-debug-tri
 requires: []
 version_notes:
   - "humble: the daemon serves the command-line tools only (nodes never use it) and keeps its RMW until restarted — https://docs.ros.org/en/humble/Concepts/Basic/About-Command-Line-Tools.html (V91)"
+  - "humble: spawn_daemon runs 'python3 -c from ros2cli.daemon.daemonize import main; main() --name ros2-daemon …' (same in Jazzy); this note called the _ros2_daemon form the newer one, it is the older — https://github.com/ros2/ros2cli/blob/humble/ros2cli/ros2cli/node/daemon.py (CPP-V75)"
 ---
 # The ros2 daemon: discovery cache, start/stop/status, stale RMW
 
@@ -35,7 +36,7 @@ ps faux | grep "rmw-implementation"
 ```text
 user  6819 ... /usr/bin/python3 -c from ros2cli.daemon.daemonize import main; main() --name ros2-daemon --ros-domain-id 0 --rmw-implementation rmw_cyclonedds_cpp
 ```
-Newer ros2cli versions show the process as `_ros2_daemon --rmw-implementation … --ros-domain-id …`.
+Humble and Jazzy start the daemon in this `daemonize` form (`--name ros2-daemon`), so `grep "ros2_daemon"` finds only the grep itself; the form `_ros2_daemon --rmw-implementation … --ros-domain-id …` is from an older ros2cli (CPP-V75). Starting the daemon before a node system does not speed up the nodes: only the CLI uses it (CPP-V76).
 
 ## After changing the RMW
 The daemon does not change its RMW when you export a new one: the CLI then shows an empty graph or fails. Stop it and start it again from a shell with the new export:
