@@ -1,6 +1,6 @@
 ---
 name: ros2-cpp
-description: "ROS 2 C++ (rclcpp) on Humble: ament_cmake packages, nodes, timers, topics, services, actions, executors, callback groups, components, logging, cv_bridge. Jazzy/Lyrical notes."
+description: "ROS 2 C++ (rclcpp) on Humble: ament_cmake, nodes, timers, parameters, topics, services, actions, executors, callback groups, components, lifecycle nodes, QoS. Jazzy/Lyrical notes."
 ---
 # ros2-cpp — ROS 2 programming in C++ with rclcpp
 
@@ -9,22 +9,22 @@ Atomic notes for writing correct code and debugging it. **Humble is canonical**;
 ## Golden rules (always apply)
 1. Check the user's distro first. Most Humble code builds unchanged on Jazzy. What breaks: `cv_bridge/cv_bridge.h` (Jazzy: `.hpp`), `create_service(…, rmw_qos_profile_services_default, group)` (removed in Kilted: `rclcpp::ServicesQoS()`, Jazzy+), `ament_target_dependencies` and the tf2 `.h` headers (removed in Lyrical: `target_link_libraries(tgt PUBLIC rclcpp::rclcpp)` and `.hpp`, both valid since Humble) ([[cpp-humble-to-jazzy]]).
 2. Every executable needs `add_executable`, its dependencies and `install(TARGETS … DESTINATION lib/${PROJECT_NAME})`; launch files need `install(DIRECTORY launch DESTINATION share/${PROJECT_NAME}/)`. Every package used needs `find_package` **and** a `<depend>` with a valid rosdep key (`libopencv-dev`, not `OpenCV`, CPP-V03). `--packages-select` builds only the listed packages (CPP-V47) ([[cpp-pkg-cmake]], [[cpp-cmake-library]]).
-3. A node is an `rclcpp::Node` subclass named in the initializer list. Store every timer, publisher, subscription, service and client in a `SharedPtr` member: a local one dies with the constructor. Nothing runs without `rclcpp::spin` or an executor ([[cpp-node-class]]).
+3. A node is an `rclcpp::Node` subclass named in the initializer list. Store every timer, publisher, subscription, service and client in a `SharedPtr` member: a local one dies with the constructor. Nothing runs without `rclcpp::spin` or an executor ([[cpp-node-class]]). Parameters: `declare_parameter<T>(name, default)` first, read again where used to follow `ros2 param set`, validate in `add_on_set_parameters_callback` and keep its handle ([[cpp-params-declare-get]], [[cpp-params-callback]]).
 4. `create_wall_timer` runs on the steady clock and ignores `use_sim_time`; on sim time use `rclcpp::create_timer(this, this->get_clock(), …)` (Humble) or `this->create_timer(…)` (≥Jazzy) (CPP-V01, [[cpp-node-class]]).
-5. Subscription callbacks: `std::bind(&Class::cb, this, std::placeholders::_1)` and `MsgT::ConstSharedPtr msg`; the course's `const MsgT::SharedPtr msg` warns on Humble and Lyrical (CPP-V46). QoS must be compatible with the publisher (`ros2 topic info <topic> -v`) ([[cpp-topic-subscriber]]).
+5. Subscription callbacks: `std::bind(&Class::cb, this, std::placeholders::_1)` and `MsgT::ConstSharedPtr msg`; the course's `const MsgT::SharedPtr msg` warns on Humble and Lyrical (CPP-V46). QoS must be compatible with the publisher (`ros2 topic info <topic> -v`) ([[cpp-topic-subscriber]]). QoS in code: `rclcpp::QoS qos(depth)` and its setters; event callbacks go in `PublisherOptions`/`SubscriptionOptions::event_callbacks` ([[cpp-qos-profile]]).
 6. `async_send_request` returns a future. Wait with `spin_until_future_complete` only from `main()`; inside a callback or an action's execute thread of a node that already spins, never spin again (CPP-V10): use a response callback, or block on the future while **another thread** spins ([[cpp-srv-client]], [[cpp-srv-sync-async]]).
 7. A long callback blocks the single-threaded executor. Overlap needs both a `MultiThreadedExecutor` with ≥2 threads **and** groups that allow it (one Reentrant group or separate MutuallyExclusive groups; the default group never overlaps). Protect shared data with `std::mutex` (CPP-V05); the header is `rclcpp/callback_group.hpp` (CPP-V04) ([[cpp-exec-blocking]], [[cpp-exec-callback-groups]]).
 8. Action server: `handle_accepted` returns fast and starts `execute()` in a new thread; `execute()` publishes feedback, checks `is_canceling()` and ends with `succeed()`, `abort()` or `canceled()`, since a client cancel is only a request (CPP-V11). Client: `SendGoalOptions` callbacks, the goal-response one takes `GoalHandle::SharedPtr` (CPP-V08); both sides use the same interface package ([[cpp-action-server]], [[cpp-action-client]], [[cpp-action-custom-timeout]]).
-9. A component is a Node subclass with `explicit Class(const rclcpp::NodeOptions & options)`, no `main()`, `RCLCPP_COMPONENTS_REGISTER_NODE`, a SHARED library and `rclcpp_components_register_nodes`. One process is not automatically intra-process: `use_intra_process_comms` is per node and covers publishers and subscriptions only (CPP-V17) ([[cpp-component-write]], [[cpp-component-run]]).
+9. A component is a Node subclass with `explicit Class(const rclcpp::NodeOptions & options)`, no `main()`, `RCLCPP_COMPONENTS_REGISTER_NODE`, a SHARED library and `rclcpp_components_register_nodes`. One process is not automatically intra-process: `use_intra_process_comms` is per node and covers publishers and subscriptions only (CPP-V17) ([[cpp-component-write]], [[cpp-component-run]]). Managed node: `rclcpp_lifecycle::LifecycleNode`, publishers created in `on_configure` and enabled in `on_activate`, spun via `node->get_node_base_interface()` ([[cpp-lifecycle-node]], [[cpp-lifecycle-param-node]]).
 10. Log with `RCLCPP_INFO` and friends, not `std::cout`: printf formats (`"%s", text.c_str()`), never built text as the format (`RCLCPP_INFO_STREAM` instead, CPP-V24); level with `--ros-args --log-level DEBUG`. Wrap `cv_bridge::toCvCopy` in `try`/`catch (cv_bridge::Exception&)` ([[cpp-logging]], [[cpp-recipe-cv-bridge]]).
 
 ## Retrieval protocol
 1. Pick the area from the **Areas** table below (column "Covers").
 2. Open that area's `_index.md` and choose notes by their summary.
 3. Open 1–3 notes. Use their code as the template: keep the structure, adapt the names.
-4. No clear match → `grep -ril "<keyword>" notes/` (API names work best: `create_subscription`, `MultiThreadedExecutor`, `rclcpp_action`, `RCLCPP_COMPONENTS_REGISTER_NODE`, `toCvCopy`) and open the top hits.
-5. Follow a note's `see:` links **one hop** at most. The language-neutral parts (CLI, interface packages, launch files, QoS, TF, `ros2 doctor`) and the Python twins of these programs live in ros2-core.
-6. Do not open `learn/` unless the question is about the C++ basics course (Leo Mars rover; units 2–9).
+4. No clear match → `grep -ril "<keyword>" notes/` (API names work best: `create_subscription`, `declare_parameter`, `MultiThreadedExecutor`, `rclcpp_action`, `LifecycleNode`, `event_callbacks`, `RCLCPP_COMPONENTS_REGISTER_NODE`, `toCvCopy`) and open the top hits.
+5. Follow a note's `see:` links **one hop** at most. The language-neutral parts (CLI, interface packages, launch files, QoS and DDS concepts, TF, `ros2 doctor`) and the Python twins of these programs live in ros2-core.
+6. Do not open `learn/` unless the question is about the C++ courses (Leo Mars rover; basics units 2–9, intermediate course).
 7. Jazzy, Kilted, Lyrical or porting → open `migration/` and apply the version marks.
 8. Simulation → answer with modern Gazebo (Gazebo Sim); see the ros2-gazebo skill.
 If the notes do not cover the question, read the official source for the user's distro (below) or say that you answer from standard knowledge. Never invent APIs or flags.
@@ -55,4 +55,4 @@ If the notes do not cover the question, read the official source for the user's 
 <!-- INDEX:END -->
 
 ## Related skills
-ros2-core (required): nodes, topics, services, actions, executors, launch, colcon, QoS, TF, debugging tools, the Python versions of these programs, and the note on choosing and combining rclpy and rclcpp; install it with this skill. Other skills with C++ code name this one in plain text and never require it: ros2-bt (BT nodes with rclcpp), ros2-nav2 (Nav2 itself, the `NavigateToPose` server of unit 7), ros2-control (controllers and hardware interfaces).
+ros2-core (required): the language-neutral side (CLI, launch, colcon, QoS and DDS, lifecycle states, TF, debugging), the Python versions of these programs and the note on choosing rclpy or rclcpp; install it with this skill. Other skills with C++ code name this one in plain text and never require it: ros2-bt (BT nodes with rclcpp), ros2-nav2 (Nav2 itself, the `NavigateToPose` server of unit 7), ros2-control (controllers and hardware interfaces).
