@@ -1,6 +1,6 @@
 # Version audit — ros2-cpp (Phase 1)
 
-> Date: 2026-10-25 (rows CPP-V46–V50 added in Phase 2). Scope: every version-dependent or checkable statement of the C++ basics course (course wiki,
+> Date: 2026-10-25 (rows CPP-V46–V50 added in Phase 2; rows CPP-V51–V84 from the intermediate C++ course, see below). Scope: every version-dependent or checkable statement of the C++ basics course (course wiki,
 > not published; units 2–9: packages and CMake, nodes and timers, launch, topics, custom interfaces, services,
 > callbacks and executors, callback groups, actions with a Nav2 client inside, components, logging and debugging
 > tools) that lands in the new skill `ros2-cpp`, the course lines that become unions in `ros2-core`, and the claims of
@@ -8,6 +8,10 @@
 > Baseline: **Humble is canonical** (the course runs on Humble: `source /opt/ros/humble/setup.bash`). Jazzy, Kilted and
 > **Lyrical** are annotated. Generic ROS 2 rows are in [version_audit.md](version_audit.md) (`Vnn`, e.g. V09
 > `ament_target_dependencies`, V44 tf2 `.h` headers).
+> Second source (rows CPP-V51–V84): the intermediate C++ course (units 3–5 and 7–9: nested launch files and
+> arguments, parameters and their validation callback, managed nodes and an own lifecycle manager, QoS policies and
+> events, DDS implementations and the ros2 daemon). Its Python twin was audited in version_audit.md (V81–V104); rows
+> that repeat a correction already made there cite it.
 
 ## Method
 - Primary sources, read on the matching branch with grep: `ros2/rclcpp` (humble, jazzy, kilted, lyrical: `node.hpp`,
@@ -22,6 +26,13 @@
   `composition`), `ros2/examples` (humble, lyrical: minimal action client/server), `ros2/ros2_documentation`
   (humble, lyrical), `ros/rosdistro` (`*/distribution.yaml`, `rosdep/base.yaml`, `rosdep/python.yaml`),
   `ros-infrastructure/rep` (REP 2001), crates.io metadata of `ros2-client`.
+- Rows V51–V84 also read: `ros2/rclcpp` (`node_parameters.cpp`, `time.hpp`, `qos.hpp`, `qos_event.hpp` /
+  `event_handler.hpp`, `detail/qos_parameters.hpp`, `rclcpp_lifecycle` sources and headers, humble…lyrical),
+  `ros2/rmw` (humble, jazzy: `types.h`, `qos_policy_kind.h`), `ros2/rcl` (humble:
+  `rcl_lifecycle/src/default_state_machine.c`), `ros2/launch` (humble: `log_info.py`, `execute_process.py`),
+  `ros2/launch_ros` (humble: `push_ros_namespace.py`), `ros2/rosidl_runtime_py` (humble: `utilities.py`),
+  `ros2/ros2cli` (humble, jazzy: daemon spawn, `ros2lifecycle`, `ros2topic` echo), the Humble QoS concepts page, and
+  `ros/rosdistro` (`rmw_zenoh`, `rmw_gurumdds`, `rmw_connextdds` per distro).
 - Origin of the course code: the action client and server of 7.5–7.6 follow the official C++ action tutorial
   ([tutorial][act-tut-h], Apache-2.0 code, including its `RCLCPP_INFO(logger, ss.str().c_str())` lines); the
   components of 8.3 copy `visibility_control.h`, the `COMPOSITION_BUILDING_DLL` define and the `COMPOSITION__` header
@@ -45,6 +56,9 @@
 | `Node::create_timer` (node clock) | ✗ (free function `rclcpp::create_timer`) | ✓ | ✓ | ✓ |
 | `create_service(…, rmw_qos_profile_t, group)` | ✓ only form | deprecated (`rclcpp::QoS` overload added) | **removed** | removed |
 | Official docs | [Humble docs][docs-h] | [Jazzy docs][docs-j] | — | [Lyrical docs][docs-l] (pages moved under `ROS-Framework/`) |
+| `add_pre_set_parameters_callback`, `add_post_set_parameters_callback` | ✗ (`add_on_set_parameters_callback` only) | ✓ | ✓ | ✓ |
+| QoS event header (`rclcpp::QOS*Info` types) | `rclcpp/qos_event.hpp` | `rclcpp/event_handler.hpp` (same type names) | same | same |
+| Lifecycle class for subscriptions | none (`LifecyclePublisher` only) | none | none | none |
 
 ## Real Humble errors (fix)
 | ID | Section | Origin | Error | Correct statement |
@@ -71,6 +85,26 @@
 | CPP-V47 | 2.5 | course mistake | "`colcon build --packages-select <package_name>` … will compile only the specified packages and their dependencies" | `--packages-select` processes only the listed packages; `--packages-up-to` adds their recursive dependencies ([select_skip.py][colcon-sel], [dependencies.py][colcon-dep]). Found in Phase 2. |
 | CPP-V48 | 3.3 | course mistake | "now we set `linear.x = 1.0`" for the command `ros2 topic pub … "{linear: {x: 0.1, …}, angular: {…, z: 1.0}}"` | The command sends `linear.x = 0.1` (and `angular.z = 1.0`). Found in Phase 2. |
 | CPP-V49 | 3.5 | course mistake (output vs code) | Exercise 3.2's expected output lists the sectors as Right_Rear, Right, Front_Right, Front_Left, Left, Left_Rear | The program stores them in `std::map<std::string, …>`, which iterates its keys in sorted order: it prints Front_Left, Front_Right, Left, Left_Rear, Right, Right_Rear ([std::map][cpp-map]). Found in Phase 2. |
+| CPP-V52 | 3.3 | course mistake | Override example `ros2 launch launch_args_example_pkg move_robot.launch.py linear_speed:=0.1 angular_speed:=1.2` | The package has no `move_robot.launch.py`: the course's own `touch` commands create `start_with_arguments.launch.py` and `start_with_arguments_dummy.launch.py`; the override works on `start_with_arguments.launch.py`. |
+| CPP-V53 | 4.4 | course mistake | "There is no equivalent tag for logging" in XML, so an XML launch file cannot print argument values | `LogInfo` is exposed to the XML and YAML frontends as `log` with the attribute `message`: `<log message="turning_speed: $(var turning_speed)"/>`, YAML `- log: {message: "…"}` ([log_info.py (humble)][launch-log-h]). |
+| CPP-V54 | 4.4, 4.5 | course mistake | `move_with_arguments.launch.yaml` starts `exec: "move_robot_with_params_exe"`; 4.4 says "use `move_robot_with_params.cpp`" | The package builds only `move_robot_exe` and `move_robot_with_arguments_exe` (its CMakeLists of 4.3), so the YAML launch fails on a missing executable. Use `exec: "move_robot_with_arguments_exe"`; the C++ file is `move_robot_with_arguments.cpp`. |
+| CPP-V55 | 5.3 | course mistake | `add_executable(param_tests_node …)` followed by `ament_target_dependencies(param_vel_node rclcpp geometry_msgs)` | The first argument must be an existing target: CMake stops with "ament_target_dependencies() the first argument must be a valid target name" ([ament_target_dependencies.cmake][atd-h]). Use `param_tests_node` in both lines. |
+| CPP-V56 | 5.9 | course mistake | Both `test_parameters.launch.py` versions start `executable='param_vel_node'` | The package installs `param_tests_node` and (5.10) `param_tests_callback_node`; `param_vel_node` is only the node name of the callback program, so the launch fails on a missing executable. Use `executable='param_tests_node'` (or `param_tests_callback_node`); `name='param_vel_node'` may stay. |
+| CPP-V57 | 5.4 | course mistake | `get_parameter()` reads "the current values of the parameters from the ROS 2 parameter server"; "the `angular_velocity` parameter" | ROS 2 has no parameter server: each node stores its own parameters, and `get_parameter()` reads the node's own copy, changed by overrides, `ros2 param set` or `set_parameters()` ([About parameters (Humble)][params-doc-h]). The parameter is `angular_speed`. |
+| CPP-V59 | 5.10, 5.11 | course mistake (code vs output) | 5.10 rejects `angular_speed > 2.0` with the reason "Parameter 'angular_speed' cannot be higher than 1.0" | The check is 2.0, and 5.11's listing and the `ros2 param set … 2.1` output say "…cannot be higher than 2.0": the 5.10 string is a copy of the `linear_speed` one. The notes use 2.0. |
+| CPP-V60 | 5.11 | course mistake | "The response from this `parameters_callback` function will be stored in `callback_handle_`" | `add_on_set_parameters_callback()` returns a handle that keeps the callback registered: "The callback is valid as long as the smart pointer is alive" ([node.hpp (humble)][node-h]). The member keeps validation on; a discarded handle removes the callback at once. |
+| CPP-V61 | 5.11 | course mistake | "These parameter checks will only be performed when a parameter is changed at runtime, but not when the parameters are set at node startup" | `declare_parameter()` passes the initial value (default or override) to the on-set callbacks already registered ("Check with the user's callback to see if the initial value can be set", [node_parameters.cpp (humble)][nodeparams-h]); a rejection throws `rclcpp::exceptions::InvalidParameterValueException`. The course's checks skip startup values only because its callback is added after the `declare_parameter` calls. |
+| CPP-V62 | 9.3 | course mistake | "Currently, managed nodes are available for C++, not Python" | `rclpy.lifecycle` exists since Humble ([rclpy (humble)][rclpy-h-lc]; same correction as core V98). |
+| CPP-V63 | 9.4 | course mistake | "Create a simple, managed node called `scan_publisher` … publishes laser data on the `/managed_scan` topic … a new package named `managed_scan` … `managed_scan.cpp`" | The commands and code create package `managed_node_tests`, file `managed_node_example.cpp` and node `param_vel_lifecycle_node`, which publishes `geometry_msgs/Twist` on `/cmd_vel`: the sentence is left over from the Python course's scan-publisher example (that program is in `cpp-lifecycle-node`). |
+| CPP-V65 | 9.5 | course mistake | `on_error` "takes the node directly to the `finalized` state"; the full program's `on_error` returns `SUCCESS`, the 9.5 snippet `FAILURE` | The outcome follows the return value: `SUCCESS` → `unconfigured`, `FAILURE` or an error → `finalized` ([default_state_machine.c (humble)][rcl-lc-sm-h]). With the course's full program, an uncaught exception in a transition leaves the node `unconfigured`, ready to be configured again. |
+| CPP-V67 | 9.6 | course mistake | `ament_target_dependencies(lifecycle_manager "lifecycle_msgs" "rclcpp_lifecycle" "std_msgs")` | The program uses `rclcpp` and the `lifecycle_msgs` interfaces, never `std_msgs` or `rclcpp_lifecycle`; the package never calls `find_package(std_msgs)`, and `ament_target_dependencies` stops with "…'std_msgs' was not found before" unless a dependency already found it ([ament_target_dependencies.cmake][atd-h]) `[verify]` (build). List `rclcpp lifecycle_msgs`. |
+| CPP-V70 | 7.9 | course mistake | Message age from `seconds_ + std::pow(nanoseconds_, -9)` and `time_now_obj.seconds() + std::pow(time_now_obj.nanoseconds(), -9)` | `std::pow(x, -9)` is x⁻⁹, about 0 for a nanosecond stamp, not x·10⁻⁹ ([pow][cpp-pow]); the age comes out right only because both terms vanish and `seconds` already holds the whole time. The second field of the message is the full time in nanoseconds: age = `(this->now().nanoseconds() - stamp_ns) * 1e-9`. |
+| CPP-V71 | 7.9 | course mistake | Subscriber lifespan "acts as a requirement or filter: 'I only want messages that are valid for at least this long'" | Lifespan takes no part in the compatibility check: the Humble QoS page lists reliability, durability, deadline, liveliness and lease duration ([QoS settings (Humble)][qos-doc-h]). Expiry follows the publisher's lifespan; in the Python twin's run the subscriber's value changed nothing (core-qos-lifespan). |
+| CPP-V72 | 7.10 | course mistake | AUTOMATIC: alive "as long as it publishes messages"; MANUAL_BY_TOPIC: "publishing data alone is not enough to maintain liveliness … the publisher must call `assert_liveliness()`" | rmw: AUTOMATIC "the signal that establishes a Topic is alive comes from the ROS rmw layer"; MANUAL_BY_TOPIC "Only publishing a message on the Topic or an explicit signal from the application to assert liveliness on the Topic will mark the Topic as being alive" ([types.h (humble)][rmw-types-h]). The course's runs agree: AUTOMATIC with a 3 s publish period and a 2 s lease never lost liveliness, and MANUAL_BY_TOPIC with 1 s publishing, 3 s asserts and a 2 s lease lost it only in the 5 s pause. Same correction as core V94. |
+| CPP-V73 | 7.10 | course mistake | The C++ publisher is titled `publisher_liveliness.py`, its explanation shows Python (`MutuallyExclusiveCallbackGroup()`, `PublisherEventCallbacks(…)`, `MultiThreadedExecutor(num_threads=3)`), and example 2's output comes from another program (node `subscriber_liveliness`, `alive_count=1`) | The file is `publisher_liveliness.cpp`; its C++ forms are `create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive)`, `PublisherOptions::event_callbacks` plus `callback_group`, the group argument of `create_wall_timer`, and `rclcpp::executors::MultiThreadedExecutor executor(rclcpp::ExecutorOptions(), 3)`. With this subscriber, example 2 prints `[subscriber_qos_obj]` and `alive_count = 1`. |
+| CPP-V74 | 8.7 | course mistake | `subscriber_dds.cpp`: `rclcpp::Time time_obj(seconds, nanoseconds)` from the parsed fields; `id_next` and `lost_messages_counter` never initialized; `delta = time_obj − now` | The second field is the full stamp in nanoseconds: as the `uint32_t nanoseconds` argument of `Time(int32_t seconds, uint32_t nanoseconds)` ([time.hpp (humble)][time-h]) it overflows, and the seconds would count twice. Members without initializers hold indeterminate values ([default initialization][cpp-definit]), so the first ID check and the loss counter are undefined. Parse the stamp as `int64_t` nanoseconds, start `id_next_` at −1 and the counter at 0, and compute `now − stamp`. |
+| CPP-V75 | 8.8 | course mistake (outputs of an older distro) | `ps faux \| grep "ros2_daemon"` and the outputs `/usr/bin/python3 /opt/ros/galactic/bin/_ros2_daemon --rmw-implementation …` | Humble and Jazzy start the daemon as `python3 -c from ros2cli.daemon.daemonize import main; main() --name ros2-daemon --ros-domain-id 0 --rmw-implementation …` ([daemonize.py (humble)][daemonize-h], [daemon.py (humble)][daemon-h], [daemon.py (jazzy)][daemon-j]), as the course's own 8.7 warning shows: `grep "ros2_daemon"` finds only the grep. Use `grep "ros2-daemon"` or `grep "rmw-implementation"`. core-ros2-daemon called the `_ros2_daemon` form the newer one; it is the older one (corrected there). |
+| CPP-V76 | 8.8 | course mistake | Start the daemon before a complex node system, because a new node "discovers ALL of the Node web" | The daemon serves the command-line tools only; nodes never use it, so starting it first changes nothing for them (same correction as core V91, [About command-line tools (Humble)][cli-doc-h]). It makes `ros2 node list`, `ros2 topic list`… answer fast. |
 
 ## Full table
 | # | Section | Statement | Humble | Jazzy | Lyrical | Action | Source | Confidence |
@@ -126,6 +160,40 @@
 | CPP-V48 | 3.3 | text "linear.x = 1.0" vs command 0.1 | ✗ | — | — | **fix** | course command | High |
 | CPP-V49 | 3.5 | sector output order of exercise 3.2 | ✗ `std::map` sorts keys | same | same | **fix** | [cpp-map] | High |
 | CPP-V50 | 4.8 | custom server returns the label's "bounding box" | returns the 5 %-margin search region | same | same | annotate (the code comment says so; (5, 5) → (95, 95) is that region of a 100 × 100 image) | course code | High |
+| CPP-V51 | 3.2 | note on `this->timer_->cancel()` "inside `timer_callback()`" | the listed `move_robot.cpp` has no such line (add it there to run the callback once) | — | — | annotate | course code | High |
+| CPP-V52 | 3.3 | override example on `move_robot.launch.py` | ✗ no such file in the package | — | — | **fix** | course commands | High |
+| CPP-V53 | 4.4 | "XML has no logging tag" | ✗ `<log message=…/>` | same | same | **fix** | [launch-log-h] | High |
+| CPP-V54 | 4.4, 4.5 | YAML `exec: move_robot_with_params_exe` | ✗ not built | — | — | **fix** | course CMakeLists | High |
+| CPP-V55 | 5.3 | `ament_target_dependencies(param_vel_node …)` for `param_tests_node` | ✗ CMake error | same | macro removed (V09) | **fix** | [atd-h] | High |
+| CPP-V56 | 5.9 | launch `executable='param_vel_node'` | ✗ not installed | — | — | **fix** | course CMakeLists | High |
+| CPP-V57 | 5.4 | "parameter server"; `angular_velocity` | ✗ per-node storage; `angular_speed` | same | same | **fix** | [params-doc-h] | High |
+| CPP-V58 | 5.8 | `duration_cast<nanoseconds>` is "the format required by the timer" | any `std::chrono::duration` (template parameter) | same | same | annotate | [ctimer-h] | High |
+| CPP-V59 | 5.10 | reason "…higher than 1.0" for the 2.0 check | ✗ | — | — | **fix** | course code and output | High |
+| CPP-V60 | 5.11 | the handle "stores the response" | ✗ keeps the callback registered | same | same | **fix** | [node-h] | High |
+| CPP-V61 | 5.11 | checks never run at startup | ✗ declare runs callbacks registered before it | same | same | **fix** | [nodeparams-h] | High |
+| CPP-V62 | 9.3 | managed nodes only in C++ | ✗ `rclpy.lifecycle` | same | same | **fix** | [rclpy-h-lc], V98 | High |
+| CPP-V63 | 9.4 | `scan_publisher` / `managed_scan` sentence | ✗ other program | — | — | **fix** | course code | High |
+| CPP-V64 | 9.5 | "`on_configuring` function"; "after having done the activation, the node is in an `inactive` state" | wording: `on_configure`; after the configuration | — | — | annotate | course code | High |
+| CPP-V65 | 9.5 | `on_error` always leads to `finalized` | ✗ `SUCCESS` → `unconfigured` | same | same | **fix** | [rcl-lc-sm-h] | High |
+| CPP-V66 | 9.4 | no lifecycle class for subscribers (Humble) | ✓ | ✓ still none | ✓ still none | keep (all distros) | [lc-inc-l] | High |
+| CPP-V67 | 9.6 | lifecycle_manager dependencies | ✗ unused, unfound `std_msgs`; `rclcpp` missing | same | macro removed (V09) | **fix** | [atd-h] | Medium `[verify]` |
+| CPP-V68 | 7.3–7.10 | printed event strings vs code; `last_policy_kind` 16, 4, 8 | outputs transcribed from other code; kinds = RELIABILITY, DEADLINE, LIVELINESS | same | same | annotate | [rmw-kind-h] | High |
+| CPP-V69 | 7.7 | subscriber's deadline log "PUBLISHER::: Deadline Triggered!" | label of the subscriber's requested-deadline event | — | — | annotate | course code | High |
+| CPP-V70 | 7.9 | `std::pow(ns, -9)` as ×10⁻⁹ | ✗ | — | — | **fix** | [cpp-pow] | High |
+| CPP-V71 | 7.9 | subscriber lifespan as a requirement | ✗ not a compatibility policy | same | same | **fix** | [qos-doc-h] | High |
+| CPP-V72 | 7.10 | AUTOMATIC / MANUAL_BY_TOPIC semantics | ✗ | same | same | **fix** | [rmw-types-h], V94 | High |
+| CPP-V73 | 7.10 | Python fragments and another program's output in the C++ liveliness section | ✗ | — | — | **fix** | course code | High |
+| CPP-V74 | 8.7 | `subscriber_dds.cpp` stamp parsing and uninitialized members | ✗ | — | — | **fix** | [time-h], [cpp-definit] | High |
+| CPP-V75 | 8.8 | `grep "ros2_daemon"`, `_ros2_daemon` outputs | ✗ older ros2cli | same | — | **fix** | [daemonize-h], [daemon-h], [daemon-j] | High |
+| CPP-V76 | 8.8 | start the daemon before node systems | ✗ CLI tools only | same | same | **fix** | V91, [cli-doc-h] | High |
+| CPP-V77 | 8.5 | Connext "a 30-day trial, and you cannot use it for commercial purposes" | free for non-commercial, research and academic use from the ROS repos (already in core-rmw-implementations) | same | same | annotate | [connext-doc-h] | Medium |
+| CPP-V78 | 8.5 | Zenoh "experimental RMW implementations … not included by default" | binary `rmw_zenoh_cpp` released, not installed by default | released | Tier 1 from Kilted (core-rmw-implementations) | annotate | [rd-h] | High |
+| CPP-V79 | 3.3, 8.6 | text typos: "One of them (**msg**)" for `extra_msg`; comment `# ContextDDS` for Connext | corrected in the notes | — | — | annotate | course code | High |
+| CPP-V80 | 5.10 | parameter validation callback | `add_on_set_parameters_callback` only | + `add_pre_set_parameters_callback`, `add_post_set_parameters_callback` | same | annotate | [node-h], [node-j] | High |
+| CPP-V81 | 7.3–7.10 | event info types `rclcpp::QOS*Info` | ✓ (`rclcpp/qos_event.hpp`) | header renamed `rclcpp/event_handler.hpp`, same type names | same | annotate | [evh-j] | High |
+| CPP-V82 | 7.3–7.10 | `qos.reliability(RMW_QOS_POLICY_…)` setters | ✓ (`rclcpp::ReliabilityPolicy` enum classes too) | ✓ | ✓ | keep | [qos-hpp-h], [qos-hpp-l] | High |
+| CPP-V83 | 9.4 | `publisher_->on_activate()` inside `on_activate` | ✓; `LifecycleNode::on_activate(state)` also activates every managed entity | same | same | annotate | [lc-node-h] | High |
+| CPP-V84 | 9.4 | `is_activated()` check before publishing | ✓ avoids the "publisher is not activated" warning | same | same | keep | [lc-pub-h] | High |
 
 ## Canonical alternatives (features of later distros)
 | Later feature | Humble way | Checked in |
@@ -133,6 +201,7 @@
 | `this->create_timer(period, cb)` (Jazzy) | `rclcpp::create_timer(this, this->get_clock(), rclcpp::Duration::from_seconds(p), cb)` (accepts `this`: the interface getters take raw and smart pointers) | [ctimer-h], `resource/get_interface.hpp.em` (humble) |
 | `create_service(…, rclcpp::QoS, group)` (Jazzy) | `create_service(…, rmw_qos_profile_services_default, group)` | [node-h] |
 | `cv_bridge/cv_bridge.hpp` (Iron+) | `cv_bridge/cv_bridge.h` (the only header of cv_bridge 3.2.1) | [cvb-h-h] |
+| `add_pre_set_parameters_callback` / `add_post_set_parameters_callback` (Jazzy) | validate in `add_on_set_parameters_callback`; act on accepted values where they are read (the course reads them in the timer) | [node-h], [node-j] |
 
 ## Open `[verify]`
 - CPP-V05: the mutex fix of the plant detector (build and run the reentrant and exclusive-group variants).
@@ -142,6 +211,7 @@
 - CPP-V31: a single `spin_some()` right after construction leaves the initial pose unknown.
 - CPP-V39: `robot_status_component.cpp` without `<iomanip>` (build).
 - CPP-V01: the Humble `rclcpp::create_timer(this, …)` form follows `/clock` with `use_sim_time:=true`.
+- CPP-V67: whether `ament_target_dependencies(lifecycle_manager … "std_msgs")` stops the CMake step of `managed_node_tests` (build it as the course writes it).
 
 ## Sources
 [docs-h]: https://docs.ros.org/en/humble/
@@ -212,3 +282,26 @@
 [ubuntu-flags]: https://wiki.ubuntu.com/ToolChain/CompilerFlags
 [crate-r2c]: https://crates.io/crates/ros2-client
 [ros2rust]: https://github.com/ros2-rust/ros2_rust
+[launch-log-h]: https://github.com/ros2/launch/blob/humble/launch/launch/actions/log_info.py
+[params-doc-h]: https://docs.ros.org/en/humble/Concepts/Basic/About-Parameters.html
+[nodeparams-h]: https://github.com/ros2/rclcpp/blob/humble/rclcpp/src/rclcpp/node_interfaces/node_parameters.cpp
+[rclpy-h-lc]: https://github.com/ros2/rclpy/tree/humble/rclpy/rclpy/lifecycle
+[rcl-lc-sm-h]: https://github.com/ros2/rcl/blob/humble/rcl_lifecycle/src/default_state_machine.c
+[lc-inc-l]: https://github.com/ros2/rclcpp/tree/lyrical/rclcpp_lifecycle/include/rclcpp_lifecycle
+[lc-node-h]: https://github.com/ros2/rclcpp/blob/humble/rclcpp_lifecycle/src/lifecycle_node.cpp
+[lc-pub-h]: https://github.com/ros2/rclcpp/blob/humble/rclcpp_lifecycle/include/rclcpp_lifecycle/lifecycle_publisher.hpp
+[rmw-types-h]: https://github.com/ros2/rmw/blob/humble/rmw/include/rmw/types.h
+[rmw-kind-h]: https://github.com/ros2/rmw/blob/humble/rmw/include/rmw/qos_policy_kind.h
+[qos-doc-h]: https://docs.ros.org/en/humble/Concepts/Intermediate/About-Quality-of-Service-Settings.html
+[qos-hpp-h]: https://github.com/ros2/rclcpp/blob/humble/rclcpp/include/rclcpp/qos.hpp
+[qos-hpp-l]: https://github.com/ros2/rclcpp/blob/lyrical/rclcpp/include/rclcpp/qos.hpp
+[evh-j]: https://github.com/ros2/rclcpp/blob/jazzy/rclcpp/include/rclcpp/event_handler.hpp
+[time-h]: https://github.com/ros2/rclcpp/blob/humble/rclcpp/include/rclcpp/time.hpp
+[cpp-pow]: https://en.cppreference.com/w/cpp/numeric/math/pow
+[cpp-definit]: https://en.cppreference.com/w/cpp/language/default_initialization
+[daemonize-h]: https://github.com/ros2/ros2cli/blob/humble/ros2cli/ros2cli/daemon/daemonize.py
+[daemon-h]: https://github.com/ros2/ros2cli/blob/humble/ros2cli/ros2cli/node/daemon.py
+[daemon-j]: https://github.com/ros2/ros2cli/blob/jazzy/ros2cli/ros2cli/node/daemon.py
+[cli-doc-h]: https://docs.ros.org/en/humble/Concepts/Basic/About-Command-Line-Tools.html
+[connext-doc-h]: https://docs.ros.org/en/humble/Installation/RMW-Implementations/DDS-Implementations/Working-with-RTI-Connext-DDS.html
+[rd-h]: https://github.com/ros/rosdistro/blob/master/humble/distribution.yaml
