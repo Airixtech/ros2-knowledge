@@ -2,8 +2,8 @@
 id: cpp-recipe-cv-bridge
 type: reference
 owner: equipo-ros2
-updated: 2026-10-25
-review_by: 2027-04-23
+updated: 2026-10-27
+review_by: 2027-04-25
 source: manual
 confidentiality: internal
 title: "cv_bridge and OpenCV in rclcpp: toCvCopy BGR8, plant detector node, HSV inRange masks, excess-green ratio, HSV trackbar tuner"
@@ -230,3 +230,4 @@ With the lower bounds H = 34, S = 84, V = 0 mainly the green areas remain; those
 - A missing `try`/`catch` around `toCvCopy` → an unexpected encoding throws and the node dies.
 - `cv::waitKey()` is needed for `imshow` windows to refresh; never loop on it inside a ROS callback, it blocks that executor thread ([[cpp-exec-multi-node]]).
 - `#include <cv_bridge/cv_bridge.h>` exists only up to cv_bridge 3.x (Humble); Jazzy+ needs `cv_bridge/cv_bridge.hpp` (CPP-V21).
+- Python versions of more pipelines (blob and line following, Haar faces, HOG people, YOLO): the ros2-perception skill.

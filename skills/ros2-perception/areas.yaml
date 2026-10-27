@@ -1,0 +1,9 @@
+# Area descriptions for tools/build_index.py (display order = file order). Not packaged.
+sensors: "Sensor messages read by hand in rclpy: sensor_msgs/LaserScan (ranges, angles), Image (encoding, step, data bytes), PointCloud2 (fields, offsets, point_step), MarkerArray from points, RViz2 displays for perception"
+image: "OpenCV with cv_bridge in Python: imgmsg_to_cv2, HSV color ranges (inRange, trackbar tuning), blob detection (contours, moments), blob following, line following (crop, centroid error), door/area following"
+pointcloud: "Point clouds in Python: PCL bindings (python-pcl, pclpy), PointCloud2 to base_link with TF, region filter, RANSAC plane segmentation, Euclidean clustering, surface and object-on-surface detection, markers"
+hri: "Human-robot interaction perception: Haar cascades (face, eye detection, detectMultiScale), face_recognition encodings, HOG + SVM people detection, non-maximum suppression, turning toward a person"
+yolo: "Ultralytics YOLO (YOLOv8) in ROS 2 nodes: models and COCO, object detection results (boxes, classes), person follower, pose keypoints and joint angles, instance segmentation masks and counts"
+setup: "Python perception packages: custom detection messages (custom_msgs), data_files for models and cascades, package share paths, installing OpenCV, PCL, face_recognition, Ultralytics (rosdep, apt, pip, venv, numpy<2)"
+learn: "Perception course for students (DeepMind robot in a museum): course map, exercises, inventory-management project and its solution; open only for course questions"
+migration: "The course's perception code on Jazzy, Kilted and Lyrical: Python and pip rules (PEP 668), NumPy 2 and cv_bridge, python-pcl availability, Ultralytics; open for other distros"

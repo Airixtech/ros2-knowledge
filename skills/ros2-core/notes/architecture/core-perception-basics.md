@@ -2,8 +2,8 @@
 id: core-perception-basics
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-27
+review_by: 2027-04-25
 source: manual
 confidentiality: internal
 title: "Perception basics: timing, frames, calibration, transport"
@@ -21,7 +21,7 @@ version_notes:
 ---
 # Perception basics: timing, frames, calibration, transport
 
-**TL;DR** Stamp as close to the hardware as possible and use sensor QoS. Optical frames are z-forward. Extrinsics go in the URDF and intrinsics in `camera_info` YAML. Compress over Wi-Fi, and compose pipelines in one container. Seed note for a future perception skill.
+**TL;DR** Stamp as close to the hardware as possible and use sensor QoS. Optical frames are z-forward. Extrinsics go in the URDF and intrinsics in `camera_info` YAML. Compress over Wi-Fi, and compose pipelines in one container. Perception nodes in Python (OpenCV, PCL, Haar/HOG, YOLO) in detail: the ros2-perception skill.
 
 ## Checklist
 - Sync quality: hardware trigger > PTP > NTP > software sync ([[core-message-filters]]).

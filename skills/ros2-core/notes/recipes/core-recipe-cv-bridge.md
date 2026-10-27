@@ -2,8 +2,8 @@
 id: core-recipe-cv-bridge
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-27
+review_by: 2027-04-25
 source: manual
 confidentiality: internal
 title: "Images with cv_bridge + OpenCV"
@@ -16,7 +16,8 @@ summary: "Convert sensor_msgs/Image to OpenCV and back, HSV color mask, publish 
 tags: [cv_bridge, OpenCV, Image, HSV, DNN, rqt_image_view]
 see: ["[[core-exec-callback-groups]]", "[[core-perception-basics]]", "[[core-pkg-workspace]]"]
 requires: []
-version_notes: []
+version_notes:
+  - "humble+: cv2_to_imgmsg(cvim, encoding='passthrough') writes the OpenCV type ('8UC3'); a later bgr8 conversion raises '[8UC3] is not a color format. but [bgr8] is' — https://github.com/ros-perception/vision_opencv/blob/humble/cv_bridge/python/cv_bridge/core.py (PERC-V32)"
 ---
 # Images with cv_bridge + OpenCV
 
@@ -45,3 +46,5 @@ def on_image(self, msg):                                       # sensor_msgs/Ima
 ## Pitfalls
 - OpenCV is BGR, while most DNN/PIL models expect RGB. Convert explicitly.
 - Subscribe to cameras with sensor QoS. Use compressed transport over Wi-Fi ([[core-perception-basics]]).
+- `cv2_to_imgmsg(img)` without an encoding publishes `8UC3`: RViz draws it, but a cv_bridge subscriber asking for `bgr8` raises. Always pass `'bgr8'` (PERC-V32).
+- Complete Python pipelines (center-pixel color, HSV blobs and lines, Haar faces, HOG people, YOLO detection, pose and segmentation): the ros2-perception skill.

@@ -2,8 +2,8 @@
 id: core-recipe-laserscan
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-27
+review_by: 2027-04-25
 source: manual
 confidentiality: internal
 title: "LaserScan geometry, sectors & obstacle avoidance"
@@ -31,7 +31,7 @@ idx = int(round((angle - msg.angle_min) / msg.angle_increment))   # angle -> ind
 n_expected = int(round((msg.angle_max - msg.angle_min) / msg.angle_increment)) + 1
 valid = [r for r in msg.ranges if math.isfinite(r) and msg.range_min <= r <= msg.range_max]   # drop inf/nan
 ```
-Index 0 = `angle_min`, which is the rightmost beam when angle_min < 0. The front is the index where the angle ≈ 0 (the middle, for symmetric scans).
+Index 0 = `angle_min`, which is the rightmost beam when angle_min < 0. The front is the index where the angle ≈ 0 (the middle, for symmetric scans). `intensities` is empty when the device gives none ([LaserScan.msg](https://github.com/ros2/common_interfaces/blob/humble/sensor_msgs/msg/LaserScan.msg)). Field table and a stop-at-distance node: the ros2-perception skill.
 
 ## Sector minimums (6 sectors, right → left)
 ```python
