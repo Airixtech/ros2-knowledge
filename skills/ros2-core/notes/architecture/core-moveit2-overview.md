@@ -2,8 +2,8 @@
 id: core-moveit2-overview
 type: reference
 owner: equipo-ros2
-updated: 2026-10-09
-review_by: 2027-04-08
+updated: 2026-10-28
+review_by: 2027-04-26
 source: manual
 confidentiality: internal
 title: "MoveIt2 overview & MoveGroupInterface"
@@ -22,7 +22,7 @@ version_notes:
 ---
 # MoveIt2 overview & MoveGroupInterface
 
-**TL;DR** `move_group` loads URDF + SRDF + kinematics + planning pipelines. In Humble, use `MoveGroupInterface` (C++), `MoveItCpp` or `moveit_py`, with OMPL, Pilz or CHOMP. Parallel planning and STOMP need Iron+. Seed note for a future `ros2-moveit` skill.
+**TL;DR** `move_group` loads URDF + SRDF + kinematics + planning pipelines. In Humble, use `MoveGroupInterface` (C++), `MoveItCpp` or `moveit_py`, with OMPL, Pilz or CHOMP. Parallel planning and STOMP need Iron+. In detail (Setup Assistant and its config fixes, `move_group` with sim time, MoveGroupInterface programs, gripper, Cartesian paths, kinematics plugins, pick and place, simple_grasping perception): the ros2-moveit skill.
 
 ## Planning stack
 - `move_group` loads URDF + SRDF + kinematics + planning pipelines. Humble pipelines: OMPL (default RRTConnect), Pilz (PTP/LIN/CIRC), CHOMP.

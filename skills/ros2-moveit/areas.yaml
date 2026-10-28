@@ -1,0 +1,6 @@
+# Area descriptions for tools/build_index.py (display order = file order). Not packaged.
+config: "MoveIt 2 configuration package: architecture (move_group, robot interface, config data), MoveIt Setup Assistant (self-collisions, virtual joint, planning groups, poses, end effector, controllers), joint_limits.yaml, moveit_controllers.yaml, move_group launch with use_sim_time, RViz2 MotionPlanning"
+planning: "Move Group C++ interface (MoveGroupInterface): joint-space, pose and named targets, plan/execute/move, gripper group, Cartesian paths (computeCartesianPath), kinematics plugins (KDL, LMA), approach/retreat, pick and place, moveit2_scripts package, objects to grasp in Gazebo"
+perception: "Object detection for grasping with simple_grasping: find_objects action (FindGraspableObjects), basic_grasping_perception node and parameters, grasping_msgs (GraspableObject, Object, SolidPrimitive), C++ action client for object poses, filtering by type and size"
+learn: "Manipulation course for students (UR3e arm with Robotiq gripper): course map, exercises of units 2-5 and their solutions; open only for course questions"
+migration: "The course's MoveIt code on Jazzy, Kilted and Lyrical: .hpp headers, computeCartesianPath without jump_threshold, target_link_libraries, Gazebo pairs; open for other distros"
