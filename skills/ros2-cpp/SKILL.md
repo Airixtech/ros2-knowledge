@@ -55,4 +55,4 @@ If the notes do not cover the question, read the official source for the user's 
 <!-- INDEX:END -->
 
 ## Related skills
-ros2-core (required): the language-neutral side (CLI, launch, colcon, QoS and DDS, lifecycle states, TF, debugging), the Python versions of these programs and the note on choosing rclpy or rclcpp; install it with this skill. Other skills with C++ code name this one in plain text and never require it: ros2-bt (BT nodes with rclcpp), ros2-nav2 (Nav2 itself, the `NavigateToPose` server of unit 7), ros2-control (controllers and hardware interfaces).
+ros2-core (required): the language-neutral side (CLI, launch, colcon, QoS and DDS, lifecycle states, TF, debugging), the Python versions of these programs and the note on choosing rclpy or rclcpp; install it with this skill. Other skills with C++ code name this one in plain text and never require it: ros2-bt (BT nodes with rclcpp), ros2-nav2 (Nav2 itself, the `NavigateToPose` server of unit 7), ros2-control (controllers and hardware interfaces), ros2-moveit (MoveIt programs).
